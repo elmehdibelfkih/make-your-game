@@ -1,0 +1,16 @@
+{
+  "name": "level0",
+  "map": [
+    [1,1,1],
+    [1,0,1],
+    [1,1,1]
+  ],
+  "enemy_quantity": 2,
+  "enemy_speed": 2,
+  "hiden_harts_quantity": 3,
+  "bomb_quantity_at_time": 1,
+  "tile_size": "64px",
+  "brick": "./assets/images/brick.png",
+  "floor": "./assets/images/floor.png",
+  "block": "./assets/images/box.png"
+}
