@@ -28,32 +28,32 @@ export class Game {
     }
 
 
-    // run() {
-    //     requestAnimationFrame(this.loop.bind(this));
-    // }
+    run() {
+        requestAnimationFrame(this.loop.bind(this));
+    }
 
-    // loop(timestamp) {
-    //     const delta = timestamp - this.lastUpdateTime;
-    //     this.lastUpdateTime = timestamp;
+    loop(timestamp) {
+        const delta = timestamp - this.lastUpdateTime;
+        this.lastUpdateTime = timestamp;
 
-    //     if (!this.state.paused) {
-    //         this.update(delta);
-    //         this.render();
-    //     }
+        if (!this.state.isPaused()) {
+            this.update(delta);
+            this.render();
+        }
 
-    //     requestAnimationFrame(this.loop.bind(this));
-    // }
+        requestAnimationFrame(this.loop.bind(this));
+    }
 
-    // update(delta) {
-    //     this.player.update(delta);
-    //     this.enemy.update(delta);
-    //     this.bombs?.forEach(b => b.update(delta));
-    //     this.scoreboard.update(this.state);
-    // }
+    update(delta) {
+        // this.player.update(delta);
+        // this.enemy.update(delta);
+        // this.bombs?.forEach(b => b.update(delta));
+        // this.scoreboard.update(this.state);
+    }
 
-    // render() {
-    //     this.map.render();
-    //     this.player.render();
-    //     this.enemy.render();
-    // }
+    render() {
+        this.map.render();
+        this.player.render();
+        // this.enemy.render();
+    }
 }

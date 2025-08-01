@@ -21,13 +21,12 @@ import { Game } from "./engine/core.js"
 // let game = new ScoreBoard()
 let level = await Game.getCurrentLevelObj()
 let game = Game.getInstance(level)
+game.run()
 
-document.addEventListener("click", () => {
-    let lvs = game.state.getLives()
-    // console.log(game.state);
-    
-    game.state.setLives(--lvs) // todo fix this problem
-    game.scoreboard.updateLives()
-})
+// document.addEventListener("click", () => {
+//     let lvs = game.state.getLives()    
+//     game.state.setLives(--lvs) // todo fix this problem
+//     game.scoreboard.updateLives()
+// })
 // scoreBoard.creatScoreBoard()
-// map.runder()
+// map.render()

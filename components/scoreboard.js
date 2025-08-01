@@ -38,10 +38,7 @@ export class Scoreboard {
         
     }
     
-    updateLives() {
-        console.log(this.game);
-        // console.log(this.game.state);
-        
+    updateLives() {        
         this.lives.innerText = "lives: " + "❤️".repeat(this.game.state.getLives())
     }
     

@@ -4,6 +4,7 @@ export class State {
     #LIVES = 3
     #SCORE = 0
     #PAUSE = false
+    #PLAYER_SPEED = 5
 
     constructor() {
     }
@@ -41,5 +42,21 @@ export class State {
 
     FPS() {
 
+    }
+
+    pause() {
+        this.#PAUSE = true
+    }
+
+    start() {
+        this.#PAUSE = false
+    }
+
+    isPaused() {
+        return this.#PAUSE
+    }
+
+    getPlayerSpeed() {
+        return this.#PLAYER_SPEED
     }
 }
