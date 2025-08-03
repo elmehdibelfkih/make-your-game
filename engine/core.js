@@ -27,7 +27,6 @@ export class Game {
         return await fetch(`assets/maps/level${state.getLevel()}.json`).then(res => res.json());
     }
 
-
     run() {
         requestAnimationFrame(this.loop.bind(this));
     }
@@ -45,7 +44,7 @@ export class Game {
     }
 
     update(delta) {
-        // this.player.update(delta);
+        this.player.update(delta);
         // this.enemy.update(delta);
         // this.bombs?.forEach(b => b.update(delta));
         // this.scoreboard.update(this.state);

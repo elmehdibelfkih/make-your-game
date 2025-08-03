@@ -54,24 +54,23 @@ export class Map {
     canPlayerMoveTo(x, y) {
         let topLeftX = Math.floor(x / this.level.block_size)
         let topLeftY = Math.floor(y / this.level.block_size)
+        if (!this.isFreeSpaceInGrid(topLeftX, topLeftY)) return false
 
         let topRightX = Math.floor((x + this.game.player.getPlayerWeight()) / this.level.block_size)
         let topRightY = Math.floor(y / this.level.block_size)
+        if (!this.isFreeSpaceInGrid(topRightX, topRightY)) return false
 
         let bottomLeftX = Math.floor(x / this.level.block_size)
         let bottomLeftY = Math.floor((y + this.game.player.getPlayerHeight()) / this.level.block_size)
+        if (!this.isFreeSpaceInGrid(bottomLeftX, bottomLeftY)) return false
 
         let bottomRightX = Math.floor((x + this.game.player.getPlayerHeight()) / this.level.block_size)
         let bottomRightY = Math.floor((y + this.game.player.getPlayerHeight()) / this.level.block_size)
-        
-        if (!this.isFreeSpaceInGrid(topLeftX, topLeftY)) return false
-        if (!this.isFreeSpaceInGrid(topRightX, topRightY)) return false
-        if (!this.isFreeSpaceInGrid(bottomLeftX, bottomLeftY)) return false
         if (!this.isFreeSpaceInGrid(bottomRightX, bottomRightY)) return false
+        
         return true
-
     }
-
+    
     isFreeSpaceInGrid = (x, y) =>  this.level.map[y][x] === 0
 }
 

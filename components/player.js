@@ -23,7 +23,6 @@ export class Player {
             this.player.appendChild(img)
             this.player.id = "player"
             this.game.map.grid.appendChild(this.player)
-            document.addEventListener('keydown', this.updatePosition.bind(this))
             this.player.style.position = "absolute";
         }
 
@@ -36,20 +35,23 @@ export class Player {
     // ArrowRight
     // ArrowLeft
 
-    updatePosition(event) {
-        if (event.key === 'ArrowUp' && this.game.map.canPlayerMoveTo(this.x, this.y - this.game.state.getPlayerSpeed())) {
-            this.y-=  this.game.state.getPlayerSpeed()
+    update(delta) {
+        if (this.game.state.isArrowUp() && this.game.map.canPlayerMoveTo(this.x, this.y - this.game.state.getPlayerSpeed())) {
+            this.y -= this.game.state.getPlayerSpeed()
+            this.mustrender = true
         }
-        if (event.key === 'ArrowDown' && this.game.map.canPlayerMoveTo(this.x, this.y + this.game.state.getPlayerSpeed())) {
-            this.y+= this.game.state.getPlayerSpeed()
+        if (this.game.state.isArrowDown() && this.game.map.canPlayerMoveTo(this.x, this.y + this.game.state.getPlayerSpeed())) {
+            this.y += this.game.state.getPlayerSpeed()
+            this.mustrender = true
         }
-        if (event.key === 'ArrowRight' && this.game.map.canPlayerMoveTo(this.x + this.game.state.getPlayerSpeed(), this.y)) {            
-            this.x+= this.game.state.getPlayerSpeed()
+        if (this.game.state.isArrowRight() && this.game.map.canPlayerMoveTo(this.x + this.game.state.getPlayerSpeed(), this.y)) {
+            this.x += this.game.state.getPlayerSpeed()
+            this.mustrender = true
         }
-        if (event.key === 'ArrowLeft' && this.game.map.canPlayerMoveTo(this.x - this.game.state.getPlayerSpeed(), this.y)) {
-            this.x-= this.game.state.getPlayerSpeed()
+        if (this.game.state.isArrowLeft() && this.game.map.canPlayerMoveTo(this.x - this.game.state.getPlayerSpeed(), this.y)) {
+            this.x -= this.game.state.getPlayerSpeed()
+            this.mustrender = true
         }
-        this.mustrender = true
     }
 
     getPlayerHeight() {
