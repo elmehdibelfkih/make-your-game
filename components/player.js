@@ -4,6 +4,7 @@ export class Player {
         this.x = x
         this.y = y
         this.mustrender = true
+        this.direction = 'Down'
         this.render()
     }
 
@@ -25,7 +26,6 @@ export class Player {
             this.game.map.grid.appendChild(this.player)
             this.player.style.position = "absolute";
         }
-
         this.player.style.transform = `translate(${this.x}px, ${this.y}px)`;
         this.mustrender = false
     }
@@ -35,23 +35,36 @@ export class Player {
     // ArrowRight
     // ArrowLeft
 
-    update(delta) {
+    update(timestamp) {
         if (this.game.state.isArrowUp() && this.game.map.canPlayerMoveTo(this.x, this.y - this.game.state.getPlayerSpeed())) {
             this.y -= this.game.state.getPlayerSpeed()
+            this.direction = 'Up'
             this.mustrender = true
         }
         if (this.game.state.isArrowDown() && this.game.map.canPlayerMoveTo(this.x, this.y + this.game.state.getPlayerSpeed())) {
             this.y += this.game.state.getPlayerSpeed()
+            this.direction = 'Down'
             this.mustrender = true
         }
         if (this.game.state.isArrowRight() && this.game.map.canPlayerMoveTo(this.x + this.game.state.getPlayerSpeed(), this.y)) {
             this.x += this.game.state.getPlayerSpeed()
+            this.direction = 'Right'
             this.mustrender = true
         }
         if (this.game.state.isArrowLeft() && this.game.map.canPlayerMoveTo(this.x - this.game.state.getPlayerSpeed(), this.y)) {
             this.x -= this.game.state.getPlayerSpeed()
+            this.direction = 'Left'
             this.mustrender = true
         }
+        
+        if (this.game.state.isSpace()) {
+            this.game.map.addBoom(this.x, this.y, timestamp)
+        }
+
+    }
+
+    movePlayer(timestamp) {
+
     }
 
     getPlayerHeight() {
@@ -61,5 +74,9 @@ export class Player {
     getPlayerWeight() {
         return 40
     }
+
+    // intiEvent() {
+
+    // }
 
 }

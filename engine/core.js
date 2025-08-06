@@ -18,8 +18,8 @@ export class Game {
         this.scoreboard = Scoreboard.getInstance(this)
         this.map = Map.getInstance(this, initialLevel)
         this.player = Player.getInstance(this)
-        this.enemy = new Enemy(this)
-        this.bomb = new Bomb(this)
+        // this.enemy = new Enemy(this)
+        // this.bomb = new Bomb(this)
     }
 
     static async getCurrentLevelObj() {
@@ -31,27 +31,27 @@ export class Game {
         requestAnimationFrame(this.loop.bind(this));
     }
 
-    loop(timestamp) {
-        const delta = timestamp - this.lastUpdateTime;
-        this.lastUpdateTime = timestamp;
+    async loop(timestamp) {
+        // const delta = timestamp - this.lastUpdateTime;
+        // this.lastUpdateTime = timestamp;
 
         if (!this.state.isPaused()) {
-            this.update(delta);
-            this.render();
+            this.update(timestamp);
+            await this.render();
         }
 
         requestAnimationFrame(this.loop.bind(this));
     }
 
-    update(delta) {
-        this.player.update(delta);
-        // this.enemy.update(delta);
-        // this.bombs?.forEach(b => b.update(delta));
+    update(timestamp) {
+        this.player.update(timestamp);
+        // this.enemy.update(timestamp);
+        // this.bombs?.forEach(b => b.update(timestamp));
         // this.scoreboard.update(this.state);
     }
 
-    render() {
-        this.map.render();
+    async render() {
+        await this.map.render();
         this.player.render();
         // this.enemy.render();
     }

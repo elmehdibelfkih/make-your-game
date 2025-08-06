@@ -22,6 +22,7 @@
   "floor": "./assets/images/floor.png",
   "block": "./assets/images/box.png",
   "player": "./assets/images/playerTMP.png",
+  "bomb": "./assets/images/Bomb/bomb.png",
   "player_x": 70,
   "player_y": 70
 }

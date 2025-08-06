@@ -1,4 +1,6 @@
 import * as consts from '../utils/consts.js';
+// import { Game } from "./engine/core.js"
+import { Bomb } from "./bomb.js"
 
 export class Map {
 
@@ -6,6 +8,8 @@ export class Map {
         this.game = game
         this.level = level;
         this.mustrender = true
+        this.updateLevel = false
+        this.bombs = []
     }
 
     static getInstance(game, level) {
@@ -18,12 +22,12 @@ export class Map {
     }
 
     // todo
-    // addBoom(x, y);
     // removeEnemy(x, y);
 
-    render() {
+    async render() {
         if (!this.mustrender) return
-        let grid = document.getElementById("div")
+        if (this.updateLevel) this.level = await this.getCurrentLevelObj()
+        let grid = document.getElementById("grid")
         if (grid) document.body.removeChild(grid)
         grid = document.createElement("div")
         grid.id = "grid"
@@ -52,6 +56,9 @@ export class Map {
     }
 
     canPlayerMoveTo(x, y) {
+        // if (Math.floor(x / this.level.block_size) === Math.floor(this.game.player.x / this.level.block_size) &&
+            // Math.floor(y / this.level.block_size) === Math.floor(this.game.player.y / this.level.block_size) && ) return true
+
         let topLeftX = Math.floor(x / this.level.block_size)
         let topLeftY = Math.floor(y / this.level.block_size)
         if (!this.isFreeSpaceInGrid(topLeftX, topLeftY)) return false
@@ -67,10 +74,14 @@ export class Map {
         let bottomRightX = Math.floor((x + this.game.player.getPlayerHeight()) / this.level.block_size)
         let bottomRightY = Math.floor((y + this.game.player.getPlayerHeight()) / this.level.block_size)
         if (!this.isFreeSpaceInGrid(bottomRightX, bottomRightY)) return false
-        
+
         return true
     }
-    
-    isFreeSpaceInGrid = (x, y) =>  this.level.map[y][x] === 0
+
+    isFreeSpaceInGrid = (x, y) => this.level.map[y][x] === 0 || this.level.map[y][x] === 6
+
+    addBoom(x, y, timestamp) {
+        this.bombs.push(new Bomb(this.game, x, y, timestamp))
+    }
 }
 

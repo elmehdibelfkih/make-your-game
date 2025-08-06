@@ -5,6 +5,7 @@ export class State {
     #SCORE = 0
     #PAUSE = false
     #PLAYER_SPEED = 6
+    #BOMB_COUNT = 0
 
     #ARROW_UP = false
     #ARROW_DOWN = false
@@ -34,6 +35,7 @@ export class State {
         if (event.key === 'ArrowDown') this.#ARROW_DOWN = true
         if (event.key === 'ArrowRight') this.#ARROW_RIGHT = true
         if (event.key === 'ArrowLeft') this.#ARROW_LEFT = true
+        if (event.key === ' ') this.#SPACE = true
     }
 
     setArrowStateKeyUp = (event) => {
@@ -41,6 +43,7 @@ export class State {
         if (event.key === 'ArrowDown') this.#ARROW_DOWN = false
         if (event.key === 'ArrowRight') this.#ARROW_RIGHT = false
         if (event.key === 'ArrowLeft') this.#ARROW_LEFT = false
+        if (event.key === ' ') this.#SPACE = false
     }
 
     initArrowState() {
@@ -51,9 +54,12 @@ export class State {
     getLives = () => this.#LIVES
     getLevel = () => this.#CURRENT_LEVEL
     getScore = () => this.#SCORE
+    getBombCount = () => this.#BOMB_COUNT
     setLives = (val = 1) => this.#LIVES += val
     setLevel = () => this.#CURRENT_LEVEL = val
     setScore = () => this.#SCORE = val
+    setBombCount = (val = 1) => this.#BOMB_COUNT += val
+
     // FPS = () => 
     pause = () => this.#PAUSE = true
     start = () => this.#PAUSE = false
