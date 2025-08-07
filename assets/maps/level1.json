@@ -21,7 +21,7 @@
   "brick": "./assets/images/brick.png",
   "floor": "./assets/images/floor.png",
   "block": "./assets/images/box.png",
-  "player": "./assets/images/playerTMP.png",
+  "player": "./assets/images/player.png",
   "bomb": "./assets/images/Bomb/bomb.png",
   "player_x": 70,
   "player_y": 70

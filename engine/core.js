@@ -1,7 +1,7 @@
 import { Scoreboard } from '../components/scoreboard.js';
 import { Player } from '../components/player.js';
 import { Enemy } from '../components/enemy.js';
-import { Bomb } from '../components/bomb.js';
+// import { Bomb } from '../components/bomb.js';
 import { Map } from '../components/map.js';
 import { State } from './state.js';
 
@@ -25,6 +25,11 @@ export class Game {
     static async getCurrentLevelObj() {
         const state = State.getInstance();
         return await fetch(`assets/maps/level${state.getLevel()}.json`).then(res => res.json());
+    }
+
+    async getPlayerCoordinate() {
+        const state = State.getInstance();
+        return await fetch(`assets/playerCoordinate.json`).then(res => res.json());
     }
 
     run() {
@@ -52,7 +57,7 @@ export class Game {
 
     async render() {
         await this.map.render();
-        this.player.render();
+        await this.player.render();
         // this.enemy.render();
     }
 }

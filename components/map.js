@@ -71,7 +71,7 @@ export class Map {
         let bottomLeftY = Math.floor((y + this.game.player.getPlayerHeight()) / this.level.block_size)
         if (!this.isFreeSpaceInGrid(bottomLeftX, bottomLeftY)) return false
 
-        let bottomRightX = Math.floor((x + this.game.player.getPlayerHeight()) / this.level.block_size)
+        let bottomRightX = Math.floor((x + this.game.player.getPlayerWeight()) / this.level.block_size)
         let bottomRightY = Math.floor((y + this.game.player.getPlayerHeight()) / this.level.block_size)
         if (!this.isFreeSpaceInGrid(bottomRightX, bottomRightY)) return false
 

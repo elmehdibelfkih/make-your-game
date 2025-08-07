@@ -5,6 +5,8 @@ export class Player {
         this.y = y
         this.mustrender = true
         this.direction = 'Down'
+        this.lastTime = 0;
+        this.MS_PER_FRAME = 100
         this.render()
     }
 
@@ -15,17 +17,34 @@ export class Player {
         return Player.instance
     }
 
-    render() {
+    async render() {
+        if (!this.playerCoordinate) this.playerCoordinate = await this.game.getPlayerCoordinate()
         if (!this.mustrender) return
-        if (!this.player) {
+         if (!this.player) {
             this.player = document.createElement("div")
-            let img = document.createElement("img")
-            img.src = this.game.map.level.player
-            this.player.appendChild(img)
-            this.player.id = "player"
+            this.player.className = 'player';
             this.game.map.grid.appendChild(this.player)
-            this.player.style.position = "absolute";
+
+            this.player.style.backgroundImage = `url(${this.game.map.level.player})`;
+            this.player.style.backgroundRepeat = 'no-repeat';
+            this.player.style.imageRendering = 'pixelated';
+            this.player.style.position = 'absolute';
+            this.player.style.width = this.playerCoordinate[this.direction]['width'];
+            this.player.style.height = this.playerCoordinate[this.direction]['height'];
+
+
+            // let img = document.createElement("img")
+
+            // img.src = this.game.map.level.player
+
+            // this.player.appendChild(img)
+            // this.player.id = "player"
+            // this.player.style.position = "absolute";
+
+            // console.log(this.playerCoordinate[this.direction]['height']);
+
         }
+
         this.player.style.transform = `translate(${this.x}px, ${this.y}px)`;
         this.mustrender = false
     }
@@ -56,7 +75,7 @@ export class Player {
             this.direction = 'Left'
             this.mustrender = true
         }
-        
+
         if (this.game.state.isSpace()) {
             this.game.map.addBoom(this.x, this.y, timestamp)
         }
@@ -64,15 +83,25 @@ export class Player {
     }
 
     movePlayer(timestamp) {
+        const delta = timestamp - lastTime;
+        if (delta >= MS_PER_FRAME) {
+            // frameIndex = (frameIndex + 1) % COLS;
+            lastTime = timestamp;
+        }
 
     }
 
     getPlayerHeight() {
-        return 40
+        console.log((this.playerCoordinate[this.direction]['height'].replace('px', '')));
+        
+        return Number(this.playerCoordinate[this.direction]['height'].replace('px', ''))
     }
 
     getPlayerWeight() {
-        return 40
+        // return this.playerCoordinate[this.direction]['width']
+        console.log((this.playerCoordinate[this.direction]['width'].replace('px', '')));
+
+        return Number(this.playerCoordinate[this.direction]['width'].replace('px', ''))
     }
 
     // intiEvent() {

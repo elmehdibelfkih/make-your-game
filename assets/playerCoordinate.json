@@ -23,7 +23,7 @@
     { "x": "-637px", "y": "-2px", "width": "21px", "height": "40px" },
     { "x": "-660px", "y": "-2px", "width": "20px", "height": "41px" }
   ],
-  
+
   "walkingrightwithbombs": [
     { "x": "-81px", "y": "-2px", "width": "19px", "height": "40px" },
     { "x": "-192px", "y": "-2px", "width": "20px", "height": "40px" },
@@ -48,14 +48,23 @@
     { "x": "-403px", "y": "-2px", "width": "26px", "height": "40px" },
     { "x": "-430px", "y": "-2px", "width": "25px", "height": "41px" }
   ],
-  "right": [
+
+  "Right": 
     { "x": "-2px", "y": "-2px", "width": "15px", "height": "40px" }
-  ],
+  ,
+  "Left": 
+    { "x": "-18px", "y": "-2px", "width": "16px", "height": "40px" }
+  ,
+  "Up": 
+    { "x": "-18px", "y": "-2px", "width": "16px", "height": "40px" }
+  ,
+  "Down": 
+    { "x": "-18px", "y": "-2px", "width": "16px", "height": "40px" }
+  ,
+
+
   "rightwithbombs": [
     { "x": "-2px", "y": "-45px", "width": "20px", "height": "40px" }
-  ],
-  "left": [
-    { "x": "-18px", "y": "-2px", "width": "16px", "height": "40px" }
   ],
   "leftwithbomb": [
     { "x": "-23px", "y": "-45px", "width": "21px", "height": "40px" }
