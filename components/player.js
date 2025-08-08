@@ -7,6 +7,7 @@ export class Player {
         this.direction = 'Down'
         this.lastTime = 0;
         this.MS_PER_FRAME = 100
+        this.frameIndex = 0
         this.render()
     }
 
@@ -20,39 +21,29 @@ export class Player {
     async render() {
         if (!this.playerCoordinate) this.playerCoordinate = await this.game.getPlayerCoordinate()
         if (!this.mustrender) return
-         if (!this.player) {
+        if (!this.player) {
             this.player = document.createElement("div")
             this.player.className = 'player';
             this.game.map.grid.appendChild(this.player)
-
             this.player.style.backgroundImage = `url(${this.game.map.level.player})`;
             this.player.style.backgroundRepeat = 'no-repeat';
             this.player.style.imageRendering = 'pixelated';
             this.player.style.position = 'absolute';
             this.player.style.width = this.playerCoordinate[this.direction]['width'];
             this.player.style.height = this.playerCoordinate[this.direction]['height'];
-
-
-            // let img = document.createElement("img")
-
-            // img.src = this.game.map.level.player
-
-            // this.player.appendChild(img)
-            // this.player.id = "player"
-            // this.player.style.position = "absolute";
-
-            // console.log(this.playerCoordinate[this.direction]['height']);
+            this.player.style.backgroundPosition = `${this.playerCoordinate[this.direction]['x']} ${this.playerCoordinate[this.direction]['y']}`;
 
         }
-
         this.player.style.transform = `translate(${this.x}px, ${this.y}px)`;
+        if (this.frame) {
+            this.player.style.width = this.frame.width;
+            this.player.style.height = this.frame.height;
+            this.player.style.backgroundPosition = `${this.frame.x} ${this.frame.y}`;
+            this.frameIndex = (this.frameIndex + 1) % this.playerCoordinate['walking' + this.direction].length;
+        }
+
         this.mustrender = false
     }
-
-    // ArrowUp
-    // ArrowDown
-    // ArrowRight
-    // ArrowLeft
 
     update(timestamp) {
         if (this.game.state.isArrowUp() && this.game.map.canPlayerMoveTo(this.x, this.y - this.game.state.getPlayerSpeed())) {
@@ -75,37 +66,35 @@ export class Player {
             this.direction = 'Left'
             this.mustrender = true
         }
-
         if (this.game.state.isSpace()) {
             this.game.map.addBoom(this.x, this.y, timestamp)
         }
+        this.movePlayer(timestamp)
+
 
     }
 
     movePlayer(timestamp) {
-        const delta = timestamp - lastTime;
-        if (delta >= MS_PER_FRAME) {
-            // frameIndex = (frameIndex + 1) % COLS;
-            lastTime = timestamp;
+        if (!this.playerCoordinate) return
+        const delta = timestamp - this.lastTime;
+        if (this.mustrender) {
+            this.frame = this.playerCoordinate['walking' + this.direction][this.frameIndex];
+        } else {
+            this.player.style.width = this.playerCoordinate[this.direction]['width'];
+            this.player.style.height = this.playerCoordinate[this.direction]['height'];
+            this.player.style.backgroundPosition = `${this.playerCoordinate[this.direction].x} ${this.playerCoordinate[this.direction].y}`;
+            return
         }
-
+        if (delta >= this.MS_PER_FRAME) {
+            this.lastTime = timestamp;
+            this.player.style.width = this.frame.width;
+            this.player.style.height = this.frame.height;
+            this.player.style.backgroundPosition = `${this.frame.x} ${this.frame.y}`;
+            this.frameIndex = (this.frameIndex + 1) % this.playerCoordinate['walking' + this.direction].length;
+        }
     }
 
-    getPlayerHeight() {
-        console.log((this.playerCoordinate[this.direction]['height'].replace('px', '')));
-        
-        return Number(this.playerCoordinate[this.direction]['height'].replace('px', ''))
-    }
-
-    getPlayerWeight() {
-        // return this.playerCoordinate[this.direction]['width']
-        console.log((this.playerCoordinate[this.direction]['width'].replace('px', '')));
-
-        return Number(this.playerCoordinate[this.direction]['width'].replace('px', ''))
-    }
-
-    // intiEvent() {
-
-    // }
+    getPlayerHeight = () => Number(this.playerCoordinate[this.direction]['height'].replace('px', ''))
+    getPlayerWeight = () => Number(this.playerCoordinate[this.direction]['width'].replace('px', ''))
 
 }
