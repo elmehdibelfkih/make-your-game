@@ -39,7 +39,7 @@ export class Map {
                 const tile = document.createElement("div");
                 tile.style.position = "absolute";
                 tile.style.transform = `translate(${this.level.block_size * rowIndex}px, ${this.level.block_size * colIndex}px)`;
-                if (cell === consts.WALL) tile.style.backgroundImage = `url(${this.level.brick})`;
+                if (cell === consts.WALL) tile.style.backgroundImage = `url(${this.level.wall})`;
                 else tile.style.backgroundImage = `url(${this.level.floor})`;
                 if (cell === consts.BLOCK) {
                     const block = document.createElement("img");

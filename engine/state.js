@@ -4,7 +4,7 @@ export class State {
     #LIVES = 3
     #SCORE = 0
     #PAUSE = false
-    #PLAYER_SPEED = 2
+    #PLAYER_SPEED = 4
     #BOMB_COUNT = 0
 
     #ARROW_UP = false

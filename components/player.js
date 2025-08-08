@@ -6,7 +6,7 @@ export class Player {
         this.mustrender = true
         this.direction = 'Down'
         this.lastTime = 0;
-        this.MS_PER_FRAME = 100
+        this.MS_PER_FRAME = 400
         this.frameIndex = 0
         this.render()
     }
@@ -95,6 +95,7 @@ export class Player {
     }
 
     getPlayerHeight = () => Number(this.playerCoordinate[this.direction]['height'].replace('px', ''))
+    // getPlayerWeight = () => 33
     getPlayerWeight = () => Number(this.playerCoordinate[this.direction]['width'].replace('px', ''))
 
 }
