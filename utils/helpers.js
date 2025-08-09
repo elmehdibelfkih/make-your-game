@@ -1,6 +1,13 @@
-import * as state from '../utils/state.js';
 import {} from '../enginestate.js';
 
-export async function getCurrentLevelObj() {
-    return await fetch(`assets/maps/level${state.CURRENT_LEVEL}.json`).then(res => res.json());
+export function throttle(cbf, wait) {
+    let block = false
+    return function (...args) {
+        if (block) return
+        block = true;
+        cbf(...args)
+        setTimeout(() => {
+            block = false;
+        }, wait)
+    }
 }

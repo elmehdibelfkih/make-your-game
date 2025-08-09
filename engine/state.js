@@ -4,8 +4,9 @@ export class State {
     #LIVES = 3
     #SCORE = 0
     #PAUSE = false
-    #PLAYER_SPEED = 4
+    #PLAYER_SPEED = 2
     #BOMB_COUNT = 0
+    #MAX_ALLOWD_BOMBS = 3
 
     #ARROW_UP = false
     #ARROW_DOWN = false
@@ -16,13 +17,8 @@ export class State {
     constructor() {
     }
 
-    static getInstance() {
-        if (!State.instance) {
-            State.instance = new State()
-            State.instance.initArrowState()
-        }
-        return State.instance
-    }
+    static getInstance = (game) => State.instance ? State.instance : new State(game)
+
 
     isArrowUp = () => this.#ARROW_UP
     isArrowDown = () => this.#ARROW_DOWN
@@ -52,13 +48,19 @@ export class State {
     }
 
     getLives = () => this.#LIVES
-    getLevel = () => this.#CURRENT_LEVEL
-    getScore = () => this.#SCORE
-    getBombCount = () => this.#BOMB_COUNT
     setLives = (val = 1) => this.#LIVES += val
+
     setLevel = () => this.#CURRENT_LEVEL = val
+    getLevel = () => this.#CURRENT_LEVEL
+
+    getScore = () => this.#SCORE
     setScore = () => this.#SCORE = val
+    
+    getBombCount = () => this.#BOMB_COUNT
     setBombCount = (val = 1) => this.#BOMB_COUNT += val
+
+    getMaxAllowdBombCount = () => this.#MAX_ALLOWD_BOMBS
+    setMaxAllowdBombCount = (val = 1) => this.#MAX_ALLOWD_BOMBS += val
 
     // FPS = () => 
     pause = () => this.#PAUSE = true

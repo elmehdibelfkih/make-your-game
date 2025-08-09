@@ -19,8 +19,9 @@ import { Game } from "./engine/core.js"
 
 
 // let game = new ScoreBoard()
-let level = await Game.getCurrentLevelObj()
-let game = Game.getInstance(level)
+// let level = await Game.getCurrentLevelObj()
+let game = Game.getInstance()
+await game.intiElements()
 game.run()
 
 // document.addEventListener("click", () => {
