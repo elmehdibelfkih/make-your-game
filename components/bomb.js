@@ -13,12 +13,13 @@ export class Bomb {
         this.frameIndex = 0
         this.MS_PER_FRAME = 300
         this.lastTime = performance.now()
-        this.exp = []
+        this.exp
         this.initBomb()
     }
 
     initBomb() {
         this.bomb = document.createElement("div")
+        this.bomb.style.opacity = 1
         this.img = document.createElement("img")
         this.img.src = this.image
         this.bomb.appendChild(this.img)
@@ -39,45 +40,48 @@ export class Bomb {
         if (this.explosion) {
             this.makeShockSound()
             this.makeExplosion()
+            this.explosion = false
         }
-
+        if (this.disappearing) {
+            this.makeDisappearing()
+            this.disappearing = false
+        }
 
     }
 
     update(timestamp) {
         const delta = timestamp - this.lastTime;
-        if (timestamp - this.startTime >= this.explosionTime + 1000) {
-            this.bomb.removeChild(this.exp)
-            return
-        }
-        
-        if (timestamp - this.startTime >= this.explosionTime) {
-            this.explosion = true
-            this.image = this.image.replace(/\d+\.png$/, "2.png");
-            this.flashing = true
 
-            if (delta >= this.MS_PER_FRAME - 280) {
-                if (!this.exp) {
-                    this.exp = document.createElement("img")
-                    this.bomb.appendChild(this.exp)
-                    this.exp.style.position = "absolute";
-                    this.exp.style.transform = `translate(-64px, 38px)`;
-                    // this.exp.style.transform = "rotate(90deg)"
-                }
-                this.exp.src = this.explosionImg
-                this.frameIndex = (this.frameIndex + 1) % 4;
-                this.explosionImg = this.explosionImg.replace(this.frameIndex + ".png", ((this.frameIndex + 1) % 4) + ".png")
+
+        if (timestamp - this.startTime >= this.explosionTime + 1000) {
+            // this.bomb.removeChild(this.exp)\
+            if (delta >= this.MS_PER_FRAME - 250) {
+                this.disappearing = true
                 this.lastTime = timestamp;
             }
             return
         }
+
+        if (timestamp - this.startTime >= this.explosionTime) {
+            this.image = this.image.replace(/\d+\.png$/, "2.png");
+            this.flashing = true
+            if (delta >= this.MS_PER_FRAME - 280) {
+                this.frameIndex = (this.frameIndex + 1) % 4;
+                this.explosionImg = this.explosionImg.replace(this.frameIndex + ".png", ((this.frameIndex + 1) % 4) + ".png")
+                this.lastTime = timestamp;
+            }
+            this.explosion = true
+            return
+        }
+
         if (delta >= this.MS_PER_FRAME) {
             this.frameIndex = (this.frameIndex + 1) % 2;
             this.image = this.image.replace(this.frameIndex + ".png", ((this.frameIndex + 1) % 2) + ".png")
-            this.lastTime = timestamp;
             this.flashing = true
+            this.lastTime = timestamp;
         }
     }
+
     makeShockSound() {
         if (!this.shock) {
             this.game.map.electricShock.play().catch(err => {
@@ -87,7 +91,34 @@ export class Bomb {
         }
     }
     makeExplosion() {
-        
+        if (!this.exp) {
+            this.exp = []
+            for (let i = 0; i < 4; i++) {
+                this.exp[i] = document.createElement("img")
+                this.bomb.appendChild(this.exp[i])
+                this.exp[i].style.position = "absolute";
+                if (i === 0) {
+                    this.exp[i].style.transform = `translate(-68px, 34px)`;
+                }
+                if (i === 1) {
+                    this.exp[i].style.transform = "rotate(90deg) translate(-17px, 119px)";
+                }
+                if (i === 2) {
+                    this.exp[i].style.transform = "rotate(180deg) translate(68px, 68px)"
+                }
+                if (i === 3) {
+                    this.exp[i].style.transform = "rotate(270deg) translate(17px, -9px)"
+                }
+
+            }
+        }
+        this.exp?.forEach(b => b.src = this.explosionImg);
+    }
+
+    makeDisappearing() {
+        this.bomb.style.opacity = this.bomb.style.opacity - 0.1
+        // console.log( this.bomb.style.opacity);
+
     }
 }
 
