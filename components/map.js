@@ -19,31 +19,8 @@ export class Map {
 
     async initMap() {
         this.level = await fetch(`assets/maps/level${this.game.state.getLevel()}.json`).then(res => res.json());
-        let grid = document.getElementById("grid")
-        if (grid) document.body.removeChild(grid)
-        grid = document.createElement("div")
-        grid.id = "grid"
-        document.body.appendChild(grid)
-        this.grid = grid
-        grid.style.position = "absolute";
-        this.level.map.forEach((row, colIndex) => {
-            row.forEach((cell, rowIndex) => {
-                const tile = document.createElement("div");
-                tile.style.position = "absolute";
-                tile.style.transform = `translate(${this.level.block_size * rowIndex}px, ${this.level.block_size * colIndex}px)`;
-                if (cell === consts.WALL) tile.style.backgroundImage = `url(${this.level.wall})`;
-                else tile.style.backgroundImage = `url(${this.level.floor})`;
-                if (cell === consts.BLOCK) {
-                    const block = document.createElement("img");
-                    block.src = this.level.block
-                    tile.appendChild(block)
-                }
-                tile.style.width = `${this.level.block_size}px`;
-                tile.style.height = `${this.level.block_size}px`;
-                tile.style.backgroundSize = "cover";
-                grid.appendChild(tile);
-            });
-        });
+        this.initGrid()
+        this.initAudios()
     }
 
     render() {
@@ -74,13 +51,59 @@ export class Map {
     isFreeSpaceInGrid = (x, y) => this.level.map[y][x] === 0 || this.level.map[y][x] === 6
 
     addBoom(x, y, timestamp) {
-        if (this.game.state.getBombCount() < this.game.state.getMaxAllowdBombCount()){
-             this.bombs.push(new Bomb(this.game, x, y, timestamp))
+        if (this.game.state.getBombCount() < this.game.state.getMaxAllowdBombCount()) {
+            this.bombs.push(new Bomb(this.game, x, y, timestamp))
         }
     }
 
     removeBomb() {
-        
+
     }
+
+    initGrid() {
+        let grid = document.getElementById("grid")
+        if (grid) document.body.removeChild(grid)
+        grid = document.createElement("div")
+        grid.id = "grid"
+        document.body.appendChild(grid)
+        this.grid = grid
+        grid.style.position = "absolute";
+        this.level.map.forEach((row, colIndex) => {
+            row.forEach((cell, rowIndex) => {
+                const tile = document.createElement("div");
+                tile.style.position = "absolute";
+                tile.style.transform = `translate(${this.level.block_size * rowIndex}px, ${this.level.block_size * colIndex}px)`;
+                if (cell === consts.WALL) tile.style.backgroundImage = `url(${this.level.wall})`;
+                else tile.style.backgroundImage = `url(${this.level.floor})`;
+                if (cell === consts.BLOCK) {
+                    const block = document.createElement("img");
+                    block.src = this.level.block
+                    tile.appendChild(block)
+                }
+                tile.style.width = `${this.level.block_size}px`;
+                tile.style.height = `${this.level.block_size}px`;
+                tile.style.backgroundSize = "cover";
+                grid.appendChild(tile);
+            });
+        });
+    }
+
+    initAudios() {
+        this.backGroundMusic = new Audio(this.level.back_ground_music);
+        this.electricShock = new Audio(this.level.shock_sound);
+        this.backGroundMusic.preload = 'auto';
+        this.backGroundMusic.loop = true;
+        this.backGroundMusic.volume = 0.4;
+        const playMusic = () => {
+            this.backGroundMusic.play().catch(err => {
+                console.error("Playback failed:", err);
+            });
+            document.body.removeEventListener('click', playMusic);
+            document.body.removeEventListener('keydown', playMusic);
+        };
+        document.body.addEventListener('click', playMusic);
+        document.body.addEventListener('keydown', playMusic);
+    }
+
 }
 

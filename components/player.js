@@ -65,7 +65,7 @@ export class Player {
             this.direction = 'walkingLeft'
             this.movement = true
         }
-        if (this.game.state.isSpace() && (!this.lastBomb || timestamp - this.lastBomb > 600 )) {
+        if (this.game.state.isSpace() && (!this.lastBomb || timestamp - this.lastBomb > 1500 )) {
             this.lastBomb = timestamp
             this.game.map.addBoom(this.x + (this.getPlayerWidth() / 2), this.y + (this.getPlayerHeight() / 2) , timestamp)
         }
