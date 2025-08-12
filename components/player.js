@@ -67,7 +67,7 @@ export class Player {
         }
         if (this.game.state.isSpace() && (!this.lastBomb || timestamp - this.lastBomb > 1500 )) {
             this.lastBomb = timestamp
-            this.game.map.addBoom(this.x + (this.getPlayerWidth() / 2), this.y + (this.getPlayerHeight() / 2) , timestamp)
+            this.game.map.addBomb(this.x + (this.getPlayerWidth() / 2), this.y + (this.getPlayerHeight() / 2) , timestamp)
         }
         this.movePlayer(timestamp)
 

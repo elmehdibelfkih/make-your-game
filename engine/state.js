@@ -50,11 +50,11 @@ export class State {
     getLives = () => this.#LIVES
     setLives = (val = 1) => this.#LIVES += val
 
-    setLevel = () => this.#CURRENT_LEVEL = val
+    setLevel = (val) => this.#CURRENT_LEVEL = val
     getLevel = () => this.#CURRENT_LEVEL
 
     getScore = () => this.#SCORE
-    setScore = () => this.#SCORE = val
+    setScore = (val) => this.#SCORE = val
     
     getBombCount = () => this.#BOMB_COUNT
     setBombCount = (val = 1) => this.#BOMB_COUNT += val

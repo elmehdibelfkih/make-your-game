@@ -28,6 +28,10 @@ export class Map {
         this.mustrender = false
     }
 
+    update(timstamp) {
+        this.bombs = this.bombs.filter(bomb => !bomb.isDone());
+    }
+
     canPlayerMoveTo(x, y) {
         let topLeftX = Math.floor(x / this.level.block_size)
         let topLeftY = Math.floor(y / this.level.block_size)
@@ -50,14 +54,20 @@ export class Map {
 
     isFreeSpaceInGrid = (x, y) => this.level.map[y][x] === 0 || this.level.map[y][x] === 6
 
-    addBoom(x, y, timestamp) {
+    addBomb(x, y, timestamp) {
         if (this.game.state.getBombCount() < this.game.state.getMaxAllowdBombCount()) {
             this.bombs.push(new Bomb(this.game, x, y, timestamp))
         }
     }
 
-    removeBomb() {
-
+    removeBomb(bombId) {
+        this.bombs.forEach((val, index) => {
+            if (val.getId() === bombId) {
+                this.bombs.pop(index)
+                this.game.state.setBombCount(-1);
+                // return
+            }
+        })
     }
 
     initGrid() {

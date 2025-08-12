@@ -40,6 +40,7 @@ export class Game {
     }
 
     update(timestamp) {
+        this.map.update(timestamp)
         this.player.update(timestamp);        
         this.map.bombs?.forEach(b => b.update(timestamp));
         // this.enemy.update(timestamp);
