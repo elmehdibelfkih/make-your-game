@@ -1,4 +1,5 @@
 export class Player {
+
     constructor(game, x, y) {
         this.game = game
         this.x = x
@@ -24,7 +25,7 @@ export class Player {
         if (!this.player) {
             this.player = document.createElement("div")
             this.player.className = 'player';
-            this.game.map.grid.appendChild(this.player)
+            this.game.map.grid.appendChild(this.player) // I add here player to father 
             this.player.style.backgroundImage = `url(${this.game.map.level.player})`;
             this.player.style.backgroundRepeat = 'no-repeat';
             this.player.style.imageRendering = 'pixelated';
@@ -32,16 +33,15 @@ export class Player {
             this.player.style.width = this.playerCoordinate[this.direction]['width'];
             this.player.style.height = this.playerCoordinate[this.direction]['height'];
             this.player.style.backgroundPosition = `${this.playerCoordinate[this.direction]['x']} ${this.playerCoordinate[this.direction]['y']}`;
-
         }
         this.player.style.transform = `translate(${this.x}px, ${this.y}px)`;
+        // her it's add frame for exemple last is at index 0  it's fix and then it will be 1 and click it's simulation moving "soubaaiss"
         if (this.frame) {
             this.player.style.width = this.frame.width;
             this.player.style.height = this.frame.height;
             this.player.style.backgroundPosition = `${this.frame.x} ${this.frame.y}`;
             this.frameIndex = (this.frameIndex + 1) % this.playerCoordinate['walking' + this.direction].length;
         }
-
         this.mustrender = false
     }
 
@@ -70,8 +70,6 @@ export class Player {
             this.game.map.addBoom(this.x, this.y, timestamp)
         }
         this.movePlayer(timestamp)
-
-
     }
 
     movePlayer(timestamp) {

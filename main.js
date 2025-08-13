@@ -14,10 +14,7 @@ import { Game } from "./engine/core.js"
 
 //     // Wait for user interaction
 //     // document.addEventListener("click", () => {
-//         aud.play().catch(err => console.error("Playback failed:", err))
-
-
-
+//         aud.play().catch(err => c
 // let game = new ScoreBoard()
 let level = await Game.getCurrentLevelObj()
 let game = Game.getInstance(level)

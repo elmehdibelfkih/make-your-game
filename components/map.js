@@ -23,7 +23,6 @@ export class Map {
 
     // todo
     // removeEnemy(x, y);
-
     async render() {
         if (!this.mustrender) return
         if (this.updateLevel) this.level = await this.getCurrentLevelObj()
@@ -49,6 +48,8 @@ export class Map {
                 tile.style.width = `${this.level.block_size}px`;
                 tile.style.height = `${this.level.block_size}px`;
                 tile.style.backgroundSize = "cover";
+                // HER I ADD THIS TO DETECT EVERY TILE THE CORDIANTION FOR ENEMY PLACE
+                //tile.textContent =  `(${this.level.block_size * rowIndex}px, ${this.level.block_size * colIndex}px)`
                 grid.appendChild(tile);
             });
         });
@@ -57,8 +58,7 @@ export class Map {
 
     canPlayerMoveTo(x, y) {
         // if (Math.floor(x / this.level.block_size) === Math.floor(this.game.player.x / this.level.block_size) &&
-            // Math.floor(y / this.level.block_size) === Math.floor(this.game.player.y / this.level.block_size) && ) return true
-
+        // Math.floor(y / this.level.block_size) === Math.floor(this.game.player.y / this.level.block_size) && ) return true
         let topLeftX = Math.floor(x / this.level.block_size)
         let topLeftY = Math.floor(y / this.level.block_size)
         if (!this.isFreeSpaceInGrid(topLeftX, topLeftY)) return false
