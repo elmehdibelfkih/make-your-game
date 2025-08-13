@@ -6,6 +6,8 @@ export class Map {
     constructor(game) {
         this.game = game
         this.level
+        this.grid
+        this.gridArray
         this.mustrender = true
         this.updateLevel = false
         this.bombs = []
@@ -33,26 +35,29 @@ export class Map {
     }
 
     canPlayerMoveTo(x, y) {
-        let topLeftX = Math.floor(x / this.level.block_size)
-        let topLeftY = Math.floor(y / this.level.block_size)
-        if (!this.isFreeSpaceInGrid(topLeftX, topLeftY)) return false
+        const blockSize = this.level.block_size;
+        const width = this.game.player.getPlayerWidth();
+        const height = this.game.player.getPlayerHeight();
 
-        let topRightX = Math.floor((x + this.game.player.getPlayerWidth()) / this.level.block_size)
-        let topRightY = Math.floor(y / this.level.block_size)
-        if (!this.isFreeSpaceInGrid(topRightX, topRightY)) return false
+        const corners = [
+            [x, y],
+            [x + width, y],
+            [x, y + height],
+            [x + width, y + height]
+        ];
 
-        let bottomLeftX = Math.floor(x / this.level.block_size)
-        let bottomLeftY = Math.floor((y + this.game.player.getPlayerHeight()) / this.level.block_size)
-        if (!this.isFreeSpaceInGrid(bottomLeftX, bottomLeftY)) return false
+        for (const [cx, cy] of corners) {
+            const gridX = Math.floor(cx / blockSize);
+            const gridY = Math.floor(cy / blockSize);
+            if (!this.isFreeSpaceInGrid(gridX, gridY)) {
+                return false
+            };
+        }
 
-        let bottomRightX = Math.floor((x + this.game.player.getPlayerWidth()) / this.level.block_size)
-        let bottomRightY = Math.floor((y + this.game.player.getPlayerHeight()) / this.level.block_size)
-        if (!this.isFreeSpaceInGrid(bottomRightX, bottomRightY)) return false
-
-        return true
+        return true;
     }
 
-    isFreeSpaceInGrid = (x, y) => this.level.map[y][x] === 0 || this.level.map[y][x] === 6
+    isFreeSpaceInGrid = (x, y) => this.gridArray[y][x] === 0 || this.gridArray[y][x] === 6
 
     addBomb(x, y, timestamp) {
         if (this.game.state.getBombCount() < this.game.state.getMaxAllowdBombCount()) {
@@ -65,20 +70,18 @@ export class Map {
             if (val.getId() === bombId) {
                 this.bombs.pop(index)
                 this.game.state.setBombCount(-1);
-                // return
             }
         })
     }
 
     initGrid() {
-        let grid = document.getElementById("grid")
-        if (grid) document.body.removeChild(grid)
-        grid = document.createElement("div")
-        grid.id = "grid"
-        document.body.appendChild(grid)
-        this.grid = grid
-        grid.style.position = "absolute";
-        this.level.map.forEach((row, colIndex) => {
+        this.gridArray = this.level.initial_grid.map(row => [...row])
+        if (this.grid) document.body.removeChild(grid)
+        this.grid = document.createElement("div")
+        this.grid.id = "grid"
+        document.body.appendChild(this.grid)
+        this.grid.style.position = "absolute";
+        this.level.initial_grid.forEach((row, colIndex) => {
             row.forEach((cell, rowIndex) => {
                 const tile = document.createElement("div");
                 tile.style.position = "absolute";
@@ -93,14 +96,13 @@ export class Map {
                 tile.style.width = `${this.level.block_size}px`;
                 tile.style.height = `${this.level.block_size}px`;
                 tile.style.backgroundSize = "cover";
-                grid.appendChild(tile);
+                this.grid.appendChild(tile);
             });
         });
     }
 
     initAudios() {
         this.backGroundMusic = new Audio(this.level.back_ground_music);
-        this.electricShock = new Audio(this.level.shock_sound);
         this.backGroundMusic.preload = 'auto';
         this.backGroundMusic.loop = true;
         this.backGroundMusic.volume = 0.4;

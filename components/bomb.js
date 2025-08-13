@@ -11,7 +11,7 @@ export class Bomb {
         this.flashing = true
         this.image = this.game.map.level.bomb
         this.explosionTime = this.game.map.level.explosion_time
-        this.explosionImg = this.game.map.level.explosion_img
+        this.explosionImg = this.game.map.level.electric_shock_img
         this.frameIndex = 0
         this.lastTime = performance.now()
         this.freeBlocks = []
@@ -19,7 +19,7 @@ export class Bomb {
     }
 
     getId = () => this.id
-    isDone =() => this.done
+    isDone = () => this.done
 
     initBomb() {
         this.bomb = document.createElement("div")
@@ -37,13 +37,14 @@ export class Bomb {
 
         this.bomb.style.transform = `translate(${this.xMap * this.game.map.level.block_size}px,
         ${this.yMap * this.game.map.level.block_size}px)`;
-        this.game.map.level.map[this.yMap][this.xMap] = consts.BOMB
+        this.game.map.gridArray[this.yMap][this.xMap] = consts.BOMB
 
-        this.game.map.level.map[this.yMap][this.xMap - 1] !== consts.WALL ? this.freeBlocks.push(1) : 0
-        this.game.map.level.map[this.yMap][this.xMap + 1] !== consts.WALL ? this.freeBlocks.push(3) : 0
-        this.game.map.level.map[this.yMap - 1][this.xMap] !== consts.WALL ? this.freeBlocks.push(2) : 0
-        this.game.map.level.map[this.yMap + 1][this.xMap] !== consts.WALL ? this.freeBlocks.push(0) : 0
-
+        this.game.map.gridArray[this.yMap][this.xMap - 1] !== consts.WALL ? this.freeBlocks.push(1) : 0
+        this.game.map.gridArray[this.yMap][this.xMap + 1] !== consts.WALL ? this.freeBlocks.push(3) : 0
+        this.game.map.gridArray[this.yMap - 1][this.xMap] !== consts.WALL ? this.freeBlocks.push(2) : 0
+        this.game.map.gridArray[this.yMap + 1][this.xMap] !== consts.WALL ? this.freeBlocks.push(0) : 0
+        
+        this.electricShock = new Audio(this.game.map.level.shock_sound);
     }
 
     render() {
@@ -78,6 +79,14 @@ export class Bomb {
         }
 
         if (timestamp - this.startTime >= this.explosionTime) {
+            const tmp = this.game.map.level.block_size
+            const x = this.xMap * this.game.map.level.block_size
+            const y = this.yMap * this.game.map.level.block_size
+            this.game.player.isColliding(x, y, tmp, tmp) ? this.game.player.kill() : 0 
+            this.game.player.isColliding(x, y - tmp, tmp, tmp) ? this.game.player.kill() : 0 
+            this.game.player.isColliding(x, y + tmp, tmp, tmp) ? this.game.player.kill() : 0 
+            this.game.player.isColliding(x - tmp, y, tmp, tmp) ? this.game.player.kill() : 0 
+            this.game.player.isColliding(x + tmp, y, tmp, tmp) ? this.game.player.kill() : 0 
             this.image = this.image.replace(/\d+\.png$/, "2.png");
             this.flashing = true
             if (delta >= 20) {
@@ -99,7 +108,7 @@ export class Bomb {
 
     makeShockSound() {
         if (!this.shock) {
-            this.game.map.electricShock.play().catch(err => {
+            this.electricShock.play().catch(err => {
                 console.error("Playback failed:", err);
             });
             this.shock = true
@@ -117,7 +126,7 @@ export class Bomb {
                 i === 0 ? this.exp[i].style.transform = `translate(-68px, 34px)` : 0
                 i === 1 ? this.exp[i].style.transform = "rotate(90deg) translate(-17px, 119px)" : 0
                 i === 2 ? this.exp[i].style.transform = "rotate(180deg) translate(68px, 68px)" : 0
-                i === 3 ? this.exp[i].style.transform = "rotate(270deg) translate(17px, -9px)" : 0
+                i === 3 ? this.exp[i].style.transform = "rotate(270deg) translate(17px, -17px)" : 0
             }
         }
         this.exp?.forEach(b => b ? b.src = this.explosionImg : 0);
@@ -126,7 +135,6 @@ export class Bomb {
     makeDisappearing() {
         this.bomb.style.opacity = parseFloat(this.bomb.style.opacity) - 0.1;
         if (this.bomb.style.opacity <= 0) {
-            console.log(this.id);
             this.game.map.grid.removeChild(this.bomb);
             this.game.state.setBombCount(-1);
             this.done = true;

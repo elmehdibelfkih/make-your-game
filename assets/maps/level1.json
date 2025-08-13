@@ -1,12 +1,14 @@
+
+
 {
-  "name": "level1",
-  "map": [
+  "name": "level 1",
+  "initial_grid": [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1],
     [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],
     [1,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,1],
     [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],
@@ -19,14 +21,13 @@
   "bomb_quantity_at_time": 1,
   "block_size": 68,
   "wall": "./assets/images/wall/wall_17.png",
-  "floor": "./assets/images/floor/floor_11.png",
-  "block": "./assets/images/box.png",
+  "floor": "./assets/images/floor/floor_42.png",
+  "block": "./assets/images/soft_block/block_3.png",
   "player": "./assets/images/player.png",
   "bomb": "./assets/images/Bomb/bomb0.png",
-  "explosion_img": "./assets/images/shock/Explosion_1.png",
+  "electric_shock_img": "./assets/images/shock/Explosion_0.png",
+  "player_explosion_img": "./assets/images/explosion/Explosion_1.png",
   "back_ground_music" : "./assets/audios/Byzantine.mp3",
   "shock_sound" : "./assets/audios/buzz.ogg",
-  "explosion_time": 3000,
-  "player_x": 70,
-  "player_y": 70
+  "explosion_time": 2000
 }
