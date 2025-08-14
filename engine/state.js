@@ -4,9 +4,10 @@ export class State {
     #LIVES = 3
     #SCORE = 0
     #PAUSE = false
-    #PLAYER_SPEED = 2
+    #PLAYER_SPEED = 4
     #BOMB_COUNT = 0
     #MAX_ALLOWD_BOMBS = 3
+    #GAME_OVER = false
 
     #ARROW_UP = false
     #ARROW_DOWN = false
@@ -14,11 +15,21 @@ export class State {
     #ARROW_LEFT = false
     #SPACE = false
 
+
     constructor() {
     }
 
     static getInstance = (game) => State.instance ? State.instance : new State(game)
 
+    initState() {
+        this.#LIVES = 3
+        this.#SCORE = 0
+        this.#PAUSE = false
+        this.#PLAYER_SPEED = 4
+        this.#BOMB_COUNT = 0
+        this.#MAX_ALLOWD_BOMBS = 3
+        this.#GAME_OVER = false
+    }
 
     isArrowUp = () => this.#ARROW_UP
     isArrowDown = () => this.#ARROW_DOWN
@@ -32,6 +43,9 @@ export class State {
         if (event.key === 'ArrowRight') this.#ARROW_RIGHT = true
         if (event.key === 'ArrowLeft') this.#ARROW_LEFT = true
         if (event.key === ' ') this.#SPACE = true
+        if (event.key.toLowerCase() === 'p') {
+            this.pauseStart()
+        }
     }
 
     setArrowStateKeyUp = (event) => {
@@ -47,6 +61,8 @@ export class State {
         document.addEventListener('keyup', this.setArrowStateKeyUp.bind(this))
     }
 
+
+
     getLives = () => this.#LIVES
     setLives = (val = 1) => this.#LIVES += val
 
@@ -55,7 +71,7 @@ export class State {
 
     getScore = () => this.#SCORE
     setScore = (val) => this.#SCORE = val
-    
+
     getBombCount = () => this.#BOMB_COUNT
     setBombCount = (val = 1) => this.#BOMB_COUNT += val
 
@@ -63,8 +79,17 @@ export class State {
     setMaxAllowdBombCount = (val = 1) => this.#MAX_ALLOWD_BOMBS += val
 
     // FPS = () => 
-    pause = () => this.#PAUSE = true
-    start = () => this.#PAUSE = false
+    pauseStart = () => this.#PAUSE = this.#PAUSE ? false : true
+
     isPaused = () => this.#PAUSE
+    isGameOver = () => this.#GAME_OVER
+    GameOver = () => this.#GAME_OVER = true
+
     getPlayerSpeed = () => this.#PLAYER_SPEED
+
+    updateState = () => {
+        if (!this.#LIVES) {
+            this.GameOver()
+        }
+    }
 }

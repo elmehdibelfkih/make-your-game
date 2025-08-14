@@ -26,6 +26,13 @@ export class Scoreboard {
         ScoreBoard.appendChild(this.timer)
     }
 
+    initScoreBaord() {
+        this.updateLives = () => this.lives.innerText = "lives: " + "❤️".repeat(this.game.state.getLives())
+        this.updateScore = () => this.score.innerText = `score: ${this.game.state.getScore()}`
+        this.updateLevel = () => this.level.innerText = `level: ${this.game.state.getLevel()}`
+        this.updateTimer = () => 0// this.lives.innerText = "lives: " + "❤️".repeat(this.game.state.getLives())
+    }
+
     static getInstance = (game) => Scoreboard.instance ? Scoreboard.instance : new Scoreboard(game)
 
     reset() {
@@ -35,6 +42,6 @@ export class Scoreboard {
     updateLives = () => this.lives.innerText = "lives: " + "❤️".repeat(this.game.state.getLives())
     updateScore = () => this.score.innerText = `score: ${this.game.state.getScore()}`
     updateLevel = () => this.level.innerText = `level: ${this.game.state.getLevel()}`
-    updateTimer = () =>  0// this.lives.innerText = "lives: " + "❤️".repeat(this.game.state.getLives())
+    updateTimer = () => 0// this.lives.innerText = "lives: " + "❤️".repeat(this.game.state.getLives())
 }
 

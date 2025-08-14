@@ -4,11 +4,11 @@
   "name": "level 1",
   "initial_grid": [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1],
+    [1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1],
     [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],
     [1,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,1],
     [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],
@@ -26,8 +26,8 @@
   "player": "./assets/images/player.png",
   "bomb": "./assets/images/Bomb/bomb0.png",
   "electric_shock_img": "./assets/images/shock/Explosion_0.png",
-  "player_explosion_img": "./assets/images/explosion/Explosion_1.png",
-  "back_ground_music" : "./assets/audios/Byzantine.mp3",
+  "player_explosion_img": "./assets/images/explosion_3/Explosion_1.png",
+  "back_ground_music" : "./assets/audios/happy_adventure.mp3",
   "shock_sound" : "./assets/audios/buzz.ogg",
   "explosion_time": 2000
 }

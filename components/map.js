@@ -8,7 +8,7 @@ export class Map {
         this.level
         this.grid
         this.gridArray
-        this.mustrender = true
+        this.mustrender = false
         this.updateLevel = false
         this.bombs = []
     }
@@ -27,11 +27,17 @@ export class Map {
 
     render() {
         if (!this.mustrender) return
+        // document.body.removeChild(this.grid)        // document.body.removeChild(this.grid)
+
         this.mustrender = false
     }
 
     update(timstamp) {
+        // if (this.game.state.isGameOver()) {
+        //     this.mustrender = true
+        // }
         this.bombs = this.bombs.filter(bomb => !bomb.isDone());
+
     }
 
     canPlayerMoveTo(x, y) {
@@ -65,14 +71,14 @@ export class Map {
         }
     }
 
-    removeBomb(bombId) {
-        this.bombs.forEach((val, index) => {
-            if (val.getId() === bombId) {
-                this.bombs.pop(index)
-                this.game.state.setBombCount(-1);
-            }
-        })
-    }
+    // removeBomb(bombId) {
+    //     this.bombs.forEach((val, index) => {
+    //         if (val.getId() === bombId) {
+    //             this.bombs.pop(index)
+    //             this.game.state.setBombCount(-1);
+    //         }
+    //     })
+    // }
 
     initGrid() {
         this.gridArray = this.level.initial_grid.map(row => [...row])
@@ -103,6 +109,7 @@ export class Map {
 
     initAudios() {
         this.backGroundMusic = new Audio(this.level.back_ground_music);
+        this.grid.appendChild(this.backGroundMusic)
         this.backGroundMusic.preload = 'auto';
         this.backGroundMusic.loop = true;
         this.backGroundMusic.volume = 0.4;
@@ -117,5 +124,8 @@ export class Map {
         document.body.addEventListener('keydown', playMusic);
     }
 
+    destructeur() {
+        document.body.removeChild(this.grid)
+    }
 }
 

@@ -1,9 +1,9 @@
 import { Scoreboard } from '../components/scoreboard.js';
 import { Player } from '../components/player.js';
-// import { Enemy } from '../components/enemy.js';
-// import { Bomb } from '../components/bomb.js';
 import { Map } from '../components/map.js';
 import { State } from './state.js';
+// import { Enemy } from '../components/enemy.js';
+// import { Bomb } from '../components/bomb.js';
 
 export class Game {
     static #instance = null;
@@ -31,7 +31,19 @@ export class Game {
         requestAnimationFrame(this.loop.bind(this));
     }
 
-    loop(timestamp) {
+    async loop(timestamp) {
+        if (this.state.isGameOver()) {
+            this.state.initState()
+            this.scoreboard.initScoreBaord() // todo: update this
+            this.scoreboard.updateLives()
+            this.map.destructeur()
+            
+            this.map = Map.getInstance(this)
+            this.player = Player.getInstance(this)
+            await this.map.initMap()
+            await this.player.initPlayer()
+            this.state.pauseStart()
+        }
         if (!this.state.isPaused()) {
             this.update(timestamp);
             this.render();
@@ -41,8 +53,9 @@ export class Game {
 
     update(timestamp) {
         this.map.update(timestamp)
-        this.player.update(timestamp);        
+        this.player.update(timestamp);
         this.map.bombs?.forEach(b => b.update(timestamp));
+        this.state.updateState()
         // this.enemy.update(timestamp);
         // this.scoreboard.update(this.state);
     }
