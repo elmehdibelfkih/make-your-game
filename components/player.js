@@ -11,7 +11,7 @@ export class Player {
         this.frameIndex = 0
         this.render()
     }
-
+    
     static getInstance(game) {
         if (!Player.instance) {
             Player.instance = new Player(game, game.map.level.player_x, game.map.level.player_y)

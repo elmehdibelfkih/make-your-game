@@ -55,13 +55,13 @@ export class Game {
         // this.bombs?.forEach(b => b.update(timestamp));
         // this.scoreboard.update(this.state);
     }
-    
+
     async render() {
         // Here Is This Is Static One... ! 
         await this.map.render();
         await this.player.render();
         // I WILL TRY TO RENDER ENEMIES INTO MAP ?
-        this.enemy.render();
-        // this.enemy.render();
+        //this.enemy.render();
+        this.enemy.update();
     }
 }

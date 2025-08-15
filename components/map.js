@@ -77,7 +77,7 @@ export class Map {
 
         return true
     }
-
+    
     isFreeSpaceInGrid = (x, y) => this.level.map[y][x] === 0 || this.level.map[y][x] === 6
 
     addBoom(x, y, timestamp) {
