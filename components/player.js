@@ -40,7 +40,7 @@ export class Player {
         const tmp = helpers.getCoordinates(this.game.map.level.initial_grid, consts.PLAYER)
         this.y = tmp[0] * this.game.map.level.block_size
         this.x = tmp[1] * this.game.map.level.block_size + 15
-        this.game.map.gridArray[tmp[0]][tmp[1]] = 0
+        this.game.map.gridArray[tmp[0]][tmp[1]] = consts.FLOOR
         this.player.style.backgroundImage = `url(${this.game.map.level.player})`;
         this.player.style.backgroundRepeat = 'no-repeat';
         this.player.style.imageRendering = 'pixelated';
@@ -64,13 +64,15 @@ export class Player {
         }
 
         if (!this.movement && !this.animate) return
+
         this.player.style.transform = `translate(${this.x}px, ${this.y}px)`;
-        if (this.animate) {
-            this.player.style.width = this.frame.width;
-            this.player.style.height = this.frame.height;
-            this.player.style.backgroundPosition = `${this.frame.x} ${this.frame.y}`;
-            this.animate = false
-        }
+
+        // if (this.animate) {
+        //     this.player.style.width = this.frame.width;
+        //     this.player.style.height = this.frame.height;
+        //     this.player.style.backgroundPosition = `${this.frame.x} ${this.frame.y}`;
+        //     this.animate = false
+        // }
         this.movement = false
     }
 
@@ -91,7 +93,6 @@ export class Player {
             this.game.map.grid.appendChild(this.exp)
             this.exp.style.position = "absolute";
             this.exp.style.transform = `translate(${this.x - 20}px, ${this.y}px)`;
-            this.frameIndex = 0
             this.explosionFrameIndex = 0
             this.explosionImg = this.game.map.level.player_explosion_img
             this.renderExp = true

@@ -31,7 +31,6 @@ export class Map {
     update(timstamp) {
         this.bombs = this.bombs.filter(bomb => !bomb.isDone());
 
-
     }
 
 
@@ -62,13 +61,13 @@ export class Map {
 
         for (const [cx, cy] of corners) {
             const gridX = Math.floor(cx / blockSize);
-            const gridY = Math.floor(cy / blockSize);
+            const gridY = Math.floor(cy / blockSize);            
             if (!this.isFreeSpaceInGrid(gridX, gridY)) return false
         }
         return true;
     }
 
-    isFreeSpaceInGrid = (x, y) => this.gridArray[y][x] === 0 || this.gridArray[y][x] === 6
+    isFreeSpaceInGrid = (x, y) => this.gridArray[y][x] !== consts.BLOCK && this.gridArray[y][x] !== consts.WALL
 
     addBomb(x, y, timestamp) {
         if (this.game.state.getBombCount() < this.game.state.getMaxAllowdBombCount()) {
@@ -82,7 +81,7 @@ export class Map {
         this.grid = document.createElement("div")
         this.grid.id = "grid"
         document.body.appendChild(this.grid)
-        // this.grid.style.position = "relative";
+        this.grid.style.position = "absolute";
         this.level.initial_grid.forEach((row, colIndex) => {
             row.forEach((cell, rowIndex) => {
                 const tile = document.createElement("div");

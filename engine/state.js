@@ -3,7 +3,7 @@ export class State {
     #CURRENT_LEVEL = 1
     #LIVES = 3
     #SCORE = 0
-    #PAUSE = false
+    #PAUSE = true
     #PLAYER_SPEED = 4
     #BOMB_COUNT = 0
     #MAX_ALLOWD_BOMBS = 3
@@ -23,7 +23,7 @@ export class State {
     initState() {
         this.#LIVES = 3
         this.#SCORE = 0
-        this.#PAUSE = false
+        this.#PAUSE = true
         this.#PLAYER_SPEED = 4
         this.#BOMB_COUNT = 0
         this.#MAX_ALLOWD_BOMBS = 3

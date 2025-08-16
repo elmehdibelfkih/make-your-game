@@ -32,8 +32,14 @@ export class Game {
     }
 
     async loop(timestamp) {
-        if (this.state.isGameOver()) await this.gameOver()
-        if (!this.state.isPaused()) {
+
+        if (this.state.isGameOver()) {
+            await this.gameOver()
+        }
+        if (this.state.isPaused()) {
+            // this.map.grid.style.display = "none"
+
+        } else {
             this.update(timestamp);
             this.render();
         }
@@ -43,7 +49,7 @@ export class Game {
     update(timestamp) {
         this.map.update(timestamp)
         this.player.update(timestamp);
-        this.map.bombs?.filter(b => b.update(timestamp));
+        this.map.bombs?.forEach(b => b.update(timestamp));
         this.state.updateState()
         // this.enemy.update(timestamp);
         // this.scoreboard.update(this.state);

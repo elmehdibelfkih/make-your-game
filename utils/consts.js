@@ -1,7 +1,6 @@
 export const FLOOR = 0
 export const WALL = 1
-export const BLOCK = 3
-export const PLAYER = 4
-export const ENEMY = 5
-export const BOMB = 6
-// export const BOOM = 1
+export const BLOCK = 2
+export const PLAYER = 3
+export const ENEMY = 4
+export const BOMB = 5
