@@ -43,7 +43,7 @@ export class Bomb {
         this.game.map.gridArray[this.yMap][this.xMap + 1] !== consts.WALL ? this.freeBlocks.push(3) : 0
         this.game.map.gridArray[this.yMap - 1][this.xMap] !== consts.WALL ? this.freeBlocks.push(2) : 0
         this.game.map.gridArray[this.yMap + 1][this.xMap] !== consts.WALL ? this.freeBlocks.push(0) : 0
-        
+
         this.electricShock = new Audio(this.game.map.level.shock_sound);
     }
 
@@ -62,11 +62,11 @@ export class Bomb {
             this.makeDisappearing()
             this.disappearing = false
         }
-
     }
 
 
     update(timestamp) {
+        if (this.done) return true
         const delta = timestamp - this.lastTime;
 
 
@@ -79,14 +79,23 @@ export class Bomb {
         }
 
         if (timestamp - this.startTime >= this.explosionTime) {
-            const tmp = this.game.map.level.block_size
-            const x = this.xMap * this.game.map.level.block_size
-            const y = this.yMap * this.game.map.level.block_size
-            this.game.player.isColliding(x, y, tmp, tmp) ? this.game.player.kill() : 0 
-            this.game.player.isColliding(x, y - tmp, tmp, tmp) ? this.game.player.kill() : 0 
-            this.game.player.isColliding(x, y + tmp, tmp, tmp) ? this.game.player.kill() : 0 
-            this.game.player.isColliding(x - tmp, y, tmp, tmp) ? this.game.player.kill() : 0 
-            this.game.player.isColliding(x + tmp, y, tmp, tmp) ? this.game.player.kill() : 0 
+            if (!this.kill) {
+                const tmp = this.game.map.level.block_size
+                const x = this.xMap * this.game.map.level.block_size
+                const y = this.yMap * this.game.map.level.block_size
+                this.game.player.isColliding(x, y, tmp, tmp) ? (this.game.player.kill(), this.kill = true) : 0
+                this.game.player.isColliding(x, y - tmp, tmp, tmp) ? (this.game.player.kill(), this.kill = true) : 0
+                this.game.player.isColliding(x, y + tmp, tmp, tmp) ? (this.game.player.kill(), this.kill = true) : 0
+                this.game.player.isColliding(x - tmp, y, tmp, tmp) ? (this.game.player.kill(), this.kill = true) : 0
+                this.game.player.isColliding(x + tmp, y, tmp, tmp) ? (this.game.player.kill(), this.kill = true) : 0
+            }
+            if (!this.blowingUpBlock) {
+                this.game.map.isBlock(this.xMap - 1, this.yMap) ? (this.game.map.blowingUpBlock(this.xMap - 1, this.yMap), this.blowingUpBlock = true) : 0
+                this.game.map.isBlock(this.xMap + 1, this.yMap) ? (this.game.map.blowingUpBlock(this.xMap + 1, this.yMap), this.blowingUpBlock = true) : 0
+                this.game.map.isBlock(this.xMap, this.yMap - 1) ? (this.game.map.blowingUpBlock(this.xMap, this.yMap - 1), this.blowingUpBlock = true) : 0
+                this.game.map.isBlock(this.xMap, this.yMap + 1) ? (this.game.map.blowingUpBlock(this.xMap, this.yMap + 1), this.blowingUpBlock = true) : 0
+                this.blowingUpBlock = true
+            }
             this.image = this.image.replace(/\d+\.png$/, "2.png");
             this.flashing = true
             if (delta >= 20) {

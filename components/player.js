@@ -14,8 +14,13 @@ export class Player {
         if (this.player) this.game.grid.removeChild(this.player)
         this.player = document.createElement("div")
         this.player.className = 'player';
+        this.dyingSound = new Audio(this.game.map.level.dying_sound);
+        this.player.appendChild(this.dyingSound)
         this.game.map.grid.appendChild(this.player)
         this.initClassData()
+        this.canPutBomb = true
+        document.addEventListener('keydown', (event) => event.key === ' ' ? this.putBomb = true : 0)
+        document.addEventListener('keyup', (event) => event.key === ' ' ? this.canPutBomb = true : 0)
 
     }
 
@@ -30,6 +35,7 @@ export class Player {
         this.direction = 'Down'
         this.lastTime = performance.now()
         this.MS_PER_FRAME = 100
+
 
         const tmp = helpers.getCoordinates(this.game.map.level.initial_grid, consts.PLAYER)
         this.y = tmp[0] * this.game.map.level.block_size
@@ -77,7 +83,10 @@ export class Player {
         if (!this.dying) return
 
         if (!this.lastTimeDying) {
-            this.lastTimeDying = performance.now()
+            this.dyingSound.play().catch(err => {
+                console.error("Playback failed:", err);
+            });
+            this.lastTimeDying = timestamp
             this.exp = document.createElement("img")
             this.game.map.grid.appendChild(this.exp)
             this.exp.style.position = "absolute";
@@ -125,9 +134,11 @@ export class Player {
             this.direction = 'walkingLeft'
             this.movement = true
         }
-        if (this.game.state.isSpace() && (!this.lastBomb || timestamp - this.lastBomb > 500)) {
-            this.lastBomb = timestamp
+
+        if (this.putBomb && this.canPutBomb) {
             this.game.map.addBomb(this.x + (this.getPlayerWidth() / 2), this.y + (this.getPlayerHeight() / 2), timestamp)
+            this.putBomb = false
+            this.canPutBomb = false
         }
 
         if (!this.movement && this.direction.includes("walking")) {

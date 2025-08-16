@@ -11,13 +11,10 @@ export class Map {
         this.mustrender = false
         this.updateLevel = false
         this.bombs = []
+        this.blocksToBlowing = []
     }
 
     static getInstance = (game) => Map.instance ? Map.instance : new Map(game)
-
-
-    // todo
-    // removeEnemy(x, y);
 
     async initMap() {
         this.level = await fetch(`assets/maps/level${this.game.state.getLevel()}.json`).then(res => res.json());
@@ -28,23 +25,34 @@ export class Map {
     render() {
         if (!this.mustrender) return
         // document.body.removeChild(this.grid)        // document.body.removeChild(this.grid)
-
         this.mustrender = false
     }
 
     update(timstamp) {
-        // if (this.game.state.isGameOver()) {
-        //     this.mustrender = true
-        // }
         this.bombs = this.bombs.filter(bomb => !bomb.isDone());
 
+
     }
+
+
+
+    blowingUpBlock(x, y) {
+        this.gridArray[y][x] = consts.FLOOR
+        let img = document.getElementById(x.toString() + y.toString())
+        let container = document.getElementsByClassName(x.toString() + y.toString())
+        console.log(this.gridArray[y][x]);
+        
+        container[0].removeChild(img)
+
+        // this.blocksToBlowing.push()
+    }
+
+    isBlock = (x, y) => this.gridArray[y][x] === consts.BLOCK
 
     canPlayerMoveTo(x, y) {
         const blockSize = this.level.block_size;
         const width = this.game.player.getPlayerWidth();
         const height = this.game.player.getPlayerHeight();
-
         const corners = [
             [x, y],
             [x + width, y],
@@ -55,11 +63,8 @@ export class Map {
         for (const [cx, cy] of corners) {
             const gridX = Math.floor(cx / blockSize);
             const gridY = Math.floor(cy / blockSize);
-            if (!this.isFreeSpaceInGrid(gridX, gridY)) {
-                return false
-            };
+            if (!this.isFreeSpaceInGrid(gridX, gridY)) return false
         }
-
         return true;
     }
 
@@ -71,22 +76,13 @@ export class Map {
         }
     }
 
-    // removeBomb(bombId) {
-    //     this.bombs.forEach((val, index) => {
-    //         if (val.getId() === bombId) {
-    //             this.bombs.pop(index)
-    //             this.game.state.setBombCount(-1);
-    //         }
-    //     })
-    // }
-
     initGrid() {
         this.gridArray = this.level.initial_grid.map(row => [...row])
         if (this.grid) document.body.removeChild(grid)
         this.grid = document.createElement("div")
         this.grid.id = "grid"
         document.body.appendChild(this.grid)
-        this.grid.style.position = "absolute";
+        // this.grid.style.position = "relative";
         this.level.initial_grid.forEach((row, colIndex) => {
             row.forEach((cell, rowIndex) => {
                 const tile = document.createElement("div");
@@ -94,11 +90,15 @@ export class Map {
                 tile.style.transform = `translate(${this.level.block_size * rowIndex}px, ${this.level.block_size * colIndex}px)`;
                 if (cell === consts.WALL) tile.style.backgroundImage = `url(${this.level.wall})`;
                 else tile.style.backgroundImage = `url(${this.level.floor})`;
+
                 if (cell === consts.BLOCK) {
                     const block = document.createElement("img");
                     block.src = this.level.block
+                    block.id = rowIndex.toString() + colIndex.toString()
+                    tile.className = rowIndex.toString() + colIndex.toString()
                     tile.appendChild(block)
                 }
+
                 tile.style.width = `${this.level.block_size}px`;
                 tile.style.height = `${this.level.block_size}px`;
                 tile.style.backgroundSize = "cover";

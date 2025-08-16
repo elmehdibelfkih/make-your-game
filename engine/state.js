@@ -13,7 +13,6 @@ export class State {
     #ARROW_DOWN = false
     #ARROW_RIGHT = false
     #ARROW_LEFT = false
-    #SPACE = false
 
 
     constructor() {
@@ -35,14 +34,12 @@ export class State {
     isArrowDown = () => this.#ARROW_DOWN
     isArrowRight = () => this.#ARROW_RIGHT
     isArrowLeft = () => this.#ARROW_LEFT
-    isSpace = () => this.#SPACE
 
     setArrowStateKeyDown = (event) => {
         if (event.key === 'ArrowUp') this.#ARROW_UP = true
         if (event.key === 'ArrowDown') this.#ARROW_DOWN = true
         if (event.key === 'ArrowRight') this.#ARROW_RIGHT = true
         if (event.key === 'ArrowLeft') this.#ARROW_LEFT = true
-        if (event.key === ' ') this.#SPACE = true
         if (event.key.toLowerCase() === 'p') {
             this.pauseStart()
         }
@@ -53,7 +50,6 @@ export class State {
         if (event.key === 'ArrowDown') this.#ARROW_DOWN = false
         if (event.key === 'ArrowRight') this.#ARROW_RIGHT = false
         if (event.key === 'ArrowLeft') this.#ARROW_LEFT = false
-        if (event.key === ' ') this.#SPACE = false
     }
 
     initArrowState() {

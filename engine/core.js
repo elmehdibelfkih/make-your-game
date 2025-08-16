@@ -32,18 +32,7 @@ export class Game {
     }
 
     async loop(timestamp) {
-        if (this.state.isGameOver()) {
-            this.state.initState()
-            this.scoreboard.initScoreBaord() // todo: update this
-            this.scoreboard.updateLives()
-            this.map.destructeur()
-            
-            this.map = Map.getInstance(this)
-            this.player = Player.getInstance(this)
-            await this.map.initMap()
-            await this.player.initPlayer()
-            this.state.pauseStart()
-        }
+        if (this.state.isGameOver()) await this.gameOver()
         if (!this.state.isPaused()) {
             this.update(timestamp);
             this.render();
@@ -54,7 +43,7 @@ export class Game {
     update(timestamp) {
         this.map.update(timestamp)
         this.player.update(timestamp);
-        this.map.bombs?.forEach(b => b.update(timestamp));
+        this.map.bombs?.filter(b => b.update(timestamp));
         this.state.updateState()
         // this.enemy.update(timestamp);
         // this.scoreboard.update(this.state);
@@ -65,5 +54,20 @@ export class Game {
         this.player.render();
         this.map.bombs?.forEach(b => b.render());
         // this.enemy.render();
+    }
+
+    async gameOver() {
+        this.state.initState()
+        this.scoreboard.initScoreBaord() // todo: update this
+        this.scoreboard.updateLives()
+        this.map.destructeur()
+        this.map = null
+        this.player = null
+
+        this.map = Map.getInstance(this)
+        this.player = Player.getInstance(this)
+        await this.map.initMap()
+        await this.player.initPlayer()
+        this.state.pauseStart()
     }
 }

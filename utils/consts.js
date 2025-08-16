@@ -1,5 +1,5 @@
+export const FLOOR = 0
 export const WALL = 1
-export const FLOOR = 2
 export const BLOCK = 3
 export const PLAYER = 4
 export const ENEMY = 5

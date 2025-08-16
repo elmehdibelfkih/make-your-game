@@ -20,8 +20,8 @@
   "hiden_harts_quantity": 3,
   "bomb_quantity_at_time": 1,
   "block_size": 68,
-  "wall": "./assets/images/wall/wall_17.png",
-  "floor": "./assets/images/floor/floor_42.png",
+  "wall": "./assets/images/wall/wall_11.png",
+  "floor": "./assets/images/floor/floor_8.png",
   "block": "./assets/images/soft_block/block_3.png",
   "player": "./assets/images/player.png",
   "bomb": "./assets/images/Bomb/bomb0.png",
@@ -29,5 +29,6 @@
   "player_explosion_img": "./assets/images/explosion_3/Explosion_1.png",
   "back_ground_music" : "./assets/audios/happy_adventure.mp3",
   "shock_sound" : "./assets/audios/buzz.ogg",
+  "dying_sound" : "./assets/audios/die1.mp3",
   "explosion_time": 2000
 }
