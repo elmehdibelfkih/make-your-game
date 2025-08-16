@@ -11,7 +11,7 @@ export class Bomb {
         this.lastUpdate = performance.now()
         this.render()
     }
-    
+
     render() {
         if (!this.mustrender) return
         if (!this.bomb) {
@@ -31,7 +31,7 @@ export class Bomb {
     }
 
     update(timestamp) {
-        
+
     }
 }
 

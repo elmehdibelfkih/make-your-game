@@ -50,6 +50,7 @@ export class Player {
             this.y -= this.game.state.getPlayerSpeed()
             this.direction = 'Up'
             this.mustrender = true
+            console.log("h")
         }
         if (this.game.state.isArrowDown() && this.game.map.canPlayerMoveTo(this.x, this.y + this.game.state.getPlayerSpeed())) {
             this.y += this.game.state.getPlayerSpeed()

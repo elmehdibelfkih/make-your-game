@@ -51,6 +51,7 @@ export class Game {
     // for update the cordination
     update(timestamp) {
         this.player.update(timestamp);
+        console.log("hello")
         //this.enemy.update(timestamp);
         // this.bombs?.forEach(b => b.update(timestamp));
         // this.scoreboard.update(this.state);
