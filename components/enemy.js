@@ -36,7 +36,7 @@ export class Enemy {
         this.level.map.forEach((row, rowIndex) => {
             row.forEach((cellValue, colIndex) => {
                 if (cellValue === 5) {
-                    const x = this.level.block_size * colIndex + 12 ;
+                    const x = this.level.block_size * colIndex + 12;
                     const y = this.level.block_size * rowIndex + 15;
                     const id = rowIndex * this.level.map[0].length + colIndex   // <-- id based on map
                     const en = new Emy(this.game, this.level, x, y, id);
@@ -45,11 +45,11 @@ export class Enemy {
             });
         });
     }
-    
+
     update() {
         this.enemies.map((el) => el.Canmoveandupdate())
     }
-    
+
 
 
 }
@@ -65,7 +65,7 @@ export class Emy {
         this.id = i
         this.direction = "up"
         this.enemySize = this.level.block_size
-        this.speed = 2     
+        this.speed = 2
         this.detect = true
         this.lastposition = ""
         this.mustrender = true
@@ -99,9 +99,9 @@ export class Emy {
         }
 
         const blockSize = this.level.block_size
-        const col = Math.floor(this.x / blockSize)
-        const row = Math.floor(this.y / blockSize)
-
+        //  her i face i round it becs it's give me exect traget col and row in all grid
+        const col = Math.round(this.x / blockSize) 
+        const row = Math.round(this.y / blockSize)
         if (this.detect) {
             const nextRow = row + directions[this.direction].rowset
             const nextCol = col + directions[this.direction].colset
@@ -109,7 +109,7 @@ export class Emy {
             // check if i can move !!
             if (this.Canmove(nextRow, nextCol)) {
                 this.targetX = nextCol * blockSize + 12
-                this.targetY = nextRow * blockSize + 15
+                this.targetY = nextRow * blockSize + 12
             } else {
                 this.detect = false
                 this.lastposition = this.direction
@@ -128,8 +128,8 @@ export class Emy {
         if (this.y > this.targetY) this.y -= this.speed
 
         // get the value of the target tiles by moving !!
-        if (Math.abs(this.x - this.targetX) < this.speed) this.x = this.targetX + 1
-        if (Math.abs(this.y - this.targetY) < this.speed) this.y = this.targetY + 1
+        if (Math.abs(this.x - this.targetX) < this.speed) this.x = this.targetX 
+        if (Math.abs(this.y - this.targetY) < this.speed) this.y = this.targetY
         this.creatediv()
     }
 
