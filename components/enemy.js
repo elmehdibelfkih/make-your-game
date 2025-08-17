@@ -36,8 +36,8 @@ export class Enemy {
         this.level.map.forEach((row, rowIndex) => {
             row.forEach((cellValue, colIndex) => {
                 if (cellValue === 5) {
-                    const x = this.level.block_size * colIndex + 12;
-                    const y = this.level.block_size * rowIndex + 11;
+                    const x = this.level.block_size * colIndex + 12 ;
+                    const y = this.level.block_size * rowIndex + 15;
                     const id = rowIndex * this.level.map[0].length + colIndex   // <-- id based on map
                     const en = new Emy(this.game, this.level, x, y, id);
                     this.enemies.push(en);
@@ -45,9 +45,12 @@ export class Enemy {
             });
         });
     }
+    
     update() {
         this.enemies.map((el) => el.Canmoveandupdate())
     }
+    
+
 
 }
 
@@ -60,14 +63,15 @@ export class Emy {
         this.y = y
         this.level = level
         this.id = i
-        this.direction = "down"
+        this.direction = "up"
         this.enemySize = this.level.block_size
-        this.speed = 1
+        this.speed = 2     
         this.detect = true
         this.lastposition = ""
         this.mustrender = true
+        this.targetX = x
+        this.targetY = y
         this.creatediv()
-        
     }
 
     creatediv() {
@@ -81,62 +85,60 @@ export class Emy {
             this.domElement.style.width = `${this.enemySize}px`;
             this.domElement.style.height = `${this.enemySize}px`;
             this.game.map.grid.appendChild(this.domElement);
-            this.domElement.style.transform = `translate(${this.x}px, ${this.y}px)`;
-
         }
         this.domElement.style.transform = `translate(${this.x}px, ${this.y}px)`;
         this.mustrender = false
     }
 
-    // Check if enemy can move based on its size !
-    // Renamed method for better naming convention
     Canmoveandupdate() {
-        if (this.detect) {
-            // here there is the direction of up  down 
-            const directions = {
-                up: { rowset: -1, colset: 0 },
-                down: { rowset: 1, colset: 0 },
-                left: { rowset: 0, colset: -1 },
-                right: { rowset: 0, colset: 1 }
-            }
-            // I Will Check The Direction At First If It's Space In Grid At First ! <==> ! 
-            var blockSize = this.level.block_size
-            var col = Math.floor(this.x / blockSize);
-            var row = Math.floor(this.y / blockSize);
-            // i will get the cordination base of the direction 
-            var nextRow = row + directions[this.direction].rowset
-            var nextCol = col + directions[this.direction].colset
-            // this variable it's for moving the enmies base on the correct direction 
-            var Xchange = directions[this.direction].colset
-            var Ychange = directions[this.direction].rowset
-            console.log("the next check")
-            console.log(nextRow,nextCol)
-            console.log("the direction is ", this.direction)
-            console.log("where is the player in grid ")
-            console.log(row, col)
-            console.log("i will check this IN GRID", this.level.map[nextRow][nextRow])
-            // here i will check if this it's can move !!
-            this.Canmove(nextRow, nextCol) ? (this.x += Xchange * blockSize, this.y += Ychange * blockSize , this.creatediv(), console.log("the x and y" , this.x, this.y)) : (this.detect = false, this.lastposition = this.direction)
+        const directions = {
+            up: { rowset: -1, colset: 0 },
+            down: { rowset: 1, colset: 0 },
+            left: { rowset: 0, colset: -1 },
+            right: { rowset: 0, colset: 1 }
+        }
 
+        const blockSize = this.level.block_size
+        const col = Math.floor(this.x / blockSize)
+        const row = Math.floor(this.y / blockSize)
+
+        if (this.detect) {
+            const nextRow = row + directions[this.direction].rowset
+            const nextCol = col + directions[this.direction].colset
+
+            // check if i can move !!
+            if (this.Canmove(nextRow, nextCol)) {
+                this.targetX = nextCol * blockSize + 12
+                this.targetY = nextRow * blockSize + 15
+            } else {
+                this.detect = false
+                this.lastposition = this.direction
+            }
         } else {
-            // Her i will chnage the position of enemies
-              this.direction = this.randomDirection();
-            this.detect = true;
+            this.direction = this.randomDirection()
+            this.detect = true
             if (this.direction === this.lastposition) {
                 this.direction = this.randomDirection()
             }
-            //console.log("not")
         }
+        // Move pixel by pixel to the the next tiles but not in one shoot !
+        if (this.x < this.targetX) this.x += this.speed
+        if (this.x > this.targetX) this.x -= this.speed
+        if (this.y < this.targetY) this.y += this.speed
+        if (this.y > this.targetY) this.y -= this.speed
 
+        // get the value of the target tiles by moving !!
+        if (Math.abs(this.x - this.targetX) < this.speed) this.x = this.targetX + 1
+        if (Math.abs(this.y - this.targetY) < this.speed) this.y = this.targetY + 1
+        this.creatediv()
     }
+
     Canmove(x, y) {
-        console.log("at the can move", this.level.map[x][y] )
-        return this.level.map[x][y] === 0
+        return this.level.map[x] && this.level.map[x][y] === 0
     }
-    randomDirection() {
-    const dirs = ["up", "down", "left", "right"];
-    return dirs[Math.floor(Math.random() * dirs.length)];
-}
 
+    randomDirection() {
+        const dirs = ["up", "down", "left", "right"]
+        return dirs[Math.floor(Math.random() * dirs.length)]
+    }
 }
- 

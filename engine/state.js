@@ -45,7 +45,7 @@ export class State {
         if (event.key === 'ArrowLeft') this.#ARROW_LEFT = false
         if (event.key === ' ') this.#SPACE = false
     }
-
+    
     initArrowState() {
         document.addEventListener('keydown', this.setArrowStateKeyDown.bind(this))
         document.addEventListener('keyup', this.setArrowStateKeyUp.bind(this))
