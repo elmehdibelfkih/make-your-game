@@ -1,10 +1,10 @@
 export class State {
 
-    #CURRENT_LEVEL = 1
+    #CURRENT_LEVEL = 0
     #LIVES = 3
     #SCORE = 0
     #PAUSE = true
-    #PLAYER_SPEED = 4
+    #PLAYER_SPEED = 3
     #BOMB_COUNT = 0
     #MAX_ALLOWD_BOMBS = 3
     #GAME_OVER = false
@@ -53,6 +53,9 @@ export class State {
     }
 
     initArrowState() {
+        //FIXME: REMOVE THIS
+        this.test = document.getElementById('test')
+
         document.addEventListener('keydown', this.setArrowStateKeyDown.bind(this))
         document.addEventListener('keyup', this.setArrowStateKeyUp.bind(this))
     }
@@ -83,7 +86,9 @@ export class State {
 
     getPlayerSpeed = () => this.#PLAYER_SPEED
 
-    updateState = () => {
+    update = () => {
+        this.test.innerText = this.#SCORE
+        this.#SCORE++
         if (!this.#LIVES) {
             this.GameOver()
         }

@@ -28,9 +28,9 @@ export class Map {
         this.mustrender = false
     }
 
-    update(timstamp) {
-        this.bombs = this.bombs.filter(bomb => !bomb.isDone());
-
+    updateRender(timstamp) {
+        // this.bombs = this.bombs.filter(bomb => !bomb.isDone());
+        this.render()
     }
 
 

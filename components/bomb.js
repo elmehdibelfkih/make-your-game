@@ -65,8 +65,10 @@ export class Bomb {
     }
 
 
-    update(timestamp) {
-        if (this.done) return true
+    updateRender(timestamp) {
+        if (this.done) {
+            this.render()
+            return true}
         const delta = timestamp - this.lastTime;
 
 
@@ -75,6 +77,7 @@ export class Bomb {
                 this.disappearing = true
                 this.lastTime = timestamp;
             }
+            this.render()
             return
         }
 
@@ -104,6 +107,7 @@ export class Bomb {
                 this.lastTime = timestamp;
             }
             this.explosion = true
+            this.render()
             return
         }
 
@@ -113,6 +117,7 @@ export class Bomb {
             this.flashing = true
             this.lastTime = timestamp;
         }
+        this.render()
     }
 
     makeShockSound() {

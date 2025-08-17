@@ -40,27 +40,20 @@ export class Game {
             // this.map.grid.style.display = "none"
 
         } else {
-            this.update(timestamp);
-            this.render();
+            this.updateRender(timestamp);
         }
         requestAnimationFrame(this.loop.bind(this));
     }
 
-    update(timestamp) {
-        this.map.update(timestamp)
-        this.player.update(timestamp);
-        this.map.bombs?.forEach(b => b.update(timestamp));
-        this.state.updateState()
+    updateRender(timestamp) {
+        this.map.updateRender(timestamp)
+        this.player.updateRender(timestamp);
+        this.map.bombs?.forEach(b => b.updateRender(timestamp));
+        this.state.update()
         // this.enemy.update(timestamp);
         // this.scoreboard.update(this.state);
     }
 
-    render() {
-        this.map.render();
-        this.player.render();
-        this.map.bombs?.forEach(b => b.render());
-        // this.enemy.render();
-    }
 
     async gameOver() {
         this.state.initState()

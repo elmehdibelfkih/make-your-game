@@ -47,8 +47,8 @@ export class Player {
         this.player.style.position = 'absolute';
         this.player.style.transform = `translate(${this.x}px, ${this.y}px)`;
         this.frame = this.playerCoordinate[this.direction][this.frameIndex];
-        this.player.style.width = this.frame.width;
-        this.player.style.height = this.frame.height;
+        this.player.style.width = this.frame.width + "px";
+        this.player.style.height = this.frame.height + "px";
         this.player.style.backgroundPosition = `${this.frame.x} ${this.frame.y}`;
         this.player.style.opacity = 1;
     }
@@ -67,18 +67,19 @@ export class Player {
 
         this.player.style.transform = `translate(${this.x}px, ${this.y}px)`;
 
-        // if (this.animate) {
-        //     this.player.style.width = this.frame.width;
-        //     this.player.style.height = this.frame.height;
-        //     this.player.style.backgroundPosition = `${this.frame.x} ${this.frame.y}`;
-        //     this.animate = false
-        // }
+        if (this.animate) {
+            this.player.style.width = this.frame.width + "px";
+            this.player.style.height = this.frame.height + "px";
+            this.player.style.backgroundPosition = `${this.frame.x} ${this.frame.y}`;
+            this.animate = false
+        }
         this.movement = false
     }
 
-    update(timestamp) {
+    updateRender(timestamp) {
         this.playerDying(timestamp)
         this.movePlayer(timestamp)
+        this.render()
     }
 
     playerDying(timestamp) {
@@ -172,7 +173,7 @@ export class Player {
 
 
     kill = () => this.dying = true
-    getPlayerHeight = () => Number(this.playerCoordinate[this.direction][this.frameIndex]['height'].replace('px', ''))
-    getPlayerWidth = () => Number(this.playerCoordinate[this.direction][this.frameIndex]['width'].replace('px', ''))
+    getPlayerHeight = () => this.playerCoordinate[this.direction][this.frameIndex].height
+    getPlayerWidth = () => this.playerCoordinate[this.direction][this.frameIndex].width
 
 }
