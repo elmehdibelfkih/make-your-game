@@ -1,6 +1,6 @@
 export class State {
 
-    #CURRENT_LEVEL = 0
+    #CURRENT_LEVEL = 1
     #LIVES = 3
     #SCORE = 0
     #PAUSE = true

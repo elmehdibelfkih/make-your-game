@@ -3,6 +3,7 @@ import * as helpers from '../utils/helpers.js';
 
 
 export class Player {
+
     constructor(game) {
         this.game = game
     }
@@ -36,7 +37,6 @@ export class Player {
         this.lastTime = performance.now()
         this.MS_PER_FRAME = 100
 
-
         const tmp = helpers.getCoordinates(this.game.map.level.initial_grid, consts.PLAYER)
         this.y = tmp[0] * this.game.map.level.block_size
         this.x = tmp[1] * this.game.map.level.block_size + 15
@@ -51,29 +51,6 @@ export class Player {
         this.player.style.height = this.frame.height + "px";
         this.player.style.backgroundPosition = `${this.frame.x} ${this.frame.y}`;
         this.player.style.opacity = 1;
-    }
-
-    render() {
-        if (this.reRender) this.initClassData()
-
-        if (this.renderExp) {
-            this.exp.src = this.explosionImg
-            this.player.style.opacity = this.player.style.opacity - 0.2
-            this.renderExp = false
-            return
-        }
-
-        if (!this.movement && !this.animate) return
-
-        this.player.style.transform = `translate(${this.x}px, ${this.y}px)`;
-
-        if (this.animate) {
-            this.player.style.width = this.frame.width + "px";
-            this.player.style.height = this.frame.height + "px";
-            this.player.style.backgroundPosition = `${this.frame.x} ${this.frame.y}`;
-            this.animate = false
-        }
-        this.movement = false
     }
 
     updateRender(timestamp) {
@@ -114,7 +91,7 @@ export class Player {
             }
         }
     }
-
+    
     movePlayer(timestamp) {
         if (this.game.state.isArrowUp() && this.game.map.canPlayerMoveTo(this.x, this.y - this.game.state.getPlayerSpeed())) {
             this.y -= this.game.state.getPlayerSpeed()
@@ -160,6 +137,29 @@ export class Player {
         }
     }
 
+    render() {
+        if (this.reRender) return this.initClassData()
+
+        if (this.renderExp) {
+            this.exp.src = this.explosionImg
+            this.player.style.opacity = this.player.style.opacity - 0.2
+            this.renderExp = false
+            return
+        }
+
+        if (!this.movement && !this.animate) return
+
+        this.player.style.transform = `translate(${this.x}px, ${this.y}px)`;
+
+        if (this.animate) {
+            this.player.style.width = this.frame.width + "px";
+            this.player.style.height = this.frame.height + "px";
+            this.player.style.backgroundPosition = `${this.frame.x} ${this.frame.y}`;
+            this.animate = false
+        }
+        this.movement = false
+    }
+
     isColliding(x, y, width, height) {
         return !this.dying && !(
             this.x + this.getPlayerWidth() <= x ||
@@ -168,9 +168,6 @@ export class Player {
             this.y >= y + height
         );
     }
-
-
-
 
     kill = () => this.dying = true
     getPlayerHeight = () => this.playerCoordinate[this.direction][this.frameIndex].height

@@ -8,7 +8,7 @@ export class Bomb {
         this.xMap = Math.floor(x / this.game.map.level.block_size)
         this.yMap = Math.floor(y / this.game.map.level.block_size)
         this.startTime = timestamp
-        this.flashing = true
+        this.flashing = true  
         this.image = this.game.map.level.bomb
         this.explosionTime = this.game.map.level.explosion_time
         this.explosionImg = this.game.map.level.electric_shock_img
@@ -17,7 +17,7 @@ export class Bomb {
         this.freeBlocks = []
         this.initBomb()
     }
-
+    
     getId = () => this.id
     isDone = () => this.done
 
@@ -63,7 +63,6 @@ export class Bomb {
             this.disappearing = false
         }
     }
-
 
     updateRender(timestamp) {
         if (this.done) {

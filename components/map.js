@@ -1,5 +1,6 @@
 import * as consts from '../utils/consts.js';
 import { Bomb } from "./bomb.js"
+import { Enemy } from "./enemy.js"
 
 export class Map {
 
@@ -11,6 +12,7 @@ export class Map {
         this.mustrender = false
         this.updateLevel = false
         this.bombs = []
+        this.enemys = []
         this.blocksToBlowing = []
     }
 
@@ -20,6 +22,7 @@ export class Map {
         this.level = await fetch(`assets/maps/level${this.game.state.getLevel()}.json`).then(res => res.json());
         this.initGrid()
         this.initAudios()
+        this.initEnemy()
     }
 
     render() {
@@ -33,20 +36,17 @@ export class Map {
         this.render()
     }
 
-
-
     blowingUpBlock(x, y) {
         this.gridArray[y][x] = consts.FLOOR
         let img = document.getElementById(x.toString() + y.toString())
         let container = document.getElementsByClassName(x.toString() + y.toString())
         console.log(this.gridArray[y][x]);
-        
+
         container[0].removeChild(img)
 
         // this.blocksToBlowing.push()
     }
 
-    isBlock = (x, y) => this.gridArray[y][x] === consts.BLOCK
 
     canPlayerMoveTo(x, y) {
         const blockSize = this.level.block_size;
@@ -61,12 +61,13 @@ export class Map {
 
         for (const [cx, cy] of corners) {
             const gridX = Math.floor(cx / blockSize);
-            const gridY = Math.floor(cy / blockSize);            
+            const gridY = Math.floor(cy / blockSize);
             if (!this.isFreeSpaceInGrid(gridX, gridY)) return false
         }
         return true;
     }
 
+    isBlock = (x, y) => this.gridArray[y][x] === consts.BLOCK
     isFreeSpaceInGrid = (x, y) => this.gridArray[y][x] !== consts.BLOCK && this.gridArray[y][x] !== consts.WALL
 
     addBomb(x, y, timestamp) {
@@ -86,7 +87,9 @@ export class Map {
             row.forEach((cell, rowIndex) => {
                 const tile = document.createElement("div");
                 tile.style.position = "absolute";
+
                 tile.style.transform = `translate(${this.level.block_size * rowIndex}px, ${this.level.block_size * colIndex}px)`;
+
                 if (cell === consts.WALL) tile.style.backgroundImage = `url(${this.level.wall})`;
                 else tile.style.backgroundImage = `url(${this.level.floor})`;
 
@@ -97,7 +100,6 @@ export class Map {
                     tile.className = rowIndex.toString() + colIndex.toString()
                     tile.appendChild(block)
                 }
-
                 tile.style.width = `${this.level.block_size}px`;
                 tile.style.height = `${this.level.block_size}px`;
                 tile.style.backgroundSize = "cover";
@@ -105,7 +107,35 @@ export class Map {
             });
         });
     }
+    // when i creadted new div on top of this i get problem of the enmiey it's not visible becs ..
+    // the floor it's will be in the top every time so for that i will creat enemy separate from grid
+    initEnemy() {
 
+        this.level.initial_grid.forEach((row, rowIndex) => {
+            row.forEach((cellValue, colIndex) => {
+                if (cellValue === consts.ENEMY) {
+                    const x = this.level.block_size * colIndex + 12;
+                    const y = this.level.block_size * rowIndex + 15;
+                    // ===>>>>>>>> Create enemy div <<<<=============
+                    const enemyDiv = document.createElement('div');
+                    enemyDiv.className = 'enemy';
+                    enemyDiv.style.backgroundImage = `url(${this.level.enemy})`;
+                    enemyDiv.style.backgroundRepeat = 'no-repeat';
+                    enemyDiv.style.imageRendering = 'pixelated';
+                    enemyDiv.style.position = 'absolute';
+                    enemyDiv.style.width = `${this.level.block_size}px`;
+                    enemyDiv.style.height = `${this.level.block_size}px`;
+                    enemyDiv.style.transform = `translate(${x}px, ${y}px)`;
+                    this.grid.appendChild(enemyDiv);
+                    // ============ Store enemy object (Emy) ============
+                    const en = new Enemy(this.game, this.level, x, y );
+                    en.Div = enemyDiv; // point to the target enemy !!
+                    this.enemys.push(en); // and then push it to ARRAY !!
+                }
+            });
+        });
+    }
+    
     initAudios() {
         this.backGroundMusic = new Audio(this.level.back_ground_music);
         this.grid.appendChild(this.backGroundMusic)
@@ -125,6 +155,7 @@ export class Map {
 
     destructeur() {
         document.body.removeChild(this.grid)
+        this.instance = null
     }
 }
 

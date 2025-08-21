@@ -2,8 +2,7 @@ import { Scoreboard } from '../components/scoreboard.js';
 import { Player } from '../components/player.js';
 import { Map } from '../components/map.js';
 import { State } from './state.js';
-// import { Enemy } from '../components/enemy.js';
-// import { Bomb } from '../components/bomb.js';
+import { Enemy } from '../components/enemy.js';
 
 export class Game {
     static #instance = null;
@@ -18,18 +17,20 @@ export class Game {
         this.scoreboard = Scoreboard.getInstance(this)
         this.map = Map.getInstance(this)
         this.player = Player.getInstance(this)
+        // test enemy with logic of mehdi 
+        this.enemie = null;
     }
 
     async intiElements() {
         this.state.initArrowState()
         await this.map.initMap()
         await this.player.initPlayer()
+        //this.map.enemie.
+        //this.enemie = new Enemy(this)
+        //this.enemie.createnemy();
     }
 
-
-    run() {
-        requestAnimationFrame(this.loop.bind(this));
-    }
+    run = () => requestAnimationFrame(this.loop.bind(this));
 
     async loop(timestamp) {
 
@@ -38,7 +39,6 @@ export class Game {
         }
         if (this.state.isPaused()) {
             // this.map.grid.style.display = "none"
-
         } else {
             this.updateRender(timestamp);
         }
@@ -50,10 +50,10 @@ export class Game {
         this.player.updateRender(timestamp);
         this.map.bombs?.forEach(b => b.updateRender(timestamp));
         this.state.update()
-        // this.enemy.update(timestamp);
-        // this.scoreboard.update(this.state);
+        console.log("i")
+        console.log(this.map.enemys)
+        this.map.enemys?.forEach(enemy => enemy.Canmoveandupdate());
     }
-
 
     async gameOver() {
         this.state.initState()
@@ -66,6 +66,7 @@ export class Game {
         this.map = Map.getInstance(this)
         this.player = Player.getInstance(this)
         await this.map.initMap()
+        this.enemie = new Enemy(this);
         await this.player.initPlayer()
         this.state.pauseStart()
     }
