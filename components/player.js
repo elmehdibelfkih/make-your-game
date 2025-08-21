@@ -53,35 +53,12 @@ export class Player {
         this.player.style.opacity = 1;
     }
 
-    render() {
-        if (this.reRender) this.initClassData()
-
-        if (this.renderExp) {
-            this.exp.src = this.explosionImg
-            this.player.style.opacity = this.player.style.opacity - 0.2
-            this.renderExp = false
-            return
-        }
-
-        if (!this.movement && !this.animate) return
-
-        this.player.style.transform = `translate(${this.x}px, ${this.y}px)`;
-
-        if (this.animate) {
-            this.player.style.width = this.frame.width + "px";
-            this.player.style.height = this.frame.height + "px";
-            this.player.style.backgroundPosition = `${this.frame.x} ${this.frame.y}`;
-            this.animate = false
-        }
-        this.movement = false
-    }
-
     updateRender(timestamp) {
         this.playerDying(timestamp)
         this.movePlayer(timestamp)
         this.render()
     }
-
+    
     playerDying(timestamp) {
         if (!this.dying) return
 
@@ -160,6 +137,32 @@ export class Player {
         }
     }
 
+    render() {
+        if (this.reRender) return this.initClassData()
+
+        if (this.renderExp) {
+            this.exp.src = this.explosionImg
+            this.player.style.opacity = this.player.style.opacity - 0.2
+            this.renderExp = false
+            return
+        }
+
+        if (!this.movement && !this.animate) return
+
+        this.player.style.transform = `translate(${this.x}px, ${this.y}px)`;
+
+        if (this.animate) {
+            this.player.style.width = this.frame.width + "px";
+            this.player.style.height = this.frame.height + "px";
+            this.player.style.backgroundPosition = `${this.frame.x} ${this.frame.y}`;
+            this.animate = false
+        }
+        this.movement = false
+    }
+
+
+
+
     isColliding(x, y, width, height) {
         return !this.dying && !(
             this.x + this.getPlayerWidth() <= x ||
@@ -168,8 +171,6 @@ export class Player {
             this.y >= y + height
         );
     }
-
-
 
 
     kill = () => this.dying = true

@@ -46,8 +46,7 @@ export class Map {
         // this.blocksToBlowing.push()
     }
 
-    isBlock = (x, y) => this.gridArray[y][x] === consts.BLOCK
-
+    
     canPlayerMoveTo(x, y) {
         const blockSize = this.level.block_size;
         const width = this.game.player.getPlayerWidth();
@@ -58,7 +57,7 @@ export class Map {
             [x, y + height],
             [x + width, y + height]
         ];
-
+        
         for (const [cx, cy] of corners) {
             const gridX = Math.floor(cx / blockSize);
             const gridY = Math.floor(cy / blockSize);            
@@ -66,7 +65,8 @@ export class Map {
         }
         return true;
     }
-
+    
+    isBlock = (x, y) => this.gridArray[y][x] === consts.BLOCK
     isFreeSpaceInGrid = (x, y) => this.gridArray[y][x] !== consts.BLOCK && this.gridArray[y][x] !== consts.WALL
 
     addBomb(x, y, timestamp) {
@@ -125,6 +125,7 @@ export class Map {
 
     destructeur() {
         document.body.removeChild(this.grid)
+        this.instance = null
     }
 }
 

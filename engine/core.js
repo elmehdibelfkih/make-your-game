@@ -2,8 +2,6 @@ import { Scoreboard } from '../components/scoreboard.js';
 import { Player } from '../components/player.js';
 import { Map } from '../components/map.js';
 import { State } from './state.js';
-// import { Enemy } from '../components/enemy.js';
-// import { Bomb } from '../components/bomb.js';
 
 export class Game {
     static #instance = null;
@@ -27,9 +25,7 @@ export class Game {
     }
 
 
-    run() {
-        requestAnimationFrame(this.loop.bind(this));
-    }
+    run = () => requestAnimationFrame(this.loop.bind(this));
 
     async loop(timestamp) {
 
@@ -38,7 +34,6 @@ export class Game {
         }
         if (this.state.isPaused()) {
             // this.map.grid.style.display = "none"
-
         } else {
             this.updateRender(timestamp);
         }
@@ -50,8 +45,6 @@ export class Game {
         this.player.updateRender(timestamp);
         this.map.bombs?.forEach(b => b.updateRender(timestamp));
         this.state.update()
-        // this.enemy.update(timestamp);
-        // this.scoreboard.update(this.state);
     }
 
 
