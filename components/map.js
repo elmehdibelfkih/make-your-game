@@ -79,7 +79,12 @@ export class Map {
     }
 
     initGrid() {
+        console.log("at initialize grid original")
+        console.log(this.level.initial_grid) 
+        //return;
         this.gridArray = this.level.initial_grid.map(row => [...row])
+        console.log("the copy")
+        console.log(this.gridArray)
         if (this.grid) document.body.removeChild(grid)
         this.grid = document.createElement("div")
         this.grid.id = "grid"
@@ -117,12 +122,12 @@ export class Map {
             row.forEach((cellValue, colIndex) => {
                 if (cellValue === consts.ENEMY) {
                     // her i will accesse to enemy and make it 0
-                    console.log("before the add 0 to grid", this.level.initial_grid)
-                    console.log(" the ",  this.level.initial_grid[rowIndex][colIndex])
+                    //console.log("before the add 0 to grid", this.level.initial_grid)
+                    //console.log(" the ",  this.level.initial_grid[rowIndex][colIndex])
                     this.gridArray[rowIndex][colIndex] = 0
                     const x = this.level.block_size * colIndex + 12;
                     const y = this.level.block_size * rowIndex + 15;
-                    console.log("after the add 0", this.level.initial_grid)
+                    //console.log("after the add 0", this.level.initial_grid)
 
                     // ===>>>>>>>> Create enemy div <<<<=============
                     const enemyDiv = document.createElement('div');
@@ -132,7 +137,7 @@ export class Map {
                     enemyDiv.style.imageRendering = 'pixelated';
                     enemyDiv.style.position = 'absolute';
                     enemyDiv.style.width = `${this.level.block_size}px`;
-                    enemyDiv.style.height = `${this.level.block_size}px`;;
+                    enemyDiv.style.height = `${this.level.block_size}px`;
                     enemyDiv.style.transform = `translate(${x}px, ${y}px)`;
                     this.grid.appendChild(enemyDiv);
                     // ============ Store enemy object (Emy) ============
@@ -142,7 +147,7 @@ export class Map {
                 }
             });
         });
-        console.log(this.level.initial_grid)
+        //console.log(this.level.initial_grid)
     }
     
     initAudios() {

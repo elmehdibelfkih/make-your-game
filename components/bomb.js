@@ -15,10 +15,15 @@ export class Bomb {
         this.frameIndex = 0
         this.lastTime = performance.now()
         this.freeBlocks = []
+        this.x = x
+        this.y = y
+        // i add this for detect the boombs on or off 
         this.active = true
         this.initBomb()
     }
-    
+    // ================>> ******** <<================== \\
+    // it's need to remove the boombs from grid to let enemy move well ???
+
     getId = () => this.id
     isDone = () => this.done
 
@@ -77,6 +82,11 @@ export class Bomb {
                 this.disappearing = true
                 this.lastTime = timestamp;
             }
+            //====== i remove the boombs from grid to let enemy move
+            // her i will try to remove it from grid [][]
+            const col = Math.round(this.x /  this.game.map.level.block_size)
+            const row = Math.round(this.y /   this.game.map.level.block_size)
+            this.game.map.gridArray[row][col] = 0
             this.active = false
             this.render()
             return
