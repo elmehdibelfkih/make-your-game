@@ -15,6 +15,7 @@ export class Bomb {
         this.frameIndex = 0
         this.lastTime = performance.now()
         this.freeBlocks = []
+        this.active = true
         this.initBomb()
     }
     
@@ -76,6 +77,7 @@ export class Bomb {
                 this.disappearing = true
                 this.lastTime = timestamp;
             }
+            this.active = false
             this.render()
             return
         }
@@ -105,6 +107,7 @@ export class Bomb {
                 this.explosionImg = this.explosionImg.replace(this.frameIndex + ".png", ((this.frameIndex + 1) % 4) + ".png")
                 this.lastTime = timestamp;
             }
+            
             this.explosion = true
             this.render()
             return
@@ -118,7 +121,7 @@ export class Bomb {
         }
         this.render()
     }
-
+    
     makeShockSound() {
         if (!this.shock) {
             this.electricShock.play().catch(err => {
@@ -144,7 +147,7 @@ export class Bomb {
         }
         this.exp?.forEach(b => b ? b.src = this.explosionImg : 0);
     }
-
+    
     makeDisappearing() {
         this.bomb.style.opacity = parseFloat(this.bomb.style.opacity) - 0.1;
         if (this.bomb.style.opacity <= 0) {

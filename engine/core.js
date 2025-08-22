@@ -31,11 +31,10 @@ export class Game {
         //this.enemie = new Enemy(this)
         //this.enemie.createnemy();
     }
-
+    
     run = () => requestAnimationFrame(this.loop.bind(this));
 
     async loop(timestamp) {
-
         if (this.state.isGameOver()) {
             await this.gameOver()
         }
@@ -52,8 +51,7 @@ export class Game {
         this.player.updateRender(timestamp);
         this.map.bombs?.forEach(b => b.updateRender(timestamp));
         this.state.update()
-        console.log("i")
-        console.log(this.map.enemys)
+        console.log("the grid", this.map.level.initial_grid)
         this.map.enemys?.forEach(enemy => enemy.Canmoveandupdate());
     }
 

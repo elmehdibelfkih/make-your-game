@@ -38,15 +38,13 @@ export class Map {
 
     blowingUpBlock(x, y) {
         this.gridArray[y][x] = consts.FLOOR
+        console.log("im at the grid for update grid", this.gridArray[x][y])
         let img = document.getElementById(x.toString() + y.toString())
         let container = document.getElementsByClassName(x.toString() + y.toString())
         console.log(this.gridArray[y][x]);
-
         container[0].removeChild(img)
-
         // this.blocksToBlowing.push()
     }
-
 
     canPlayerMoveTo(x, y) {
         const blockSize = this.level.block_size;
@@ -66,7 +64,11 @@ export class Map {
         }
         return true;
     }
-
+    // her it's can move enemy based on dynamic array 
+    Canmove(row, col) {
+        console.log("at can move", row, col, this.game.map.gridArray[row][col])
+        return this.gridArray[row] && this.gridArray[row][col] === 0
+    }
     isBlock = (x, y) => this.gridArray[y][x] === consts.BLOCK
     isFreeSpaceInGrid = (x, y) => this.gridArray[y][x] !== consts.BLOCK && this.gridArray[y][x] !== consts.WALL
 
@@ -117,7 +119,7 @@ export class Map {
                     // her i will accesse to enemy and make it 0
                     console.log("before the add 0 to grid", this.level.initial_grid)
                     console.log(" the ",  this.level.initial_grid[rowIndex][colIndex])
-                    this.level.initial_grid[rowIndex][colIndex] = 0
+                    this.gridArray[rowIndex][colIndex] = 0
                     const x = this.level.block_size * colIndex + 12;
                     const y = this.level.block_size * rowIndex + 15;
                     console.log("after the add 0", this.level.initial_grid)
