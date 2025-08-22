@@ -16,6 +16,7 @@ export class Game {
         this.state = State.getInstance();
         this.scoreboard = Scoreboard.getInstance(this)
         this.map = Map.getInstance(this)
+        
         this.player = Player.getInstance(this)
         // test enemy with logic of mehdi 
         this.enemie = null;
@@ -25,6 +26,7 @@ export class Game {
         this.state.initArrowState()
         await this.map.initMap()
         await this.player.initPlayer()
+         console.log("at initialize after the map is fetch", this.map.level.initial_grid)
         //this.map.enemie.
         //this.enemie = new Enemy(this)
         //this.enemie.createnemy();
