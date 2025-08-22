@@ -110,6 +110,7 @@ export class Emy {
             if (this.Canmove(nextRow, nextCol)) {
                 this.targetX = nextCol * blockSize + 12
                 this.targetY = nextRow * blockSize + 12
+                //this.lastposition = this.direction
             } else {
                 this.detect = false
                 this.lastposition = this.direction
@@ -117,6 +118,7 @@ export class Emy {
         } else {
             this.direction = this.randomDirection()
             this.detect = true
+            
             if (this.direction === this.lastposition) {
                 this.direction = this.randomDirection()
             }

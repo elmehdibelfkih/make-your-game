@@ -10,8 +10,14 @@ export class Map {
         this.mustrender = true
         this.updateLevel = false
         this.bombs = []
+        // her i creat this div for controling css !!
+        this.container = document.createElement("div");
+        this.container.id = "grid-container";
+        document.body.appendChild(this.container)
+        // I Will Make The Grid Shared !!
+        this.grid = null
     }
-
+    
     static getInstance(game, level) {
         if (!Map.instance) {
             // todo: check the return of getCurrentLevelObj
@@ -21,17 +27,19 @@ export class Map {
         return Map.instance;
     }
 
+    // creat container for css to the grid 
     // todo
     // removeEnemy(x, y);
     async render() {
+        // creat div for styling the grid
         if (!this.mustrender) return
         if (this.updateLevel) this.level = await this.getCurrentLevelObj()
-        let grid = document.getElementById("grid")
-        if (grid) document.body.removeChild(grid)
-        grid = document.createElement("div")
-        grid.id = "grid"
-        document.body.appendChild(grid)
-        this.grid = grid
+        //let grid = document.getElementById("grid")
+        // === > 
+        this.grid = document.createElement("div")
+        this.grid.id = "grid"
+        this.container.appendChild(this.grid)
+        //this.grid = grid
         grid.style.position = "absolute";
         this.level.map.forEach((row, colIndex) => {
             row.forEach((cell, rowIndex) => {
@@ -50,7 +58,7 @@ export class Map {
                 tile.style.backgroundSize = "cover";
                 // HER I ADD THIS TO DETECT EVERY TILE THE CORDIANTION FOR ENEMY PLACE
                 //tile.textContent =  `(${this.level.block_size * rowIndex}px, ${this.level.block_size * colIndex}px)`
-                grid.appendChild(tile);
+                this.grid.appendChild(tile);
             });
         });
         this.mustrender = false
@@ -77,7 +85,7 @@ export class Map {
 
         return true
     }
-    
+
     isFreeSpaceInGrid = (x, y) => this.level.map[y][x] === 0 || this.level.map[y][x] === 6
 
     addBoom(x, y, timestamp) {

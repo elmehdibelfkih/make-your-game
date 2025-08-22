@@ -14,14 +14,22 @@ export class State {
     #SPACE = false
 
     constructor() {
+        
     }
 
     static getInstance() {
         if (!State.instance) {
             State.instance = new State()
             State.instance.initArrowState()
+            State.instance.StarandPause()
         }
         return State.instance
+    }
+
+    StarandPause() {
+    
+        document.getElementById('start').addEventListener('click', this.start.bind())
+        document.getElementById('pause').addEventListener('click', this.pause.bind())
     }
 
     isArrowUp = () => this.#ARROW_UP
@@ -45,7 +53,7 @@ export class State {
         if (event.key === 'ArrowLeft') this.#ARROW_LEFT = false
         if (event.key === ' ') this.#SPACE = false
     }
-    
+
     initArrowState() {
         document.addEventListener('keydown', this.setArrowStateKeyDown.bind(this))
         document.addEventListener('keyup', this.setArrowStateKeyUp.bind(this))
@@ -59,10 +67,9 @@ export class State {
     setLevel = () => this.#CURRENT_LEVEL = val
     setScore = () => this.#SCORE = val
     setBombCount = (val = 1) => this.#BOMB_COUNT += val
-
     // FPS = () => 
-    pause = () => this.#PAUSE = true
-    start = () => this.#PAUSE = false
+    pause = () => this.#PAUSE = false
+    start = () => this.#PAUSE = true
     isPaused = () => this.#PAUSE
     getPlayerSpeed = () => this.#PLAYER_SPEED
 }

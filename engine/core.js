@@ -42,7 +42,7 @@ export class Game {
     async loop(timestamp) {
         // const delta = timestamp - this.lastUpdateTime;
         // this.lastUpdateTime = timestamp;
-        if (!this.state.isPaused()) {
+        if (this.state.isPaused()) {
             this.update(timestamp);
             await this.render();
         }
@@ -56,7 +56,7 @@ export class Game {
         // this.bombs?.forEach(b => b.update(timestamp));
         // this.scoreboard.update(this.state);
     }
-
+    
     async render() {
         // Here Is This Is Static One... ! 
         await this.map.render();

@@ -9,8 +9,15 @@
   "enemy_speed": 2,
   "hiden_harts_quantity": 3,
   "bomb_quantity_at_time": 1,
-  "block_size": "64px",
-  "brick": "./assets/images/brick.png",
-  "floor": "./assets/images/floor.png",
-  "block": "./assets/images/box.png"
+  "block_size": 68,
+  "wall": "./assets/images/wall/wall13.png",
+  "floor": "./assets/images/floor/floor09.png",
+  "block": "./assets/images/box.png",
+  "player": "./assets/images/player.png",
+  "enemy": "./assets/images/playerTMP.png",
+  "bomb": "./assets/images/Bomb/bomb.png",
+  "player_x": 70,
+  "player_y": 70,
+  "enemy_x" :204,
+  "enemy_y" :408
 }

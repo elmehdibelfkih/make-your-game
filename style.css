@@ -1,0 +1,86 @@
+ #ScoreBoard {
+    position: fixed;         
+    top: 10px;
+    left: 49%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;             
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.6);   
+    color: #ddc8c8;            
+    font-family: 'Arial', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(240, 167, 167, 0.3);
+    /* z-index: 1000;*          */
+}
+
+#ScoreBoard span {
+    display: inline-block;
+}
+
+#ScoreBoard span:first-child {
+    color: #ff4b4b;  
+}
+
+#ScoreBoard:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+html, body {
+    height: 100%;       
+    margin: 0;          
+    display: flex;
+    
+    padding-right: 33%;
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically */
+    background-color: #5c5858;  /* Optional: background color */
+}
+
+#grid-container {
+    width: 600px;       
+    height: 600px;      
+    /* Optional: visible background */
+    /* Good practice if children use absolute positioning */
+    margin-bottom: 20%;
+}
+
+button {
+    display: block;
+    border-radius: 12px;
+    background-color: #3a424bad;
+    color :#f0d6d6;
+    /* margin-top: 1%; */
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 50%;
+    padding-inline:  60px;
+    align-items: center;
+    justify-content: center;
+    align-items: center;
+}
+
+button:hover {
+    background-color: rgba(160, 131, 52, 0.267);
+}
+
+#controls {
+    display: flex;
+    gap: 18px; 
+    position: fixed;         
+    top: 92%;
+    left: 49%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 200px;             
+    padding: 15px 10px;
+    /* background-color: rgba(73, 55, 55, 0.6);    */
+    color: #cab6b6;            
+    font-family: 'Arial', sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 10px;
+    /* box-shadow: 0 4px 10px rgba(240, 167, 167, 0.3); */
+} 
