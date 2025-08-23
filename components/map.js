@@ -69,7 +69,7 @@ export class Map {
     }
     // her it's can move enemy based on dynamic array 
     Canmove(row, col) {
-        console.log("at can move", row, col, this.game.map.gridArray[row][col])
+       
         return this.gridArray[row] && this.gridArray[row][col] === 0
     }
     isBlock = (x, y) => this.gridArray[y][x] === consts.BLOCK

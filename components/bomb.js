@@ -86,7 +86,11 @@ export class Bomb {
             // her i will try to remove it from grid [][]
             const col = Math.round(this.x /  this.game.map.level.block_size)
             const row = Math.round(this.y /   this.game.map.level.block_size)
-            this.game.map.gridArray[row][col] = 0
+            console.log("----------------------------------------------------------------------------------")
+    
+            console.log("at remove bomb from grid", row , col)
+            console.log(this.game.map.gridArray)
+            //this.game.map.gridArray[row][col] = 0
             this.active = false
             this.render()
             return

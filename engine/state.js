@@ -75,24 +75,19 @@ export class State {
 
     getMaxAllowdBombCount = () => this.#MAX_ALLOWD_BOMBS
     setMaxAllowdBombCount = (val = 1) => this.#MAX_ALLOWD_BOMBS += val
-
     // FPS = () => 
     pauseStart = () => {
         this.#PAUSE = !this.#PAUSE;
         this.updatePauseIcon();
     }
-
     isPaused = () => this.#PAUSE
     isGameOver = () => this.#GAME_OVER
     GameOver = () => this.#GAME_OVER = true
-
     getPlayerSpeed = () => this.#PLAYER_SPEED
-
     // ============================= just test score >>>>>>
     update = () => {
         this.setScore(this.#SCORE + 1);
     }
-
     setScore = (val) => {
         this.#SCORE = val;
         if (this.game && this.game.scoreboard) {
@@ -100,7 +95,6 @@ export class State {
         }
     }
     // ================ just test score >>>>>>>>>>>>
-
     updatePauseIcon = () => {
         const icon = document.getElementById('icon');
         if (!icon) return;

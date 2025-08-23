@@ -20,7 +20,7 @@ export class Game {
         // test enemy with logic of mehdi 
         this.enemie = null;
     }
-    
+
     async intiElements() {
         this.state.initArrowState()
         await this.map.initMap()
@@ -40,7 +40,7 @@ export class Game {
         if (this.state.isPaused()) {
             // this.map.grid.style.display = "none"
         } else {
-            console.log("at initialize after the map is fetch", this.map.gridArray)
+      
             this.updateRender(timestamp);
         }
                  
