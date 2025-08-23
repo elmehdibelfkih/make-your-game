@@ -3,9 +3,10 @@
 // lives: ❤️❤️❤️    score: 0    level: 1    FPS: 0  menu
 
 export class Scoreboard {
-    constructor(game) {
-        this.game = game
 
+    constructor(game) {
+
+        this.game = game
         let ScoreBoard = document.createElement("div")
         ScoreBoard.id = "ScoreBoard"
         document.body.appendChild(ScoreBoard)
@@ -36,7 +37,6 @@ export class Scoreboard {
     static getInstance = (game) => Scoreboard.instance ? Scoreboard.instance : new Scoreboard(game)
 
     reset() {
-
     }
 
     updateLives = () => this.lives.innerText = "lives: " + "❤️".repeat(this.game.state.getLives())

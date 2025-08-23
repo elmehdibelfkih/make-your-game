@@ -14,8 +14,8 @@ export class State {
     #ARROW_RIGHT = false
     #ARROW_LEFT = false
 
-
     constructor() {
+        this.isStar = true;
     }
 
     static getInstance = (game) => State.instance ? State.instance : new State(game)
@@ -55,12 +55,10 @@ export class State {
     initArrowState() {
         //FIXME: REMOVE THIS
         this.test = document.getElementById('test')
-
+        document.getElementById('star_pause').addEventListener('click', this.transeferit.bind(this))
         document.addEventListener('keydown', this.setArrowStateKeyDown.bind(this))
         document.addEventListener('keyup', this.setArrowStateKeyUp.bind(this))
     }
-
-
 
     getLives = () => this.#LIVES
     setLives = (val = 1) => this.#LIVES += val
@@ -78,8 +76,11 @@ export class State {
     setMaxAllowdBombCount = (val = 1) => this.#MAX_ALLOWD_BOMBS += val
 
     // FPS = () => 
-    pauseStart = () => this.#PAUSE = this.#PAUSE ? false : true
-
+    pauseStart = () => {
+        this.#PAUSE = !this.#PAUSE;
+        this.updatePauseIcon();
+    }
+    
     isPaused = () => this.#PAUSE
     isGameOver = () => this.#GAME_OVER
     GameOver = () => this.#GAME_OVER = true
@@ -87,10 +88,30 @@ export class State {
     getPlayerSpeed = () => this.#PLAYER_SPEED
 
     update = () => {
+        /*
         this.test.innerText = this.#SCORE
         this.#SCORE++
         if (!this.#LIVES) {
             this.GameOver()
         }
+        */
     }
+    updatePauseIcon = () => {
+        const icon = document.getElementById('icon');
+        if (!icon) return;
+        if (!this.#PAUSE) {
+            icon.src = './icon/pause.svg';
+            icon.alt = 'pause';
+            this.isStar = false;
+        } else {
+            icon.src = './icon/play.svg';
+            icon.alt = 'star';
+            this.isStar = true;
+        }
+    }
+    
+    transeferit = () => {
+        this.pauseStart()
+    }
+
 }

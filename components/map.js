@@ -14,6 +14,9 @@ export class Map {
         this.bombs = []
         this.enemys = []
         this.blocksToBlowing = []
+        this.container = document.createElement("div");
+        this.container.id = "grid-container";
+        document.body.appendChild(this.container)
     }
 
     static getInstance = (game) => Map.instance ? Map.instance : new Map(game)
@@ -38,7 +41,7 @@ export class Map {
 
     blowingUpBlock(x, y) {
         this.gridArray[y][x] = consts.FLOOR
-        console.log("im at the grid for update grid", this.gridArray[x][y])
+
         let img = document.getElementById(x.toString() + y.toString())
         let container = document.getElementsByClassName(x.toString() + y.toString())
         console.log(this.gridArray[y][x]);
@@ -79,17 +82,21 @@ export class Map {
     }
 
     initGrid() {
-        console.log("at initialize grid original")
-        console.log(this.level.initial_grid) 
+
         //return;
         this.gridArray = this.level.initial_grid.map(row => [...row])
-        console.log("the copy")
-        console.log(this.gridArray)
+
+
         if (this.grid) document.body.removeChild(grid)
         this.grid = document.createElement("div")
         this.grid.id = "grid"
-        document.body.appendChild(this.grid)
-        this.grid.style.position = "absolute";
+        this.container.appendChild(this.grid)
+        this.grid.style.position = "relative";
+        const rows = this.level.initial_grid.length;
+        const cols = this.level.initial_grid[0].length;
+        this.grid.style.width = `${cols * this.level.block_size}px`;
+        this.grid.style.height = `${rows * this.level.block_size}px`;
+
         this.level.initial_grid.forEach((row, colIndex) => {
             row.forEach((cell, rowIndex) => {
                 const tile = document.createElement("div");
@@ -141,7 +148,7 @@ export class Map {
                     enemyDiv.style.transform = `translate(${x}px, ${y}px)`;
                     this.grid.appendChild(enemyDiv);
                     // ============ Store enemy object (Emy) ============
-                    const en = new Enemy(this.game, this.level, x, y );
+                    const en = new Enemy(this.game, this.level, x, y);
                     en.Div = enemyDiv; // point to the target enemy !!
                     this.enemys.push(en); // and then push it to ARRAY !!
                 }
@@ -149,7 +156,6 @@ export class Map {
         });
         //console.log(this.level.initial_grid)
     }
-    
     initAudios() {
         this.backGroundMusic = new Audio(this.level.back_ground_music);
         this.grid.appendChild(this.backGroundMusic)
@@ -166,7 +172,6 @@ export class Map {
         document.body.addEventListener('click', playMusic);
         document.body.addEventListener('keydown', playMusic);
     }
-
     destructeur() {
         document.body.removeChild(this.grid)
         this.instance = null
