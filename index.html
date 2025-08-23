@@ -10,11 +10,26 @@
 </head>
 
 <body>
+  <div id="level-display"></div>
+      
+    <div id="instructions">
+        <div class="instruction-box">
+            <h2>🎮 Bomberman</h2>
+            <p><strong>Controls:</strong></p>
+            <p>Arrow Keys - Move</p>
+            <p>Space - Drop Bomb</p>
+            <p><strong>Goal:</strong> Destroy blocks, avoid bombs, find exit!</p>
+            <button class="start-btn" onclick="startGame()">START GAME</button>
+        </div>
+    </div>
     <button id="star_pause">
-    <img id="icon" src="./icon/play.svg" alt="star" width="16" height="16">
+    <img id="icon" src="./icon/play.svg" alt="star" width="16" height="16"> </img>
   </button>
 <button id ="ref"> 
- <img id="icon" src="./icon/rotate-ccw.svg" alt="star" width="16" height="16">
+ <img id="icon" src="./icon/rotate-ccw.svg" alt="star" width="16" height="16"> </img>
+</button>
+<button id = 'sound' >
+  <img id="icon" src="./icon/volume-2.svg" alt="voice", width="16" height="16"> </img>
 </button>
   <script type="module" src="main.js"></script>
 </body>

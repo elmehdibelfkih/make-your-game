@@ -13,15 +13,14 @@ export class Game {
     }
 
     constructor() {
-        this.state = State.getInstance();
+        this.state = State.getInstance(this);
         this.scoreboard = Scoreboard.getInstance(this)
         this.map = Map.getInstance(this)
-
         this.player = Player.getInstance(this)
         // test enemy with logic of mehdi 
         this.enemie = null;
     }
-
+    
     async intiElements() {
         this.state.initArrowState()
         await this.map.initMap()
@@ -53,6 +52,7 @@ export class Game {
         this.map.updateRender(timestamp)
         this.player.updateRender(timestamp);
         this.map.bombs?.forEach(b => b.updateRender(timestamp));
+        // test score board !!
         this.state.update()
         //console.log("the grid", this.map.level.initial_grid)
         this.map.enemys?.forEach(enemy => enemy.Canmoveandupdate());

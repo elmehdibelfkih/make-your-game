@@ -34,8 +34,13 @@ export class Scoreboard {
         this.updateTimer = () => 0// this.lives.innerText = "lives: " + "❤️".repeat(this.game.state.getLives())
     }
 
-    static getInstance = (game) => Scoreboard.instance ? Scoreboard.instance : new Scoreboard(game)
-
+    //static getInstance = (game) => Scoreboard.instance ? Scoreboard.instance : new Scoreboard(game)
+    static getInstance = (game) => {
+        if (!Scoreboard.instance) {
+            Scoreboard.instance = new Scoreboard(game);
+        }
+        return Scoreboard.instance;
+    }
     reset() {
     }
 

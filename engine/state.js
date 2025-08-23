@@ -14,7 +14,8 @@ export class State {
     #ARROW_RIGHT = false
     #ARROW_LEFT = false
 
-    constructor() {
+    constructor(game) {
+        this.game = game
         this.isStar = true;
     }
 
@@ -80,22 +81,26 @@ export class State {
         this.#PAUSE = !this.#PAUSE;
         this.updatePauseIcon();
     }
-    
+
     isPaused = () => this.#PAUSE
     isGameOver = () => this.#GAME_OVER
     GameOver = () => this.#GAME_OVER = true
 
     getPlayerSpeed = () => this.#PLAYER_SPEED
 
+    // ============================= just test score >>>>>>
     update = () => {
-        /*
-        this.test.innerText = this.#SCORE
-        this.#SCORE++
-        if (!this.#LIVES) {
-            this.GameOver()
-        }
-        */
+        this.setScore(this.#SCORE + 1);
     }
+
+    setScore = (val) => {
+        this.#SCORE = val;
+        if (this.game && this.game.scoreboard) {
+            this.game.scoreboard.updateScore();
+        }
+    }
+    // ================ just test score >>>>>>>>>>>>
+
     updatePauseIcon = () => {
         const icon = document.getElementById('icon');
         if (!icon) return;
@@ -109,9 +114,7 @@ export class State {
             this.isStar = true;
         }
     }
-    
     transeferit = () => {
         this.pauseStart()
     }
-
 }
