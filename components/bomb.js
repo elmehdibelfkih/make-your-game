@@ -8,7 +8,7 @@ export class Bomb {
         this.xMap = Math.floor(x / this.game.map.level.block_size)
         this.yMap = Math.floor(y / this.game.map.level.block_size)
         this.startTime = timestamp
-        this.flashing = true  
+        this.flashing = true
         this.image = this.game.map.level.bomb
         this.explosionTime = this.game.map.level.explosion_time
         this.explosionImg = this.game.map.level.electric_shock_img
@@ -73,9 +73,9 @@ export class Bomb {
     updateRender(timestamp) {
         if (this.done) {
             this.render()
-            return true}
+            return true
+        }
         const delta = timestamp - this.lastTime;
-
 
         if (timestamp - this.startTime >= this.explosionTime + 1000) {
             if (delta >= 50) {
@@ -84,13 +84,14 @@ export class Bomb {
             }
             //====== i remove the boombs from grid to let enemy move
             // her i will try to remove it from grid [][]
-            const col = Math.round(this.x /  this.game.map.level.block_size)
-            const row = Math.round(this.y /   this.game.map.level.block_size)
+            const col = Math.round(this.xMap / this.game.map.level.block_size)
+            const row = Math.round(this.yMap / this.game.map.level.block_size)
             console.log("----------------------------------------------------------------------------------")
+             console.log("the grid before remove it ", this.game.map.gridArray)
+            this.game.map.gridArray[this.yMap][this.xMap] = 0
     
-            console.log("at remove bomb from grid", row , col)
-            console.log(this.game.map.gridArray)
             //this.game.map.gridArray[row][col] = 0
+            console.log("the grid after remove it ", this.game.map.gridArray)
             this.active = false
             this.render()
             return
@@ -121,7 +122,7 @@ export class Bomb {
                 this.explosionImg = this.explosionImg.replace(this.frameIndex + ".png", ((this.frameIndex + 1) % 4) + ".png")
                 this.lastTime = timestamp;
             }
-            
+
             this.explosion = true
             this.render()
             return
@@ -135,7 +136,7 @@ export class Bomb {
         }
         this.render()
     }
-    
+
     makeShockSound() {
         if (!this.shock) {
             this.electricShock.play().catch(err => {
@@ -161,7 +162,7 @@ export class Bomb {
         }
         this.exp?.forEach(b => b ? b.src = this.explosionImg : 0);
     }
-    
+
     makeDisappearing() {
         this.bomb.style.opacity = parseFloat(this.bomb.style.opacity) - 0.1;
         if (this.bomb.style.opacity <= 0) {
