@@ -100,6 +100,7 @@ export class State {
             this.game.scoreboard.updateScore();
         }
     }
+
     // ================ just test score >>>>>>>>>>>>
     updatePauseIcon = () => {
         const icon = document.getElementById('icon');
@@ -134,8 +135,10 @@ export class State {
                     this.#TIME--;
                     console.log(this.#TIME)
                     this.game.scoreboard.updateTimer();
+                   
                 } else {
                     clearInterval(this.#TIMER_ID);
+                    this.#GAME_OVER = true
                     //this.GameOver(); 
                     // her i will initialize the game over !!
                 }
@@ -161,5 +164,9 @@ export class State {
 
     transeferit = () => {
         this.pauseStart()
+    }
+
+    SetPause(env){
+        this.#PAUSE = env
     }
 }

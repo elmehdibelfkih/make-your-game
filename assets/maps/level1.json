@@ -32,5 +32,5 @@
   "shock_sound" : "./assets/audios/buzz.ogg",
   "dying_sound" : "./assets/audios/die1.mp3",
   "explosion_time": 1500,
-  "level_time" : "5min"
+  "level_time" : "1min"
 }

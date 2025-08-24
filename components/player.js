@@ -168,7 +168,7 @@ export class Player {
             this.y >= y + height
         );
     }
-
+    
     kill = () => this.dying = true
     getPlayerHeight = () => this.playerCoordinate[this.direction][this.frameIndex].height
     getPlayerWidth = () => this.playerCoordinate[this.direction][this.frameIndex].width

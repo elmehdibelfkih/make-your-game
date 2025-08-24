@@ -7,7 +7,7 @@ export class Enemy {
         this.level = level
         //this.id = i
         this.direction = "up"
-        this.enemySize = this.level.block_size
+        this.enemySize = 40
         //console.log(this.enemySize)
         this.speed = 2
         this.detect = true

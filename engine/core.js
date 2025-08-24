@@ -20,14 +20,14 @@ export class Game {
         // test enemy with logic of mehdi 
         this.enemie = null;
     }
-    
+
     async intiElements() {
         this.state.initArrowState()
         await this.map.initMap()
         await this.player.initPlayer()
         //this.map.initTimer()
         return
-         //this.map.enemie.
+        //this.map.enemie.
         //this.enemie = new Enemy(this)
         //this.enemie.createnemy();
     }
@@ -36,12 +36,14 @@ export class Game {
 
     async loop(timestamp) {
         if (this.state.isGameOver()) {
+            console.log("game is over")
+            this.state.SetPause(false)
             await this.gameOver()
         }
         if (this.state.isPaused()) {
             // this.map.grid.style.display = "none"
         } else {
-      
+
             this.updateRender(timestamp);
         }
         requestAnimationFrame(this.loop.bind(this));
@@ -58,6 +60,17 @@ export class Game {
     }
 
     async gameOver() {
+        
+        // ============>>>>>>> showing menu <<<< =====================
+        const instructions = document.getElementById("instructions");
+        const title = document.getElementById("menu-title");
+        const message = document.getElementById("menu-message");
+        const btn = document.getElementById("start-btn");
+        instructions.classList.remove("hidden");
+        title.textContent = "💀 GAME OVER";
+        message.textContent = "Time’s up or you lost all lives!";
+        btn.textContent = "PLAY AGAIN";
+        //====================================================
         this.state.initState()
         this.scoreboard.initScoreBaord() // todo: update this
         this.scoreboard.updateLives()
