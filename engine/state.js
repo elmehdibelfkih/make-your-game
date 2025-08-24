@@ -1,6 +1,6 @@
 export class State {
 
-    #CURRENT_LEVEL = 0
+    #CURRENT_LEVEL = 1
     #LIVES = 3
     #SCORE = 0
     #PAUSE = true
@@ -74,7 +74,7 @@ export class State {
     getLevel = () => this.#CURRENT_LEVEL
 
     getScore = () => this.#SCORE
-    setScore = (val) => this.#SCORE = val
+    //setScore = (val) => this.#SCORE = val
 
     getBombCount = () => this.#BOMB_COUNT
     setBombCount = (val = 1) => this.#BOMB_COUNT += val
@@ -92,10 +92,10 @@ export class State {
     getPlayerSpeed = () => this.#PLAYER_SPEED
     // ============================= just test score >>>>>>
     update = () => {
-        this.setScore(this.#SCORE + 1);
+        this.setScore(this.#SCORE);
     }
     setScore = (val) => {
-        this.#SCORE = val;
+        this.#SCORE = val + 100;
         if (this.game && this.game.scoreboard) {
             this.game.scoreboard.updateScore();
         }
@@ -158,7 +158,7 @@ export class State {
             this.#SOUND = true
         }
     }
-    
+
     transeferit = () => {
         this.pauseStart()
     }

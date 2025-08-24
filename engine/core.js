@@ -52,7 +52,7 @@ export class Game {
         this.player.updateRender(timestamp);
         this.map.bombs?.forEach(b => b.updateRender(timestamp));
         // test score board !!
-        this.state.update()
+        //this.state.update()
         //console.log("the grid", this.map.level.initial_grid)
         this.map.enemys?.forEach(enemy => enemy.Canmoveandupdate());
     }

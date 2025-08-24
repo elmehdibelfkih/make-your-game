@@ -31,5 +31,6 @@
   "back_ground_music" : "./assets/audios/happy_adventure.mp3",
   "shock_sound" : "./assets/audios/buzz.ogg",
   "dying_sound" : "./assets/audios/die1.mp3",
-  "explosion_time": 1500
+  "explosion_time": 1500,
+  "level_time" : "5min"
 }

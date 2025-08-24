@@ -25,6 +25,7 @@ export class Enemy {
         if (this.Div && this.Div.parentNode) {
             this.Div.parentNode.removeChild(this.Div);
             // this.game.removeEnemy(this);
+            this.game.state.update()
             this.dead = true;
         }
     }
