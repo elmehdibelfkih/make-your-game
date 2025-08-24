@@ -9,6 +9,7 @@ export class Map {
         this.level
         this.grid
         this.gridArray
+        this.backGroundMusic
         this.mustrender = false
         this.updateLevel = false
         this.bombs = []
@@ -86,7 +87,6 @@ export class Map {
         //return;
         this.gridArray = this.level.initial_grid.map(row => [...row])
 
-
         if (this.grid) document.body.removeChild(grid)
         this.grid = document.createElement("div")
         this.grid.id = "grid"
@@ -156,12 +156,13 @@ export class Map {
         });
         //console.log(this.level.initial_grid)
     }
+
     initAudios() {
         this.backGroundMusic = new Audio(this.level.back_ground_music);
         this.grid.appendChild(this.backGroundMusic)
         this.backGroundMusic.preload = 'auto';
         this.backGroundMusic.loop = true;
-        this.backGroundMusic.volume = 0.0;
+        this.backGroundMusic.volume = 0.3;
         const playMusic = () => {
             this.backGroundMusic.play().catch(err => {
                 console.error("Playback failed:", err);
@@ -172,6 +173,7 @@ export class Map {
         document.body.addEventListener('click', playMusic);
         document.body.addEventListener('keydown', playMusic);
     }
+
     destructeur() {
         document.body.removeChild(this.grid)
         this.instance = null

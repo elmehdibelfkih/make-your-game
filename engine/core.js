@@ -43,8 +43,6 @@ export class Game {
       
             this.updateRender(timestamp);
         }
-                 
-
         requestAnimationFrame(this.loop.bind(this));
     }
 

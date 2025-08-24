@@ -37,7 +37,6 @@ export class Enemy {
             const bombX = bomb.xMap * blockSize;
             const bombY = bomb.yMap * blockSize;
 
-
             if (this.isColliding(bombX, bombY, blockSize, blockSize)) {
                 // i want to test it and remove the div of enemys where we are now how i will do it exect
                 this.killenemy()

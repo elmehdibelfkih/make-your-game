@@ -19,5 +19,6 @@ export function getCoordinates(map, target) {
       }
     }
   }
+
   return [null, null];
 }

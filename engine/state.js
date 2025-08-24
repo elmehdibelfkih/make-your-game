@@ -1,6 +1,6 @@
 export class State {
 
-    #CURRENT_LEVEL = 1
+    #CURRENT_LEVEL = 0
     #LIVES = 3
     #SCORE = 0
     #PAUSE = true
@@ -8,6 +8,7 @@ export class State {
     #BOMB_COUNT = 0
     #MAX_ALLOWD_BOMBS = 3
     #GAME_OVER = false
+    #SOUND = true
 
     #ARROW_UP = false
     #ARROW_DOWN = false
@@ -29,6 +30,8 @@ export class State {
         this.#BOMB_COUNT = 0
         this.#MAX_ALLOWD_BOMBS = 3
         this.#GAME_OVER = false
+        this.#SOUND = true
+
     }
 
     isArrowUp = () => this.#ARROW_UP
@@ -57,6 +60,7 @@ export class State {
         //FIXME: REMOVE THIS
         this.test = document.getElementById('test')
         document.getElementById('star_pause').addEventListener('click', this.transeferit.bind(this))
+        document.getElementById('sound').addEventListener('click', this.switch.bind(this))
         document.addEventListener('keydown', this.setArrowStateKeyDown.bind(this))
         document.addEventListener('keyup', this.setArrowStateKeyUp.bind(this))
     }
@@ -108,6 +112,23 @@ export class State {
             this.isStar = true;
         }
     }
+
+    switch(){
+        const ic = document.getElementById('Icon')
+        // now it true
+        if (this.#SOUND){
+            // svg for mute
+            ic.src ='./icon/volume-x.svg'
+            this.game.map.backGroundMusic.volume = 0.0;
+            this.#SOUND = false
+        }else{
+            // svg for sound e-
+            ic.src = './icon/volume-2.svg'
+            this.game.map.backGroundMusic.volume = 0.3;
+            this.#SOUND = true
+        }
+    }
+    
     transeferit = () => {
         this.pauseStart()
     }
