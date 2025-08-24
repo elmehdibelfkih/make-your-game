@@ -20,11 +20,12 @@ export class Game {
         // test enemy with logic of mehdi 
         this.enemie = null;
     }
-
+    
     async intiElements() {
         this.state.initArrowState()
         await this.map.initMap()
         await this.player.initPlayer()
+        //this.map.initTimer()
         return
          //this.map.enemie.
         //this.enemie = new Enemy(this)

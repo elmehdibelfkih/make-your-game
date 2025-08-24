@@ -9,11 +9,12 @@ export class State {
     #MAX_ALLOWD_BOMBS = 3
     #GAME_OVER = false
     #SOUND = true
-
     #ARROW_UP = false
     #ARROW_DOWN = false
     #ARROW_RIGHT = false
     #ARROW_LEFT = false
+    #TIME = 0
+    #TIMER_ID = null
 
     constructor(game) {
         this.game = game
@@ -31,7 +32,8 @@ export class State {
         this.#MAX_ALLOWD_BOMBS = 3
         this.#GAME_OVER = false
         this.#SOUND = true
-
+        this.#TIME = 0;
+        this.#TIMER_ID = null;
     }
 
     isArrowUp = () => this.#ARROW_UP
@@ -64,10 +66,10 @@ export class State {
         document.addEventListener('keydown', this.setArrowStateKeyDown.bind(this))
         document.addEventListener('keyup', this.setArrowStateKeyUp.bind(this))
     }
+    getTime = () => this.#TIME
 
-    getLives = () => this.#LIVES
     setLives = (val = 1) => this.#LIVES += val
-
+    getLives = () => this.#LIVES
     setLevel = (val) => this.#CURRENT_LEVEL = val
     getLevel = () => this.#CURRENT_LEVEL
 
@@ -112,16 +114,44 @@ export class State {
             this.isStar = true;
         }
     }
+    // her i will set timer for game 
+    setTime = (seconds) => {
+        this.#TIME = seconds;
+        if (this.game && this.game.scoreboard) {
+            this.game.scoreboard.updateTimer();
+        }
+    };
+    // ====================================//
+    startTimer = () => {
+        // Clear any existing interval
+        if (this.#TIMER_ID) clearInterval(this.#TIMER_ID);
 
-    switch(){
+        // Star timer count 
+        this.#TIMER_ID = setInterval(() => {
+            // Only decrease time if the game is not paused
+            if (!this.isPaused()) {
+                if (this.#TIME > 0) {
+                    this.#TIME--;
+                    console.log(this.#TIME)
+                    this.game.scoreboard.updateTimer();
+                } else {
+                    clearInterval(this.#TIMER_ID);
+                    //this.GameOver(); 
+                    // her i will initialize the game over !!
+                }
+            }
+        }, 1000);
+    };
+
+    switch() {
         const ic = document.getElementById('Icon')
         // now it true
-        if (this.#SOUND){
+        if (this.#SOUND) {
             // svg for mute
-            ic.src ='./icon/volume-x.svg'
+            ic.src = './icon/volume-x.svg'
             this.game.map.backGroundMusic.volume = 0.0;
             this.#SOUND = false
-        }else{
+        } else {
             // svg for sound e-
             ic.src = './icon/volume-2.svg'
             this.game.map.backGroundMusic.volume = 0.3;

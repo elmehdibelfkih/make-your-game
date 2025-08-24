@@ -19,9 +19,6 @@ export class Scoreboard {
         this.level = document.createElement("span")
         this.level.innerText = `level: ${game.state.getLevel()}`
         ScoreBoard.appendChild(this.level)
-        this.FPS = document.createElement("span")
-        this.FPS.innerText = "FPS: 0"
-        ScoreBoard.appendChild(this.FPS)
         this.timer = document.createElement("span")
         this.timer.innerText = "timer: "
         ScoreBoard.appendChild(this.timer)
@@ -31,7 +28,7 @@ export class Scoreboard {
         this.updateLives = () => this.lives.innerText = "lives: " + "❤️".repeat(this.game.state.getLives())
         this.updateScore = () => this.score.innerText = `score: ${this.game.state.getScore()}`
         this.updateLevel = () => this.level.innerText = `level: ${this.game.state.getLevel()}`
-        this.updateTimer = () => 0// this.lives.innerText = "lives: " + "❤️".repeat(this.game.state.getLives())
+        this.updateTimer = () => this.timer.innerText = `time: ${this.game.state.getTime()}`
     }
 
     //static getInstance = (game) => Scoreboard.instance ? Scoreboard.instance : new Scoreboard(game)
@@ -41,12 +38,15 @@ export class Scoreboard {
         }
         return Scoreboard.instance;
     }
+
     reset() {
     }
 
     updateLives = () => this.lives.innerText = "lives: " + "❤️".repeat(this.game.state.getLives())
     updateScore = () => this.score.innerText = `score: ${this.game.state.getScore()}`
     updateLevel = () => this.level.innerText = `level: ${this.game.state.getLevel()}`
-    updateTimer = () => 0// this.lives.innerText = "lives: " + "❤️".repeat(this.game.state.getLives())
+    updateTimer = () => { let totalSeconds = this.game.state.getTime(); let minutes = Math.floor(totalSeconds / 60); let seconds = totalSeconds % 60;
+        this.timer.innerText = `Time: ${minutes}m ${seconds}s`;
+    };
 }
 

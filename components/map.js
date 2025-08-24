@@ -15,6 +15,7 @@ export class Map {
         this.bombs = []
         this.enemys = []
         this.blocksToBlowing = []
+        // her for styling 
         this.container = document.createElement("div");
         this.container.id = "grid-container";
         document.body.appendChild(this.container)

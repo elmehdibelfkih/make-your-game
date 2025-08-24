@@ -13,8 +13,23 @@ window.startGame = async function () {
     const levelDisplay = document.getElementById('level-display');
     levelDisplay.textContent = `${game.map.level.name}`
     levelDisplay.classList.add('show');
-    // Start the game now
-    game.run(); 
+
+
+    //  Initialize timer from JSON file to be depend on the time of level
+ 
+    let rawTime = game.map.level.level_time;  
+    let seconds;
+
+    if (typeof rawTime === "string" && rawTime.endsWith("min")) {
+        seconds = parseInt(rawTime) * 60;  
+    } else {
+        seconds = parseInt(rawTime); 
+    }
+    game.state.setTime(seconds);
+    game.state.startTimer();
+    // <===============================================>
+    // Start the game now !!
+    game.run();
     //game.state.pauseStart()
     setTimeout(() => {
         game.state.pauseStart()
