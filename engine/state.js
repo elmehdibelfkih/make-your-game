@@ -17,13 +17,22 @@ export class State {
     #TIMER_ID = null
 
     constructor(game) {
+        State.instance = this;
         this.game = game
         this.isStar = true;
     }
 
     static getInstance = (game) => State.instance ? State.instance : new State(game)
 
+    stopTimer = () => {
+        if (this.#TIMER_ID) {
+            clearInterval(this.#TIMER_ID);
+            this.#TIMER_ID = null;
+        }
+    }
+
     initState() {
+        this.stopTimer();
         this.#LIVES = 3
         this.#SCORE = 0
         this.#PAUSE = true
@@ -35,7 +44,6 @@ export class State {
         this.#TIME = 0;
         this.#TIMER_ID = null;
     }
-
     isArrowUp = () => this.#ARROW_UP
     isArrowDown = () => this.#ARROW_DOWN
     isArrowRight = () => this.#ARROW_RIGHT
@@ -87,20 +95,22 @@ export class State {
         this.#PAUSE = !this.#PAUSE;
         this.updatePauseIcon();
     }
+    
     isPaused = () => this.#PAUSE
     isGameOver = () => this.#GAME_OVER
     GameOver = () => this.#GAME_OVER = true
     getPlayerSpeed = () => this.#PLAYER_SPEED
     // ============================= just test score >>>>>>
-    update = () => {
-        this.setScore(this.#SCORE);
-    }
+    //update = () => {
+      //  this.setScore(this.#SCORE);
+    //}
     setScore = (val) => {
-        this.#SCORE = val + 100;
+        this.#SCORE += val;
         if (this.game && this.game.scoreboard) {
             this.game.scoreboard.updateScore();
         }
     }
+
     // ================ just test score >>>>>>>>>>>>
     updatePauseIcon = () => {
         const icon = document.getElementById('icon');
@@ -115,15 +125,21 @@ export class State {
             this.isStar = true;
         }
     }
+
     // her i will set timer for game 
     setTime = (seconds) => {
         this.#TIME = seconds;
+        this.maxTime = this.#TIME
         if (this.game && this.game.scoreboard) {
             this.game.scoreboard.updateTimer();
         }
     };
-    
-    addtime = (val) => this.#TIME + val
+
+    addtime = (val) => {
+        this.#TIME += val;
+        return this.#TIME;
+    }
+
     // ====================================//
     startTimer = () => {
         // Clear any existing interval
@@ -137,7 +153,7 @@ export class State {
                     this.#TIME--;
                     console.log(this.#TIME)
                     this.game.scoreboard.updateTimer();
-                   
+
                 } else {
                     clearInterval(this.#TIMER_ID);
                     this.#GAME_OVER = true
@@ -168,7 +184,7 @@ export class State {
         this.pauseStart()
     }
 
-    SetPause(env){
+    SetPause(env) {
         this.#PAUSE = env
     }
 }

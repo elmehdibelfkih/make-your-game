@@ -56,6 +56,7 @@ export class Map {
         let img = document.getElementById(x.toString() + y.toString())
         let container = document.getElementsByClassName(x.toString() + y.toString())
         console.log(this.gridArray[y][x]);
+        this.game.state.setScore(25); 
         container[0].removeChild(img)
         // this.blocksToBlowing.push()
     }
@@ -166,6 +167,7 @@ export class Map {
                     const id = rowIndex.toString() + colIndex.toString() + "T";
                     // Create Bonus object (reuse your Bonus class, or make a TimeBonus class)
                     const timeBonus = new Bonus(this.game, x, y, this.level, id);
+                   
                     this.timeBonuses.push(timeBonus);  
                     tile.appendChild(bonus);
                 }

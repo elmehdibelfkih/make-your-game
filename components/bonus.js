@@ -10,11 +10,9 @@ export class Bonus {
         this.audio =  new Audio(this.level.GetSpeed)
         this.audio1 = new Audio(this.level.GetTime)
     }
-
     removeitfromgrid() {
         this.game.map.gridArray[this.at[0]][this.at[1]] = 0
     }
-
     removeitfromDOM() {
         const div = document.getElementById(this.id)
         div.remove()

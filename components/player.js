@@ -188,7 +188,8 @@ export class Player {
         for (const bonus of this.game.map.timeBonuses) {
             const blockSize = this.game.map.level.block_size;
             if (this.isColliding(bonus.x, bonus.y, blockSize, blockSize)) {
-                this.game.state.addtime();             
+                
+                this.game.state.addtime(10);             
                 bonus.removeitfromDOM();       
                 bonus.removeitfromgrid(); 
                 bonus.audio1.play().catch(err => console.error(err))

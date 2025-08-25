@@ -15,7 +15,7 @@ export class Enemy {
         this.mustrender = true
         this.targetX = x
         this.targetY = y
-        // I will accesS to the target div enemys 
+        // I will accesS to The Target div enemys !
         this.Div = null
         this.dead = false
         // this.creatediv()
@@ -27,7 +27,7 @@ export class Enemy {
         if (this.Div && this.Div.parentNode) {
             this.Div.parentNode.removeChild(this.Div);
             // this.game.removeEnemy(this);
-            this.game.state.update()
+            this.game.state.setScore(100)
             this.dead = true;
         }
     }
@@ -114,15 +114,18 @@ export class Enemy {
         if (Math.abs(this.y - this.targetY) < this.speed) this.y = this.targetY
         this.arzigid()
     }
+
     arzigid() {
         // IF EXEIST
         this.Div.style.backgroundPosition = `${this.AnimationCord[this.direction].x} ${this.AnimationCord[this.direction].y}`
         this.Div.style.transform = `translate(${this.x}px, ${this.y}px)`;
     }
+
     randomDirection() {
         const dirs = ["Up", "Down", "Left", "Right"]
         return dirs[Math.floor(Math.random() * dirs.length)]
     }
+
     // helper to check collision with enemy 
     isColliding(x, y, w, h) {
         return !(this.x + this.enemySize < x || this.x > x + w ||

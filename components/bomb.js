@@ -87,9 +87,9 @@ export class Bomb {
             const col = Math.round(this.xMap / this.game.map.level.block_size)
             const row = Math.round(this.yMap / this.game.map.level.block_size)
             console.log("----------------------------------------------------------------------------------")
-             console.log("the grid before remove it ", this.game.map.gridArray)
+            console.log("the grid before remove it ", this.game.map.gridArray)
             this.game.map.gridArray[this.yMap][this.xMap] = 0
-    
+            // her i add score for destroy the flor !!
             //this.game.map.gridArray[row][col] = 0
             console.log("the grid after remove it ", this.game.map.gridArray)
             this.active = false
@@ -160,6 +160,7 @@ export class Bomb {
                 i === 3 ? this.exp[i].style.transform = "rotate(270deg) translate(17px, -17px)" : 0
             }
         }
+         
         this.exp?.forEach(b => b ? b.src = this.explosionImg : 0);
     }
 
