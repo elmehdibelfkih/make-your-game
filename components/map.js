@@ -16,6 +16,7 @@ export class Map {
         this.bombs = []
         this.enemys = []
         // bonus arrat 
+        this.timeBonuses = []
         this.speedBonuses = []
         this.blocksToBlowing = []
         this.enemyCordination
@@ -147,6 +148,28 @@ export class Map {
                     this.speedBonuses.push(Bamboleao)
                     tile.appendChild(bonus);
                 }
+                // === Add TIME Bonus ===
+                if (cell === consts.TIME) {
+                    const bonus = document.createElement("img");
+                    bonus.src = this.level.time;  // <- path to your clock/hourglass image
+                    bonus.className = "time-bonus";
+                    bonus.style.width = `${35}px`;
+                    bonus.style.height = `${50}px`;
+                    bonus.style.position = "absolute";
+
+                    const x = this.level.block_size * rowIndex;
+                    const y = this.level.block_size * colIndex;
+
+                    bonus.style.transform = `translate(${15}px, ${10}px)`;
+
+                    bonus.id = rowIndex.toString() + colIndex.toString() + "T";
+                    const id = rowIndex.toString() + colIndex.toString() + "T";
+                    // Create Bonus object (reuse your Bonus class, or make a TimeBonus class)
+                    const timeBonus = new Bonus(this.game, x, y, this.level, id);
+                    this.timeBonuses.push(timeBonus);  
+                    tile.appendChild(bonus);
+                }
+
                 tile.style.width = `${this.level.block_size}px`;
                 tile.style.height = `${this.level.block_size}px`;
                 tile.style.backgroundSize = "cover";

@@ -7,7 +7,8 @@ export class Bonus {
         //this.checkit() 
         this.id = id
         this.at = [this.y/ this.level.block_size, this.x/this.level.block_size] 
-        this.audio =  new Audio("./assets/audios/CoinGet.mp3")
+        this.audio =  new Audio(this.level.GetSpeed)
+        this.audio1 = new Audio(this.level.GetTime)
     }
 
     removeitfromgrid() {
@@ -21,16 +22,16 @@ export class Bonus {
 
     //  what's i will need know to do it nmmm it update speed !?
     addspeed() {
-        const lastsped = this.game.state.getPlayerSpeed()
+        //const lastsped = this.game.state.getPlayerSpeed()
         this.game.state.setPlayerspped(6)
         this.audio.currentTime = 0
         this.audio.play().catch(err => console.error(err))
         //  i will need the timer to let
         setTimeout(()=> {
-            this.game.state.setPlayerspped(lastsped)
-        }, 3000)
+            this.game.state.setPlayerspped(4)
+        }, 600)
     }
-
+    // speed efect 
     showSpeedEffect() {
     const effect = document.createElement("div");
     effect.className = "speed-effect";
@@ -39,4 +40,13 @@ export class Bonus {
     this.game.map.grid.appendChild(effect);
     setTimeout(() => effect.remove(), 500);
     }
+    /// time_Effect 
+    showTimeEffect() {
+    const effect = document.createElement("div");
+    effect.className = "time-effect";  
+    effect.style.left = `${this.x}px`;
+    effect.style.top = `${this.y}px`;
+    this.game.map.grid.appendChild(effect);
+    setTimeout(() => effect.remove(), 500);
+}
 }

@@ -66,7 +66,7 @@ export class State {
         document.addEventListener('keydown', this.setArrowStateKeyDown.bind(this))
         document.addEventListener('keyup', this.setArrowStateKeyUp.bind(this))
     }
-    
+
     getTime = () => this.#TIME
     setLives = (val = 1) => this.#LIVES += val
     getLives = () => this.#LIVES
@@ -122,6 +122,8 @@ export class State {
             this.game.scoreboard.updateTimer();
         }
     };
+    
+    addtime = (val) => this.#TIME + val
     // ====================================//
     startTimer = () => {
         // Clear any existing interval

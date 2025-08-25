@@ -56,7 +56,8 @@ export class Player {
     updateRender(timestamp) {
         this.playerDying(timestamp)
         this.movePlayer(timestamp)
-        this.checkBonusCollision()
+        this.checkBonusSpeed()
+        this.checkBonusTime()
         this.render()
     }
 
@@ -92,7 +93,7 @@ export class Player {
             }
         }
     }
-    
+
     movePlayer(timestamp) {
         if (this.game.state.isArrowUp() && this.game.map.canPlayerMoveTo(this.x, this.y - this.game.state.getPlayerSpeed())) {
             this.y -= this.game.state.getPlayerSpeed()
@@ -171,20 +172,31 @@ export class Player {
     }
 
     /// checker for get speed 
-    checkBonusCollision() {
-    for (const bonus of this.game.map.speedBonuses) {
-        const blockSize = this.game.map.level.block_size;
-        if (this.isColliding(bonus.x, bonus.y, blockSize, blockSize)) {
-            bonus.addspeed();           
-            bonus.removeitfromDOM();     
-            bonus.removeitfromgrid();    
-            this.game.map.speedBonuses = this.game.map.speedBonuses.filter(b => b !== bonus);
-            bonus.showSpeedEffect(); 
+    checkBonusSpeed() {
+        for (const bonus of this.game.map.speedBonuses) {
+            const blockSize = this.game.map.level.block_size;
+            if (this.isColliding(bonus.x, bonus.y, blockSize, blockSize)) {
+                bonus.addspeed();
+                bonus.removeitfromDOM();
+                bonus.removeitfromgrid();
+                this.game.map.speedBonuses = this.game.map.speedBonuses.filter(b => b !== bonus);
+                bonus.showSpeedEffect();
+            }
         }
-
     }
-}
-
+    checkBonusTime() {
+        for (const bonus of this.game.map.timeBonuses) {
+            const blockSize = this.game.map.level.block_size;
+            if (this.isColliding(bonus.x, bonus.y, blockSize, blockSize)) {
+                this.game.state.addtime();             
+                bonus.removeitfromDOM();       
+                bonus.removeitfromgrid(); 
+                bonus.audio1.play().catch(err => console.error(err))
+                this.game.map.timeBonuses = this.game.map.timeBonuses.filter(b => b !== bonus);
+                bonus.showTimeEffect();        
+            }
+        }
+    }
 
     kill = () => this.dying = true
     getPlayerHeight = () => this.playerCoordinate[this.direction][this.frameIndex].height
