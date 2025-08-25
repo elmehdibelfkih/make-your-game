@@ -1,12 +1,12 @@
 export class Enemy {
 
-    constructor(game, level, x, y) {
+    constructor(game, level, x, y, Cordination) {
         this.game = game
         this.x = x
         this.y = y
         this.level = level
         //this.id = i
-        this.direction = "up"
+        this.direction = "Left"
         this.enemySize = 40
         //console.log(this.enemySize)
         this.speed = 2
@@ -15,10 +15,12 @@ export class Enemy {
         this.mustrender = true
         this.targetX = x
         this.targetY = y
-        // i will acces to the target div enemys 
+        // I will accesS to the target div enemys 
         this.Div = null
         this.dead = false
-        //this.creatediv()
+        // this.creatediv()
+        // her i add cordination frame up left right !!
+        this.AnimationCord = Cordination
     }
     // i will remove enenmy
     killenemy() {
@@ -29,11 +31,12 @@ export class Enemy {
             this.dead = true;
         }
     }
+
     checkiftheriscolision() {
         const blockSize = this.level.block_size;
         const now = performance.now();
         for (let bomb of this.game.map.bombs) {
-              if (!bomb.active) continue;
+            if (!bomb.active) continue;
             if (now < bomb.startTime + bomb.explosionTime) continue;
             const bombX = bomb.xMap * blockSize;
             const bombY = bomb.yMap * blockSize;
@@ -58,9 +61,9 @@ export class Enemy {
                     return;
                 }
             }
-
         }
     }
+
     Canmoveandupdate() {
         if (this.dead) return
         this.checkiftheriscolision()
@@ -68,16 +71,17 @@ export class Enemy {
             this.game.player.kill()
         }
         const directions = {
-            up: { rowset: -1, colset: 0 },
-            down: { rowset: 1, colset: 0 },
-            left: { rowset: 0, colset: -1 },
-            right: { rowset: 0, colset: 1 }
+            Up: { rowset: -1, colset: 0 },
+            Down: { rowset: 1, colset: 0 },
+            Left: { rowset: 0, colset: -1 },
+            Right: { rowset: 0, colset: 1 }
         }
 
         const blockSize = this.level.block_size
         //  her i face i round it becs it's give me exect traget col and row in all grid
-        const col = Math.round(this.x / blockSize)
-        const row = Math.round(this.y / blockSize)
+
+        const col = (this.direction === "Left") ? Math.round(this.x / blockSize) : Math.floor(this.x / blockSize);
+        const row = (this.direction === "Left") ? Math.round(this.y / blockSize) : Math.floor(this.y / blockSize);
         if (this.detect) {
             const nextRow = row + directions[this.direction].rowset
             const nextCol = col + directions[this.direction].colset
@@ -112,11 +116,11 @@ export class Enemy {
     }
     arzigid() {
         // IF EXEIST
+        this.Div.style.backgroundPosition = `${this.AnimationCord[this.direction].x} ${this.AnimationCord[this.direction].y}`
         this.Div.style.transform = `translate(${this.x}px, ${this.y}px)`;
     }
-   
     randomDirection() {
-        const dirs = ["up", "down", "left", "right"]
+        const dirs = ["Up", "Down", "Left", "Right"]
         return dirs[Math.floor(Math.random() * dirs.length)]
     }
     // helper to check collision with enemy 

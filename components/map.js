@@ -1,6 +1,7 @@
 import * as consts from '../utils/consts.js';
 import { Bomb } from "./bomb.js"
 import { Enemy } from "./enemy.js"
+import { Bonus } from './bonus.js';
 
 export class Map {
 
@@ -14,7 +15,10 @@ export class Map {
         this.updateLevel = false
         this.bombs = []
         this.enemys = []
+        // bonus arrat 
+        this.speedBonuses = []
         this.blocksToBlowing = []
+        this.enemyCordination
         // her for styling 
         this.container = document.createElement("div");
         this.container.id = "grid-container";
@@ -25,6 +29,10 @@ export class Map {
 
     async initMap() {
         this.level = await fetch(`assets/maps/level${this.game.state.getLevel()}.json`).then(res => res.json());
+        // I will fetch enemy cordination !!
+        this.enemyCordination = await fetch(`assets/maps/enemycordinate.json`).then(res => res.json())
+        console.log(this.level.speed)
+        console.log(this.enemyCordination["Up"].width)
         this.initGrid()
         this.initAudios()
         this.initEnemy()
@@ -71,7 +79,7 @@ export class Map {
     }
     // her it's can move enemy based on dynamic array 
     Canmove(row, col) {
-       
+
         return this.gridArray[row] && this.gridArray[row][col] === 0
     }
     isBlock = (x, y) => this.gridArray[y][x] === consts.BLOCK
@@ -115,11 +123,36 @@ export class Map {
                     tile.className = rowIndex.toString() + colIndex.toString()
                     tile.appendChild(block)
                 }
+                // Her I WILL  add Speed !!
+                if (cell === consts.SPEED) {
+                    console.log("howa")
+                    const bonus = document.createElement("img");
+                    bonus.src = this.level.speed
+                    bonus.className = "speed-bonus";
+                    //bonus.dataset.speed = 2;      
+                    bonus.style.width = `${30}px`;
+                    bonus.style.height = `${40}px`;
+                    bonus.style.position = "absolute";
+                    //bonus.style
+                    var x = this.level.block_size * rowIndex
+                    var y = this.level.block_size * colIndex
+                    // her i will put it in ther cordination in grid 
+                    bonus.style.transform = `translate(${20}px, ${10}px)`;
+                    // Her I Will Create CLASS !! la class aben 3mi
+                    // I Neeed To Remove It In Grid Later !!
+                    bonus.id = rowIndex.toString() + colIndex.toString()
+                    const id = rowIndex.toString() + colIndex.toString()
+                    const Bamboleao = new Bonus(this.game, x, y, this.level, id)
+                    //bonus.style.zIndex = 10;
+                    this.speedBonuses.push(Bamboleao)
+                    tile.appendChild(bonus);
+                }
                 tile.style.width = `${this.level.block_size}px`;
                 tile.style.height = `${this.level.block_size}px`;
                 tile.style.backgroundSize = "cover";
                 this.grid.appendChild(tile);
             });
+
         });
     }
     // when i creadted new div on top of this i get problem of the enmiey it's not visible becs ..
@@ -144,12 +177,13 @@ export class Map {
                     enemyDiv.style.backgroundRepeat = 'no-repeat';
                     enemyDiv.style.imageRendering = 'pixelated';
                     enemyDiv.style.position = 'absolute';
-                    enemyDiv.style.width = `${this.level.block_size}px`;
-                    enemyDiv.style.height = `${this.level.block_size}px`;
+                    enemyDiv.style.width = `${this.enemyCordination["Left"].width}`;
+                    enemyDiv.style.height = `${this.enemyCordination["Left"].height}`;
+                    enemyDiv.style.backgroundPosition = `${this.enemyCordination["Left"].x} ${this.enemyCordination["Left"].y}`;
                     enemyDiv.style.transform = `translate(${x}px, ${y}px)`;
                     this.grid.appendChild(enemyDiv);
                     // ============ Store enemy object (Emy) ============
-                    const en = new Enemy(this.game, this.level, x, y);
+                    const en = new Enemy(this.game, this.level, x, y, this.enemyCordination);
                     en.Div = enemyDiv; // point to the target enemy !!
                     this.enemys.push(en); // and then push it to ARRAY !!
                 }

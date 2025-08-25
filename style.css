@@ -190,3 +190,27 @@ button:hover {
     50% { opacity: 1; }
     99% { opacity: 0; }
 }
+
+
+/* for speed 
+/* Add this to your CSS file */
+.speed-effect {
+    position: absolute;
+    width: 50px;     
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(240, 240, 34, 0.7);
+    animation: speed-burst 0.5s ease-out forwards;
+    pointer-events: none;  
+}
+
+@keyframes speed-burst {
+    0% {
+        transform: scale(0.5);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}

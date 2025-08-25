@@ -1,0 +1,6 @@
+{
+    "Right" : { "x" : "-0px", "y": "-0px", "width": "39px", "height" : "39px"},
+    "Left" : { "x" : "-0px", "y": "-40px", "width": "39px", "height" : "39px"},
+    "Down" : {"x" : "-40px", "y": "-40px", "width": "39px", "height": "39px"},
+    "Up" :   { "x" : "-40px", "y": "-0px", "width": "39px", "height" : "39px"}   
+}

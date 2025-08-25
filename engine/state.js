@@ -66,13 +66,14 @@ export class State {
         document.addEventListener('keydown', this.setArrowStateKeyDown.bind(this))
         document.addEventListener('keyup', this.setArrowStateKeyUp.bind(this))
     }
+    
     getTime = () => this.#TIME
-
     setLives = (val = 1) => this.#LIVES += val
     getLives = () => this.#LIVES
     setLevel = (val) => this.#CURRENT_LEVEL = val
     getLevel = () => this.#CURRENT_LEVEL
-
+    // Her I Set Player Speed For Add 
+    setPlayerspped = (val) => this.#PLAYER_SPEED = val
     getScore = () => this.#SCORE
     //setScore = (val) => this.#SCORE = val
 
@@ -100,7 +101,6 @@ export class State {
             this.game.scoreboard.updateScore();
         }
     }
-
     // ================ just test score >>>>>>>>>>>>
     updatePauseIcon = () => {
         const icon = document.getElementById('icon');

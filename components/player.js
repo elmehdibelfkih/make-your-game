@@ -56,6 +56,7 @@ export class Player {
     updateRender(timestamp) {
         this.playerDying(timestamp)
         this.movePlayer(timestamp)
+        this.checkBonusCollision()
         this.render()
     }
 
@@ -168,7 +169,23 @@ export class Player {
             this.y >= y + height
         );
     }
-    
+
+    /// checker for get speed 
+    checkBonusCollision() {
+    for (const bonus of this.game.map.speedBonuses) {
+        const blockSize = this.game.map.level.block_size;
+        if (this.isColliding(bonus.x, bonus.y, blockSize, blockSize)) {
+            bonus.addspeed();           
+            bonus.removeitfromDOM();     
+            bonus.removeitfromgrid();    
+            this.game.map.speedBonuses = this.game.map.speedBonuses.filter(b => b !== bonus);
+            bonus.showSpeedEffect(); 
+        }
+
+    }
+}
+
+
     kill = () => this.dying = true
     getPlayerHeight = () => this.playerCoordinate[this.direction][this.frameIndex].height
     getPlayerWidth = () => this.playerCoordinate[this.direction][this.frameIndex].width
