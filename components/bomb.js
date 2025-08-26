@@ -160,7 +160,7 @@ export class Bomb {
                 i === 3 ? this.exp[i].style.transform = "rotate(270deg) translate(17px, -17px)" : 0
             }
         }
-         
+
         this.exp?.forEach(b => b ? b.src = this.explosionImg : 0);
     }
 
@@ -172,7 +172,21 @@ export class Bomb {
             this.done = true;
         }
     }
+    // her i clean the dom and set istance !!
+    cleanDOM() {
+        this.done = true;
+        this.active = false;
+
+        if (this.bomb && this.bomb.parentNode) {
+            this.bomb.parentNode.removeChild(this.bomb);
+        }
+        this.game.state.setBombCount(-1);
+        this.bomb = null;
+        this.img = null;
+        this.exp = null;
+    }
 
 }
+
 
 

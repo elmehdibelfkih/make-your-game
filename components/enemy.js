@@ -23,13 +23,18 @@ export class Enemy {
         this.AnimationCord = Cordination
     }
     // i will remove enenmy
-    killenemy() {
+    killenemy(cs = true) {
         if (this.Div && this.Div.parentNode) {
             this.Div.parentNode.removeChild(this.Div);
             // this.game.removeEnemy(this);
-            this.game.state.setScore(100)
+            if (cs) this.game.state.setScore(100)
             this.dead = true;
         }
+        // Clear references
+        this.Div = null;
+        this.game = null;
+        this.level = null;
+        this.AnimationCord = null;
     }
 
     checkiftheriscolision() {
@@ -131,4 +136,5 @@ export class Enemy {
         return !(this.x + this.enemySize < x || this.x > x + w ||
             this.y + this.enemySize < y || this.y > y + h);
     }
+    // HER I CLEAN DOM !! 
 }

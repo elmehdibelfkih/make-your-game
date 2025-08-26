@@ -24,7 +24,9 @@ export class Player {
         document.addEventListener('keyup', (event) => event.key === ' ' ? this.canPutBomb = true : 0)
 
     }
-
+    removeplayer () {
+        this.player.remove()
+    }
     initClassData() {
         this.movement = false
         this.dying = false

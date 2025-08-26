@@ -216,7 +216,7 @@ export class Map {
         });
         //console.log(this.level.initial_grid)
     }
-
+    
     initAudios() {
         this.backGroundMusic = new Audio(this.level.back_ground_music);
         this.grid.appendChild(this.backGroundMusic)
@@ -233,10 +233,10 @@ export class Map {
         document.body.addEventListener('click', playMusic);
         document.body.addEventListener('keydown', playMusic);
     }
-    
+
     destructeur() {
-        document.body.removeChild(this.grid)
-        this.instance = null
+        document.body.removeChild(this.container)
+        //this.instance = null
     }
 }
 

@@ -83,7 +83,7 @@ export class State {
     // Her I Set Player Speed For Add 
     setPlayerspped = (val) => this.#PLAYER_SPEED = val
     getScore = () => this.#SCORE
-    //setScore = (val) => this.#SCORE = val
+    setScore = (val) => this.#SCORE = val
 
     getBombCount = () => this.#BOMB_COUNT
     setBombCount = (val = 1) => this.#BOMB_COUNT += val
@@ -179,10 +179,17 @@ export class State {
             this.#SOUND = true
         }
     }
-    
+    // ABOUT HEART IN GAME !
+    update = () => {
+        if (!this.#LIVES) {
+            this.GameOver()
+        }
+    }
+
     transeferit = () => {
         this.pauseStart()
     }
+
     SetPause(env) {
         this.#PAUSE = env
     }

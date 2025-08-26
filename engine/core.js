@@ -18,7 +18,9 @@ export class Game {
         this.map = Map.getInstance(this)
         this.player = Player.getInstance(this)
         // test enemy with logic of mehdi 
-        this.enemie = null;
+        //this.enemie = null;
+        // her id of request animation frame
+        this.IDRE = null
     }
 
     async intiElements() {
@@ -32,7 +34,10 @@ export class Game {
         //this.enemie.createnemy();
     }
 
-    run = () => requestAnimationFrame(this.loop.bind(this));
+    run = () => {
+        //  her id reauest to move it to not creat milty rrequest !!
+        this.IDRE = requestAnimationFrame(this.loop.bind(this));
+    }
 
     async loop(timestamp) {
         if (this.state.isGameOver()) {
@@ -46,7 +51,7 @@ export class Game {
 
             this.updateRender(timestamp);
         }
-        requestAnimationFrame(this.loop.bind(this));
+        this.IDRE = requestAnimationFrame(this.loop.bind(this));
     }
 
     updateRender(timestamp) {
@@ -54,14 +59,18 @@ export class Game {
         this.player.updateRender(timestamp);
         this.map.bombs?.forEach(b => b.updateRender(timestamp));
         // test score board !!
-        //this.state.update()
+        this.state.update()
         //console.log("the grid", this.map.level.initial_grid)
         this.map.enemys?.forEach(enemy => enemy.Canmoveandupdate());
     }
 
     async gameOver() {
-        
-        // ============>>>>>>> showing menu <<<< =====================
+
+        if (this.IDRE) {
+            cancelAnimationFrame(this.IDRE);
+            this.IDRE = null;
+        }
+        // <============>>>>>>> showing menu <<<< =====================>
         const instructions = document.getElementById("instructions");
         const title = document.getElementById("menu-title");
         const message = document.getElementById("menu-message");
@@ -70,14 +79,35 @@ export class Game {
         title.textContent = "💀 GAME OVER";
         message.textContent = "Time’s up or you lost all lives!";
         btn.textContent = "PLAY AGAIN";
-        //====================================================
+        // <==========================================================>
+        this.state.setScore(0)
         this.state.initState()
         this.scoreboard.initScoreBaord() // todo: update this
+        //this.state.setScore(0)
         this.scoreboard.updateLives()
-        this.map.destructeur()
-        this.map = null
-        this.player = null
+        this.scoreboard.updateScore()
+        // im her to destry verything i creat before !!
 
+        // =======let's star with map !!
+        this.map.destructeur()
+
+        this.map.enemys.forEach(en => {
+            en.killenemy(false)
+        })
+        this.map.enemys = []
+        // Her I Will See The bommbs !!
+        this.map.bombs.forEach(Boom => {
+            Boom.cleanDOM()
+        })
+        this.map.Booms = []
+        // === remove player 
+        this.player.removeplayer()
+        // <=======================>
+        this.player = null
+        //this.state = null
+        this.map = null
+        // <========================================================>
+        this.state = State.getInstance(this)
         this.map = Map.getInstance(this)
         this.player = Player.getInstance(this)
         await this.map.initMap()
