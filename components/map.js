@@ -233,7 +233,7 @@ export class Map {
         document.body.addEventListener('click', playMusic);
         document.body.addEventListener('keydown', playMusic);
     }
-
+    
     destructeur() {
         document.body.removeChild(this.grid)
         this.instance = null

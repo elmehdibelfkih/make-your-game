@@ -179,11 +179,10 @@ export class State {
             this.#SOUND = true
         }
     }
-
+    
     transeferit = () => {
         this.pauseStart()
     }
-
     SetPause(env) {
         this.#PAUSE = env
     }

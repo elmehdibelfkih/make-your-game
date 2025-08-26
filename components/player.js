@@ -184,6 +184,7 @@ export class Player {
             }
         }
     }
+    
     checkBonusTime() {
         for (const bonus of this.game.map.timeBonuses) {
             const blockSize = this.game.map.level.block_size;
