@@ -46,13 +46,13 @@ export class Game {
     }
 
     async loop(timestamp) {
+        // her i will handle refrech and gameover !!
         if (this.state.isGameOver() || this.state.Isrestar()) {
             console.log("game is over---------------------")
             this.state.SetPause(false)
-            this.state.Restar()
-            this.Detect = true
+            this.Detect = this.state.Isrestar() ? true : false 
+            //this.Detect = true
             await this.gameOver()
-
             //Restar
             return
         }
@@ -102,10 +102,11 @@ export class Game {
             message.textContent = "Enjoy .....";
             btn.textContent = "Continue ...";
             this.Detect = false
-        } else {
-            title.textContent = "💀 GAME OVER";
-            message.textContent = "Time’s up or you lost all lives!";
-            btn.textContent = "PLAY AGAIN";
+            this.state.Restar()
+        }else {
+        title.textContent = "💀 GAME OVER";
+        message.textContent = "Time’s up or you lost all lives!";
+        btn.textContent = "PLAY AGAIN";
         }
         // <==========================================================>
 
