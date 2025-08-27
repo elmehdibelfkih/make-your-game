@@ -1,6 +1,6 @@
 export class State {
 
-    #CURRENT_LEVEL = 1
+    #CURRENT_LEVEL = 0
     #LIVES = 3
     #SCORE = 0
     #PAUSE = true
@@ -68,12 +68,13 @@ export class State {
 
     initArrowState() {
         //FIXME: REMOVE THIS
-        this.test = document.getElementById('test')
         document.getElementById('star_pause').addEventListener('click', this.transeferit.bind(this))
         document.getElementById('sound').addEventListener('click', this.switch.bind(this))
         document.addEventListener('keydown', this.setArrowStateKeyDown.bind(this))
         document.addEventListener('keyup', this.setArrowStateKeyUp.bind(this))
     }
+
+    nextLevel = () => this.#CURRENT_LEVEL = this.#CURRENT_LEVEL += 1
 
     getTime = () => this.#TIME
     setLives = (val = 1) => this.#LIVES += val
@@ -95,7 +96,6 @@ export class State {
         this.#PAUSE = !this.#PAUSE;
         this.updatePauseIcon();
     }
-    
     isPaused = () => this.#PAUSE
     isGameOver = () => this.#GAME_OVER
     GameOver = () => this.#GAME_OVER = true
@@ -110,7 +110,6 @@ export class State {
             this.game.scoreboard.updateScore();
         }
     }
-
     // ================ just test score >>>>>>>>>>>>
     updatePauseIcon = () => {
         const icon = document.getElementById('icon');
@@ -125,21 +124,18 @@ export class State {
             this.isStar = true;
         }
     }
-
     // her i will set timer for game 
     setTime = (seconds) => {
         this.#TIME = seconds;
-        this.maxTime = this.#TIME
+        //this.maxTime = this.#TIME
         if (this.game && this.game.scoreboard) {
             this.game.scoreboard.updateTimer();
         }
     };
-
     addtime = (val) => {
         this.#TIME += val;
         return this.#TIME;
     }
-
     // ====================================//
     startTimer = () => {
         // Clear any existing interval
@@ -179,6 +175,7 @@ export class State {
             this.#SOUND = true
         }
     }
+
     // ABOUT HEART IN GAME !
     update = () => {
         if (!this.#LIVES) {
@@ -192,5 +189,12 @@ export class State {
 
     SetPause(env) {
         this.#PAUSE = env
+    }
+    //// remove event listner !!
+    removeEventListeners() {
+        document.getElementById('star_pause')?.removeEventListener('click', this.transeferit.bind(this))
+        document.getElementById('sound')?.removeEventListener('click', this.switch.bind(this))
+        document.removeEventListener('keydown', this.setArrowStateKeyDown.bind(this))
+        document.removeEventListener('keyup', this.setArrowStateKeyUp.bind(this))
     }
 }

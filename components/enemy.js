@@ -71,7 +71,14 @@ export class Enemy {
 
     Canmoveandupdate() {
         if (this.dead) return
+       
         this.checkiftheriscolision()
+        // i get problem of it's get access to player memory while he is null  and it's need to checkk first !
+        if (!this.game || !this.game.player) {
+            return; // Safe exit - don't try to use null objects
+        }
+        //this.checkiftheriscolision()
+         
         if (this.game.player.isColliding(this.x, this.y, this.enemySize, this.enemySize)) {
             this.game.player.kill()
         }

@@ -41,7 +41,7 @@ export class Scoreboard {
 
     reset() {
     }
-
+    
     updateLives = () => this.lives.innerText = "lives: " + "❤️".repeat(this.game.state.getLives())
     updateScore = () => this.score.innerText = `score: ${this.game.state.getScore()}`
     updateLevel = () => this.level.innerText = `level: ${this.game.state.getLevel()}`

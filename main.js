@@ -1,22 +1,19 @@
 import { Game } from "./engine/core.js"
 
-let test = document.createElement('div')
-test.id = 'test'
-document.body.appendChild(test)
-
-
-let game = Game.getInstance();
+window.game = Game.getInstance();
 await game.intiElements();
+
+while (!game.player || !game.player.playerCoordinate) {
+    await new Promise(r => setTimeout(r, 0));
+}
 
 window.startGame = async function () {
     document.getElementById('instructions').classList.add('hidden');
     const levelDisplay = document.getElementById('level-display');
     levelDisplay.textContent = `${game.map.level.name}`
     levelDisplay.classList.add('show');
-
-
-    //  Initialize timer from JSON file to be depend on the time of level
- 
+    
+    //  Initialize Timer From JSON File To Be Depend On The Time Of Level !
     let rawTime = game.map.level.level_time;  
     let seconds;
 

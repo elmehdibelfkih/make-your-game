@@ -21,6 +21,7 @@ export class Game {
         //this.enemie = null;
         // her id of request animation frame
         this.IDRE = null
+        this.stateofrest = false
     }
 
     async intiElements() {
@@ -41,35 +42,40 @@ export class Game {
 
     async loop(timestamp) {
         if (this.state.isGameOver()) {
-            console.log("game is over")
+            console.log("game is over---------------------")
             this.state.SetPause(false)
             await this.gameOver()
+            return
         }
         if (this.state.isPaused()) {
             // this.map.grid.style.display = "none"
         } else {
-
             this.updateRender(timestamp);
         }
         this.IDRE = requestAnimationFrame(this.loop.bind(this));
     }
 
     updateRender(timestamp) {
+        if (this.stateofrest) return
         this.map.updateRender(timestamp)
         this.player.updateRender(timestamp);
         this.map.bombs?.forEach(b => b.updateRender(timestamp));
         // test score board !!
+        // LIFE OF PLAYER Checker !
         this.state.update()
         //console.log("the grid", this.map.level.initial_grid)
         this.map.enemys?.forEach(enemy => enemy.Canmoveandupdate());
+        if (this.map.enemys.filter(enemy => !enemy.dead).length === 0) {
+            this.nextLevel();
+        }
     }
 
     async gameOver() {
-
         if (this.IDRE) {
             cancelAnimationFrame(this.IDRE);
             this.IDRE = null;
         }
+        this.stateofrest = true
         // <============>>>>>>> showing menu <<<< =====================>
         const instructions = document.getElementById("instructions");
         const title = document.getElementById("menu-title");
@@ -87,9 +93,7 @@ export class Game {
         this.scoreboard.updateLives()
         this.scoreboard.updateScore()
         // im her to destry verything i creat before !!
-
-        // =======let's star with map !!
-        this.map.destructeur()
+        // ======= Let's Star With Map =======!!
 
         this.map.enemys.forEach(en => {
             en.killenemy(false)
@@ -102,10 +106,12 @@ export class Game {
         this.map.Booms = []
         // === remove player 
         this.player.removeplayer()
-        // <=======================>
-        this.player = null
+        this.map.destructeur()
+        // <=======================> 
         //this.state = null
-        this.map = null
+        //this.map = null
+        ///======================= remove event listner to handle the problem of multi handlers
+        this.state.removeEventListeners();
         // <========================================================>
         this.state = State.getInstance(this)
         this.map = Map.getInstance(this)
@@ -113,6 +119,51 @@ export class Game {
         await this.map.initMap()
         this.enemie = new Enemy(this);
         await this.player.initPlayer()
-        this.state.pauseStart()
+        this.stateofrest = false
+        //this.state.pauseStart()
+    }
+
+    async nextLevel() {
+        if (this.IDRE) {
+            cancelAnimationFrame(this.IDRE);
+            this.IDRE = null;
+        }
+        this.stateofrest = true;
+        // be ready 
+        const instructions = document.getElementById("instructions");
+        instructions.classList.remove("hidden");
+        const title = document.getElementById("menu-title");
+        const message = document.getElementById("menu-message");
+        title.textContent = "➡️ NEXT LEVEL";
+        message.textContent = "Get ready!";
+        // wait 
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        // Clear old objects
+        this.state.setScore(0)
+        this.state.initState()
+         this.scoreboard.initScoreBaord() // todo: update this
+        //this.state.setScore(0)
+        this.scoreboard.updateLives()
+        this.scoreboard.updateScore()
+ 
+        this.map.enemys.forEach(en => en.killenemy(false));
+        this.map.enemys = [];
+        this.map.bombs.forEach(B => B.cleanDOM());
+        this.map.Booms = [];
+        this.player.removeplayer();
+        // <=============|------|==============>
+        this.map.destructeur();
+        this.state.removeEventListeners();
+        // ==== next level++
+        this.state.nextLevel(); //<<======>>
+        this.scoreboard.updateLevel()
+        // Reinitialize the map and player for new level
+        this.map = Map.getInstance(this);
+        await this.map.initMap();
+        this.player = Player.getInstance(this);
+        await this.player.initPlayer();
+        this.stateofrest = false;
+        // Resume the game loop
+        //this.run();
     }
 }

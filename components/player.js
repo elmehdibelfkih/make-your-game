@@ -173,7 +173,7 @@ export class Player {
         );
     }
 
-    /// checker for get speed 
+    /// Checker For Get Speed 
     checkBonusSpeed() {
         for (const bonus of this.game.map.speedBonuses) {
             const blockSize = this.game.map.level.block_size;
