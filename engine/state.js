@@ -15,6 +15,7 @@ export class State {
     #ARROW_LEFT = false
     #TIME = 0
     #TIMER_ID = null
+    #RESTAR = false
 
     constructor(game) {
         State.instance = this;
@@ -33,17 +34,20 @@ export class State {
 
     initState() {
         this.stopTimer();
-        this.#LIVES = 3
-        this.#SCORE = 0
-        this.#PAUSE = true
-        this.#PLAYER_SPEED = 4
-        this.#BOMB_COUNT = 0
-        this.#MAX_ALLOWD_BOMBS = 3
-        this.#GAME_OVER = false
-        this.#SOUND = true
+        this.#LIVES = 3;
+        this.#SCORE = 0;
+        this.#PAUSE = true;
+        this.#PLAYER_SPEED = 4;
+        this.#BOMB_COUNT = 0;
+        this.#MAX_ALLOWD_BOMBS = 3;
+        this.#GAME_OVER = false;
+        this.#SOUND = true;
         this.#TIME = 0;
         this.#TIMER_ID = null;
+        //this.#RESTAR = false;
+        
     }
+
     isArrowUp = () => this.#ARROW_UP
     isArrowDown = () => this.#ARROW_DOWN
     isArrowRight = () => this.#ARROW_RIGHT
@@ -69,9 +73,11 @@ export class State {
     initArrowState() {
         //FIXME: REMOVE THIS
         document.getElementById('star_pause').addEventListener('click', this.transeferit.bind(this))
+        document.getElementById('ref').addEventListener('click', this.Restar.bind(this))
         document.getElementById('sound').addEventListener('click', this.switch.bind(this))
         document.addEventListener('keydown', this.setArrowStateKeyDown.bind(this))
         document.addEventListener('keyup', this.setArrowStateKeyUp.bind(this))
+
     }
 
     nextLevel = () => this.#CURRENT_LEVEL = this.#CURRENT_LEVEL += 1
@@ -102,7 +108,7 @@ export class State {
     getPlayerSpeed = () => this.#PLAYER_SPEED
     // ============================= just test score >>>>>>
     //update = () => {
-      //  this.setScore(this.#SCORE);
+    //  this.setScore(this.#SCORE);
     //}
     setScore = (val) => {
         this.#SCORE += val;
@@ -182,7 +188,11 @@ export class State {
             this.GameOver()
         }
     }
-
+    // ResTar the game !!
+    Isrestar () {
+        return this.#RESTAR
+    }
+    //Isrestar
     transeferit = () => {
         this.pauseStart()
     }
@@ -190,8 +200,16 @@ export class State {
     SetPause(env) {
         this.#PAUSE = env
     }
+    // Her I Will Handle Restar Button !
+    Restar() {
+        this.#RESTAR = ! this.#RESTAR
+        console.log("im initialize")
+        console.log(this.#RESTAR)
+        return this.#RESTAR
+    }
     //// remove event listner !!
     removeEventListeners() {
+        document.getElementById('ref').removeEventListener('click', this.Restar.bind(this))
         document.getElementById('star_pause')?.removeEventListener('click', this.transeferit.bind(this))
         document.getElementById('sound')?.removeEventListener('click', this.switch.bind(this))
         document.removeEventListener('keydown', this.setArrowStateKeyDown.bind(this))

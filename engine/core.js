@@ -5,6 +5,7 @@ import { State } from './state.js';
 import { Enemy } from '../components/enemy.js';
 
 export class Game {
+
     static #instance = null;
 
     static getInstance() {
@@ -24,6 +25,7 @@ export class Game {
         this.stateofrest = false
         this.nextLevelTimeoutId = null;
         this.levelComplete = false;
+        this.Detect = false
 
     }
 
@@ -44,10 +46,14 @@ export class Game {
     }
 
     async loop(timestamp) {
-        if (this.state.isGameOver()) {
+        if (this.state.isGameOver() || this.state.Isrestar()) {
             console.log("game is over---------------------")
             this.state.SetPause(false)
+            this.state.Restar()
+            this.Detect = true
             await this.gameOver()
+
+            //Restar
             return
         }
         if (this.state.isPaused()) {
@@ -91,10 +97,22 @@ export class Game {
         const message = document.getElementById("menu-message");
         const btn = document.getElementById("start-btn");
         instructions.classList.remove("hidden");
-        title.textContent = "💀 GAME OVER";
-        message.textContent = "Time’s up or you lost all lives!";
-        btn.textContent = "PLAY AGAIN";
+        if (this.Detect) {
+            title.textContent = "REFRECH GAME IS DONE";
+            message.textContent = "Enjoy .....";
+            btn.textContent = "Continue ...";
+            this.Detect = false
+        } else {
+            title.textContent = "💀 GAME OVER";
+            message.textContent = "Time’s up or you lost all lives!";
+            btn.textContent = "PLAY AGAIN";
+        }
         // <==========================================================>
+
+
+        console.log("at gmae over after menu")
+        //this.State.Restar()
+        console.log("------------------------------------")
         this.state.setScore(0)
         this.state.initState()
         this.scoreboard.initScoreBaord() // todo: update this
@@ -129,6 +147,7 @@ export class Game {
         this.enemie = new Enemy(this);
         await this.player.initPlayer()
         this.stateofrest = false
+        //this.state.Restar()
         //this.state.pauseStart()
     }
 
@@ -179,6 +198,6 @@ export class Game {
         // Resume the game loop
         //this.run();
         // <==========--============> \\
-       
+
     }
 }
