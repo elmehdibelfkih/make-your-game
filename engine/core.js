@@ -22,6 +22,9 @@ export class Game {
         // her id of request animation frame
         this.IDRE = null
         this.stateofrest = false
+        this.nextLevelTimeoutId = null;
+        this.levelComplete = false;
+
     }
 
     async intiElements() {
@@ -65,8 +68,13 @@ export class Game {
         this.state.update()
         //console.log("the grid", this.map.level.initial_grid)
         this.map.enemys?.forEach(enemy => enemy.Canmoveandupdate());
-        if (this.map.enemys.filter(enemy => !enemy.dead).length === 0) {
-            this.nextLevel();
+        // Her I Will check if player it's dead !
+        const alive = this.map.enemys.filter(enemy => !enemy.dead)
+        if (alive.length === 0 && !this.levelComplete) {
+            this.levelComplete = true;
+            setTimeout(() => {
+                this.nextLevel();
+            }, 1600);
         }
     }
 
@@ -76,6 +84,7 @@ export class Game {
             this.IDRE = null;
         }
         this.stateofrest = true
+        this.levelComplete = false;
         // <============>>>>>>> showing menu <<<< =====================>
         const instructions = document.getElementById("instructions");
         const title = document.getElementById("menu-title");
@@ -128,7 +137,6 @@ export class Game {
             cancelAnimationFrame(this.IDRE);
             this.IDRE = null;
         }
-        this.stateofrest = true;
         // be ready 
         const instructions = document.getElementById("instructions");
         instructions.classList.remove("hidden");
@@ -139,13 +147,13 @@ export class Game {
         // wait 
         await new Promise(resolve => setTimeout(resolve, 1500));
         // Clear old objects
-        this.state.setScore(0)
-        this.state.initState()
-         this.scoreboard.initScoreBaord() // todo: update this
+        this.state.setScore(0);
+        this.state.initState();
+        this.scoreboard.initScoreBaord(); // todo: update this
         //this.state.setScore(0)
-        this.scoreboard.updateLives()
-        this.scoreboard.updateScore()
- 
+        this.scoreboard.updateLives();
+        this.scoreboard.updateScore();
+
         this.map.enemys.forEach(en => en.killenemy(false));
         this.map.enemys = [];
         this.map.bombs.forEach(B => B.cleanDOM());
@@ -156,14 +164,21 @@ export class Game {
         this.state.removeEventListeners();
         // ==== next level++
         this.state.nextLevel(); //<<======>>
-        this.scoreboard.updateLevel()
+        this.scoreboard.updateLevel();
         // Reinitialize the map and player for new level
+        this.map = null
         this.map = Map.getInstance(this);
         await this.map.initMap();
+        console.log(this.map.level.name);
         this.player = Player.getInstance(this);
         await this.player.initPlayer();
+        //this.stateofrest = false;
+        //this.scoreboard.updateLevel();
         this.stateofrest = false;
+        this.levelComplete = false;
         // Resume the game loop
         //this.run();
+        // <==========--============> \\
+       
     }
 }

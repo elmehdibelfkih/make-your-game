@@ -35,5 +35,5 @@
   "GetTime": "./assets/audios/timesounde.mp3",
   "explosion_time": 1500,
   "GetSpeed": "./assets/audios/CoinGet.mp3",
-  "level_time": "1min"
+  "level_time": "2min"
 }
