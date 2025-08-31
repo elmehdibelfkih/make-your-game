@@ -90,8 +90,7 @@ export class Enemy {
         }
 
         const blockSize = this.level.block_size
-        //  her i face i round it becs it's give me exect traget col and row in all grid
-
+        //  her i face i round it becs it's give me exect traget col and row in all Grid !!
         const col = (this.direction === "Left") ? Math.round(this.x / blockSize) : Math.floor(this.x / blockSize);
         const row = (this.direction === "Left") ? Math.round(this.y / blockSize) : Math.floor(this.y / blockSize);
         if (this.detect) {
@@ -130,7 +129,8 @@ export class Enemy {
     arzigid() {
         // IF EXEIST
         this.Div.style.backgroundPosition = `${this.AnimationCord[this.direction].x} ${this.AnimationCord[this.direction].y}`
-        this.Div.style.transform = `translate(${this.x}px, ${this.y}px)`;
+        // Mehdi her i can make it layer who is isolated from other layer for more performance !!
+        this.Div.style.transform = `translate3d(${this.x}px, ${this.y}px,10px)`;
     }
 
     randomDirection() {
