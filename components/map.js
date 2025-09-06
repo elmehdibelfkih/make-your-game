@@ -21,6 +21,7 @@ export class Map {
         this.blocksToBlowing = []
         this.enemyCordination
         this.tiles = [];
+        this.blockElements = [];
         // her for styling 
         this.container = document.createElement("div");
         this.container.id = "grid-container";
@@ -123,10 +124,11 @@ export class Map {
             const scaleY = containerHeight / gridHeight;
             const scale = Math.min(scaleX, scaleY, 1);
 
-            /// ========== 
-            this.currentScale = scale;  
+            /// <==========> |(-)| <==========> 
+            this.currentScale = scale;
 
-            //  each tiles enemy or player or bonus will be scaled based on the shrink of broswer !!
+            //  Each Tiles Enemy Or Player Or Bonus Will Be scaled based on the shrink of broswer !!
+            /*
             this.tiles.forEach((tile, index) => {
                 const rowIndex = index % cols;
                 const colIndex = Math.floor(index / cols);
@@ -134,6 +136,16 @@ export class Map {
                 tile.style.width = `${tileSize * scale}px`;
                 tile.style.height = `${tileSize * scale}px`;
                 tile.style.transform = `translate(${rowIndex * tileSize * scale}px, ${colIndex * tileSize * scale}px)`;
+            });
+            */
+            this.tiles.forEach((tile) => {
+                const rowIndex = parseInt(tile.dataset.rowIndex);
+                const colIndex = parseInt(tile.dataset.colIndex);
+                
+                tile.style.width = `${tileSize * scale}px`;
+                tile.style.height = `${tileSize * scale}px`;
+                tile.style.transform = `translate(${tileSize * rowIndex * scale}px, ${tileSize * colIndex * scale}px)`;
+                tile.style.backgroundSize = `${tileSize * scale}px ${tileSize * scale}px`;
             });
             /*
             this.enemys.forEach(enemy => {
@@ -150,8 +162,15 @@ export class Map {
                 enemy.Div.style.transform = `translate(${enemy.originalX * scale}px, ${enemy.originalY * scale}px)`;
             });
             
-            */ 
-            // the enemies responsive scale !!
+            */
+            // the enemies responsive scale <|-|>
+
+            // her i handle the block !! responsive scale !!
+            this.blockElements.forEach(block => {
+                block.style.width = `${tileSize * scale}px`;
+                block.style.height = `${tileSize * scale}px`;
+            });
+        
             this.enemys.forEach(enemy => {
 
                 enemy.Div.style.width = `${enemy.originalWidth * scale}px`;
@@ -163,9 +182,31 @@ export class Map {
                 enemy.Div.style.backgroundRepeat = 'no-repeat';
 
             });
+
+            this.timeBonuses.forEach(timeBonus => {
+                const bonusElement = document.getElementById(timeBonus.id);
+                if (bonusElement) {
+                    bonusElement.style.width = `${timeBonus.originalWidth * scale}px`;
+                    bonusElement.style.height = `${timeBonus.originalHeight * scale}px`;
+                    bonusElement.style.transform = `translate(${15 * scale}px, ${10 * scale}px)`;
+                }
+            });
+
+            this.speedBonuses.forEach(speedBonus => {
+                const bonusElement = document.getElementById(speedBonus.id);
+                if (bonusElement) {
+                    // her i 
+                    if (speedBonus.originalWidth && speedBonus.originalHeight) {
+                        bonusElement.style.width = `${speedBonus.originalWidth * scale}px`;
+                        bonusElement.style.height = `${speedBonus.originalHeight * scale}px`;
+
+                        const translateX = 20 * scale;
+                        const translateY = 10 * scale;
+                        bonusElement.style.transform = `translate(${translateX}px, ${translateY}px)`;
+                    }
+                }
+            });
             // speed scale
-           
-           
             // <===|-|===> 
             // <===|-|==>
             // Center the grid
@@ -188,7 +229,8 @@ export class Map {
             row.forEach((cell, rowIndex) => {
                 const tile = document.createElement("div");
                 tile.style.position = "absolute";
-
+                tile.dataset.rowIndex = rowIndex;  // Add this
+                tile.dataset.colIndex = colIndex;
                 tile.style.transform = `translate(${this.level.block_size * rowIndex}px, ${this.level.block_size * colIndex}px)`;
 
                 if (cell === consts.WALL) tile.style.backgroundImage = `url(${this.level.wall})`;
@@ -200,10 +242,11 @@ export class Map {
                     block.id = rowIndex.toString() + colIndex.toString()
                     tile.className = rowIndex.toString() + colIndex.toString()
                     tile.appendChild(block)
+                    this.blockElements.push(block);
                     //this.tiles.push(block)
                 }
                 // Her I WILL  add Speed !!
-                
+
                 if (cell === consts.SPEED) {
                     console.log("howa")
                     const bonus = document.createElement("img");
@@ -224,13 +267,13 @@ export class Map {
                     const id = rowIndex.toString() + colIndex.toString()
                     const Bamboleao = new Bonus(this.game, x, y, this.level, id)
                     //bonus.style.zIndex = 10;
+                    Bamboleao.originalWidth = 30;  // <====>
+                    Bamboleao.originalHeight = 40 // <====>
                     this.speedBonuses.push(Bamboleao)
                     tile.appendChild(bonus);
                     // her i add them to the array for scaling them later !!
                     //this.tiles.push(bonus)
                 }
-                    
-                
 
                 // === Add TIME Bonus ===
                 if (cell === consts.TIME) {
@@ -251,6 +294,11 @@ export class Map {
                     // Create Bonus object (reuse your Bonus class, or make a TimeBonus class)
                     const timeBonus = new Bonus(this.game, x, y, this.level, id);
 
+                    //timeBonus.W = 
+                    timeBonus.originalWidth = 35
+                    timeBonus.originalHeight = 50
+                    //en.originalHeight = parseInt(this.enemyCordination["Left"].height);
+                    // point to the target enemy !!
                     this.timeBonuses.push(timeBonus);
                     tile.appendChild(bonus);
                     //this.tiles.push(bonus)
@@ -267,9 +315,8 @@ export class Map {
     }
     // when i creadted new div on top of this i get problem of the enmiey it's not visible becs ..
     // the floor it's will be in the top every time so for that i will creat enemy separate from grid
-    
-    initEnemy() {
 
+    initEnemy() {
         this.level.initial_grid.forEach((row, rowIndex) => {
             row.forEach((cellValue, colIndex) => {
                 if (cellValue === consts.ENEMY) {
@@ -311,8 +358,8 @@ export class Map {
             this._scaleGrid();
         }
     }
-    
-   
+
+
     /*
     initEnemy() {
         const tileSize = this.level.block_size;
