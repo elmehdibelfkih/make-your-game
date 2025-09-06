@@ -20,6 +20,7 @@ export class Map {
         this.speedBonuses = []
         this.blocksToBlowing = []
         this.enemyCordination
+        this.tiles = [];
         // her for styling 
         this.container = document.createElement("div");
         this.container.id = "grid-container";
@@ -56,7 +57,7 @@ export class Map {
         let img = document.getElementById(x.toString() + y.toString())
         let container = document.getElementsByClassName(x.toString() + y.toString())
         console.log(this.gridArray[y][x]);
-        this.game.state.setScore(25); 
+        this.game.state.setScore(25);
         container[0].removeChild(img)
         // this.blocksToBlowing.push()
     }
@@ -105,10 +106,85 @@ export class Map {
         this.grid.style.position = "relative";
         const rows = this.level.initial_grid.length;
         const cols = this.level.initial_grid[0].length;
-        this.grid.style.width = `${cols * this.level.block_size}px`;
-        this.grid.style.height = `${rows * this.level.block_size}px`;
+        const tileSize = this.level.block_size;
+
+        const gridWidth = cols * tileSize;
+        const gridHeight = rows * tileSize;
+        //  <====> . <====> . <====>
+        this.grid.style.width = `${gridWidth}px`;
+        this.grid.style.height = `${gridHeight}px`;
+        // --- SCALING LOGIC !!!
+        const scaleGrid = () => {
+
+            const containerWidth = this.container.clientWidth;
+            const containerHeight = this.container.clientHeight;
+
+            const scaleX = (containerWidth) / gridWidth;
+            const scaleY = containerHeight / gridHeight;
+            const scale = Math.min(scaleX, scaleY, 1);
+
+            /// ========== 
+            this.currentScale = scale;  
+
+            //  each tiles enemy or player or bonus will be scaled based on the shrink of broswer !!
+            this.tiles.forEach((tile, index) => {
+                const rowIndex = index % cols;
+                const colIndex = Math.floor(index / cols);
+
+                tile.style.width = `${tileSize * scale}px`;
+                tile.style.height = `${tileSize * scale}px`;
+                tile.style.transform = `translate(${rowIndex * tileSize * scale}px, ${colIndex * tileSize * scale}px)`;
+            });
+            /*
+            this.enemys.forEach(enemy => {
+                enemy.Div.style.width = `${enemy.originalWidth * scale}px`;
+                enemy.Div.style.height = `${enemy.originalHeight * scale}px`;
+                enemy.Div.style.transform = `translate(${enemy.originalX * scale}px, ${enemy.originalY * scale}px)`;
+            });
+            */
+            // scale enemies
+            /*
+            this.enemys.forEach(enemy => {
+                enemy.Div.style.width = `${enemy.originalWidth * scale}px`;
+                enemy.Div.style.height = `${enemy.originalHeight * scale}px`;
+                enemy.Div.style.transform = `translate(${enemy.originalX * scale}px, ${enemy.originalY * scale}px)`;
+            });
+            
+            */ 
+            // the enemies responsive scale !!
+            this.enemys.forEach(enemy => {
+
+                enemy.Div.style.width = `${enemy.originalWidth * scale}px`;
+                enemy.Div.style.height = `${enemy.originalHeight * scale}px`;
+                // REMOVED THE TRANSFORM LINE
+                enemy.Div.style.zIndex = "20";
+                enemy.Div.style.backgroundSize = `${160 * scale}px ${160 * scale}px`;
+                enemy.Div.style.imageRendering = 'pixelated';
+                enemy.Div.style.backgroundRepeat = 'no-repeat';
+
+            });
+            // speed scale
+           
+           
+            // <===|-|===> 
+            // <===|-|==>
+            // Center the grid
+            this.grid.style.width = `${gridWidth * scale}px`;
+            this.grid.style.height = `${gridHeight * scale}px`;
+            this.grid.style.position = "absolute";
+            this.grid.style.left = `${(containerWidth - gridWidth * scale) / 2}px`;
+            this.grid.style.top = `${(containerHeight - gridHeight * scale) / 2}px`;
+        };
+
+        // safe call function 
+        this._scaleGrid = scaleGrid;
+        // initial scale
+        scaleGrid();
+        // update scale on window resize
+        window.addEventListener("resize", scaleGrid);
 
         this.level.initial_grid.forEach((row, colIndex) => {
+
             row.forEach((cell, rowIndex) => {
                 const tile = document.createElement("div");
                 tile.style.position = "absolute";
@@ -124,8 +200,10 @@ export class Map {
                     block.id = rowIndex.toString() + colIndex.toString()
                     tile.className = rowIndex.toString() + colIndex.toString()
                     tile.appendChild(block)
+                    //this.tiles.push(block)
                 }
                 // Her I WILL  add Speed !!
+                
                 if (cell === consts.SPEED) {
                     console.log("howa")
                     const bonus = document.createElement("img");
@@ -148,7 +226,12 @@ export class Map {
                     //bonus.style.zIndex = 10;
                     this.speedBonuses.push(Bamboleao)
                     tile.appendChild(bonus);
+                    // her i add them to the array for scaling them later !!
+                    //this.tiles.push(bonus)
                 }
+                    
+                
+
                 // === Add TIME Bonus ===
                 if (cell === consts.TIME) {
                     const bonus = document.createElement("img");
@@ -167,21 +250,24 @@ export class Map {
                     const id = rowIndex.toString() + colIndex.toString() + "T";
                     // Create Bonus object (reuse your Bonus class, or make a TimeBonus class)
                     const timeBonus = new Bonus(this.game, x, y, this.level, id);
-                   
-                    this.timeBonuses.push(timeBonus);  
+
+                    this.timeBonuses.push(timeBonus);
                     tile.appendChild(bonus);
+                    //this.tiles.push(bonus)
                 }
 
                 tile.style.width = `${this.level.block_size}px`;
                 tile.style.height = `${this.level.block_size}px`;
                 tile.style.backgroundSize = "cover";
                 this.grid.appendChild(tile);
+                this.tiles.push(tile);
             });
 
         });
     }
     // when i creadted new div on top of this i get problem of the enmiey it's not visible becs ..
     // the floor it's will be in the top every time so for that i will creat enemy separate from grid
+    
     initEnemy() {
 
         this.level.initial_grid.forEach((row, rowIndex) => {
@@ -191,10 +277,9 @@ export class Map {
                     //console.log("before the add 0 to grid", this.level.initial_grid)
                     //console.log(" the ",  this.level.initial_grid[rowIndex][colIndex])
                     this.gridArray[rowIndex][colIndex] = 0
-                    const x = this.level.block_size * colIndex + 12;
-                    const y = this.level.block_size * rowIndex + 15;
+                    const x = this.level.block_size * colIndex + 12
+                    const y = this.level.block_size * rowIndex + 15
                     //console.log("after the add 0", this.level.initial_grid)
-
                     // ===>>>>>>>> Create enemy div <<<<=============
                     const enemyDiv = document.createElement('div');
                     enemyDiv.className = 'enemy';
@@ -204,19 +289,74 @@ export class Map {
                     enemyDiv.style.position = 'absolute';
                     enemyDiv.style.width = `${this.enemyCordination["Left"].width}`;
                     enemyDiv.style.height = `${this.enemyCordination["Left"].height}`;
-                    enemyDiv.style.backgroundPosition = `${this.enemyCordination["Left"].x} ${this.enemyCordination["Left"].y}`;
+                    enemyDiv.style.backgroundPosition = `${this.enemyCordination["Left"].x}px ${this.enemyCordination["Left"].y}px`;
                     enemyDiv.style.transform = `translate(${x}px, ${y}px)`;
                     this.grid.appendChild(enemyDiv);
                     // ============ Store enemy object (Emy) ============
                     const en = new Enemy(this.game, this.level, x, y, this.enemyCordination);
-                    en.Div = enemyDiv; // point to the target enemy !!
-                    this.enemys.push(en); // and then push it to ARRAY !!
+                    en.Div = enemyDiv;
+                    en.originalX = x;
+                    en.originalY = y;
+                    en.originalWidth = parseInt(this.enemyCordination["Left"].width);
+                    en.originalHeight = parseInt(this.enemyCordination["Left"].height);
+                    // point to the target enemy !!
+                    this.enemys.push(en);
+                    // and then push it to ARRAY !!
+                    // for more resonnsife !! 
+                    //this.tiles.push(enemyDiv)
                 }
             });
         });
-        //console.log(this.level.initial_grid)
+        if (this._scaleGrid) {
+            this._scaleGrid();
+        }
     }
     
+   
+    /*
+    initEnemy() {
+        const tileSize = this.level.block_size;
+
+        this.level.initial_grid.forEach((row, rowIndex) => {
+            row.forEach((cell, colIndex) => {
+
+                if (cell === consts.ENEMY) {
+                    const x = this.level.block_size * colIndex + 12; // offset inside tile
+                    const y = this.level.block_size * rowIndex + 15;
+
+                    const enemyDiv = document.createElement("div");
+                    enemyDiv.className = "enemy";
+                    enemyDiv.style.backgroundImage = `url(${this.level.enemy})`;
+                    enemyDiv.style.backgroundRepeat = "no-repeat";
+                    enemyDiv.style.imageRendering = "pixelated";
+                    enemyDiv.style.position = "absolute";
+                    enemyDiv.style.width = `${this.enemyCordination["Left"].width}px`;
+                    enemyDiv.style.height = `${this.enemyCordination["Left"].height}px`;
+                    enemyDiv.style.backgroundPosition = `${this.enemyCordination["Left"].x}px ${this.enemyCordination["Left"].y}px`;
+                    enemyDiv.style.transform = `translate(${x}px, ${y}px)`;
+                    enemyDiv.style.zIndex = 1000;
+
+                    this.grid.appendChild(enemyDiv);
+
+                    const en = new Enemy(this.game, this.level, x, y, this.enemyCordination);
+                    en.Div = enemyDiv;
+                    en.originalX = x;            // store actual pixel x
+                    en.originalY = y;            // store actual pixel y
+                    en.originalWidth = this.enemyCordination["Left"].width;
+                    en.originalHeight = this.enemyCordination["Left"].height;
+                    en.rowIndex = rowIndex;
+                    en.colIndex = colIndex;
+
+                    this.enemys.push(en);
+                }
+
+                });
+        });
+    }
+    */
+
+    //console.log(this.level.initial_grid)
+
     initAudios() {
         this.backGroundMusic = new Audio(this.level.back_ground_music);
         this.grid.appendChild(this.backGroundMusic)

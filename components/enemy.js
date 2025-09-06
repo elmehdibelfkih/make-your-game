@@ -6,7 +6,7 @@ export class Enemy {
         this.y = y
         this.level = level
         //this.id = i
-        this.direction = "Left"
+        this.direction = "Right"
         this.enemySize = 40
         //console.log(this.enemySize)
         this.speed = 2
@@ -123,15 +123,37 @@ export class Enemy {
         // get the value of the target tiles by moving !!
         if (Math.abs(this.x - this.targetX) < this.speed) this.x = this.targetX
         if (Math.abs(this.y - this.targetY) < this.speed) this.y = this.targetY
+        //this.updateVisualPosition()
         this.arzigid()
+        //this.updateVisualPosition()
     }
+    /*
+    MOVE() {
 
-    arzigid() {
+        const scale = this.game.map.currentScale || 1;
         // IF EXEIST
+        /// <===> so what's i sould do now 
+        console.log("=>>",this.direction , this.AnimationCord[this.direction].y, scale, this.game.map.currentScale)
         this.Div.style.backgroundPosition = `${this.AnimationCord[this.direction].x} ${this.AnimationCord[this.direction].y}`
+        // <========>|<->|<========>
+        //this.Div.style.backgroundPosition = `${this.AbackgroundPositionnimationCord[this.direction].x}px ${this.AnimationCord[this.direction].y}px`;
         // Mehdi her i can make it layer who is isolated from other layer for more performance !!
-        this.Div.style.transform = `translate3d(${this.x}px, ${this.y}px,10px)`;
+        //this.Div.style.transform = `translate3d(${this.x}px, ${this.y}px,10px)`;
+        //this.updateVisualPosition()this.game.map.currentScale
     }
+    */
+    arzigid() {
+        if (!this.Div) return;
+        const scale = this.game.map.currentScale || 1;
+        const frame = this.AnimationCord[this.direction];
+    
+        this.Div.style.backgroundPosition = `${frame.x * scale}px ${frame.y * scale}px`;
+    
+        this.Div.style.width  = `${frame.width * scale}px`;
+        this.Div.style.height = `${frame.height * scale}px`;
+        this.Div.style.transform = `translate3d(${this.x * scale}px, ${this.y * scale}px, 10px)`;
+    }
+    
 
     randomDirection() {
         const dirs = ["Up", "Down", "Left", "Right"]
@@ -143,5 +165,16 @@ export class Enemy {
         return !(this.x + this.enemySize < x || this.x > x + w ||
             this.y + this.enemySize < y || this.y > y + h);
     }
+
+    /// update scale !!
+    /*
+    updateVisualPosition() {
+        //  i dont know why he is not chnage there animation while i try alot
+        if (this.Div) {
+            const scale = this.game.map.currentScale || 1;
+            this.Div.style.transform = `translate(${this.x * scale}px, ${this.y * scale}px)`;
+        }
+    }
+    */
     // HER I CLEAN DOM !! 
 }

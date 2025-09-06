@@ -73,7 +73,11 @@ export class Game {
         // LIFE OF PLAYER Checker !
         this.state.update()
         //console.log("the grid", this.map.level.initial_grid)
-        this.map.enemys?.forEach(enemy => enemy.Canmoveandupdate());
+        this.map.enemys?.forEach(enemy => {
+            enemy.Canmoveandupdate();
+            // for responsivce
+            //enemy.updateVisualPosition(); 
+        });
         // Her I Will check if player it's dead !
         const alive = this.map.enemys.filter(enemy => !enemy.dead)
         if (alive.length === 0 && !this.levelComplete) {
