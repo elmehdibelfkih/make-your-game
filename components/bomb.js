@@ -17,12 +17,10 @@ export class Bomb {
         this.freeBlocks = []
         this.x = x
         this.y = y
-        // i add this for detect the boombs on or off 
         this.active = true
         this.initBomb()
     }
-    // ================>> ******** <<================== \\
-    // it's need to remove the boombs from grid to let enemy move well ???
+
 
     getId = () => this.id
     isDone = () => this.done
@@ -82,16 +80,7 @@ export class Bomb {
                 this.disappearing = true
                 this.lastTime = timestamp;
             }
-            //====== i remove the boombs from grid to let enemy move
-            // her i will try to remove it from grid [][]
-            const col = Math.round(this.xMap / this.game.map.level.block_size)
-            const row = Math.round(this.yMap / this.game.map.level.block_size)
-            console.log("----------------------------------------------------------------------------------")
-            console.log("the grid before remove it ", this.game.map.gridArray)
             this.game.map.gridArray[this.yMap][this.xMap] = 0
-            // her i add score for destroy the flor !!
-            //this.game.map.gridArray[row][col] = 0
-            console.log("the grid after remove it ", this.game.map.gridArray)
             this.active = false
             this.render()
             return
@@ -172,7 +161,7 @@ export class Bomb {
             this.done = true;
         }
     }
-    // her i clean the dom and set istance !!
+
     cleanDOM() {
         this.done = true;
         this.active = false;

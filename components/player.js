@@ -24,7 +24,7 @@ export class Player {
         document.addEventListener('keyup', (event) => event.key === ' ' ? this.canPutBomb = true : 0)
 
     }
-    removeplayer () {
+    removeplayer() {
         this.player.remove()
     }
     initClassData() {
@@ -97,26 +97,10 @@ export class Player {
     }
 
     movePlayer(timestamp) {
-        if (this.game.state.isArrowUp() && this.game.map.canPlayerMoveTo(this.x, this.y - this.game.state.getPlayerSpeed())) {
-            this.y -= this.game.state.getPlayerSpeed()
-            this.direction = 'walkingUp'
-            this.movement = true
-        }
-        if (this.game.state.isArrowDown() && this.game.map.canPlayerMoveTo(this.x, this.y + this.game.state.getPlayerSpeed())) {
-            this.y += this.game.state.getPlayerSpeed()
-            this.direction = 'walkingDown'
-            this.movement = true
-        }
-        if (this.game.state.isArrowRight() && this.game.map.canPlayerMoveTo(this.x + this.game.state.getPlayerSpeed(), this.y)) {
-            this.x += this.game.state.getPlayerSpeed()
-            this.direction = 'walkingRight'
-            this.movement = true
-        }
-        if (this.game.state.isArrowLeft() && this.game.map.canPlayerMoveTo(this.x - this.game.state.getPlayerSpeed(), this.y)) {
-            this.x -= this.game.state.getPlayerSpeed()
-            this.direction = 'walkingLeft'
-            this.movement = true
-        }
+        this.up()
+        this.down()
+        this.right()
+        this.left()
 
         if (this.putBomb && this.canPutBomb) {
             this.game.map.addBomb(this.x + (this.getPlayerWidth() / 2), this.y + (this.getPlayerHeight() / 2), timestamp)
@@ -141,9 +125,78 @@ export class Player {
         }
     }
 
+    up() {
+        if (this.game.state.isArrowUp() || this.Up) {
+            this.Up = false
+            if (this.game.map.canPlayerMoveTo(this.x, this.y - this.game.state.getPlayerSpeed())) {
+                this.direction = 'walkingUp'
+                if (!this.game.map.canPlayerMoveTo(this.x, this.y) || !this.game.map.canPlayerMoveTo(this.x, this.y - this.game.state.getPlayerSpeed())) this.x -= 7
+                this.y -= this.game.state.getPlayerSpeed()
+                this.movement = true
+            } else {
+                this.xMap = Math.floor((this.x - 10) / this.game.map.level.block_size)
+                this.yMap = Math.floor(this.y / this.game.map.level.block_size)
+                if (this.game.map.isFreeSpaceInGrid(this.xMap, this.yMap - 1) && !this.game.state.isArrowRight()) return this.Left = true
+                this.xMap = Math.floor((this.x + this.playerCoordinate[this.direction][this.frameIndex].width + 10) / this.game.map.level.block_size)
+                if (this.game.map.isFreeSpaceInGrid(this.xMap, this.yMap - 1) && !this.game.state.isArrowLeft()) return this.Right = true
+            }
+        }
+    }
+
+    down() {
+        if (this.game.state.isArrowDown() || this.Down) {
+            this.Down = false
+            if (this.game.map.canPlayerMoveTo(this.x, this.y + this.game.state.getPlayerSpeed())) {
+                this.direction = 'walkingDown'
+                if (!this.game.map.canPlayerMoveTo(this.x, this.y) || !this.game.map.canPlayerMoveTo(this.x, this.y + this.game.state.getPlayerSpeed())) this.x -= 7
+                this.y += this.game.state.getPlayerSpeed()
+                this.movement = true
+            } else {
+                this.xMap = Math.floor((this.x - 10) / this.game.map.level.block_size)
+                this.yMap = Math.floor((this.y + this.playerCoordinate[this.direction][this.frameIndex].height) / this.game.map.level.block_size)
+                if (this.game.map.isFreeSpaceInGrid(this.xMap, this.yMap + 1) && !this.game.state.isArrowRight()) return this.Left = true
+                this.xMap = Math.floor((this.x + this.playerCoordinate[this.direction][this.frameIndex].width + 10) / this.game.map.level.block_size)
+                if (this.game.map.isFreeSpaceInGrid(this.xMap, this.yMap + 1) && !this.game.state.isArrowLeft()) return this.Right = true
+            }
+        }
+    }
+
+    left() {
+        if (this.game.state.isArrowLeft() || this.Left) {
+            this.Left = false
+            if (this.game.map.canPlayerMoveTo(this.x - this.game.state.getPlayerSpeed(), this.y)) {
+                this.direction = 'walkingLeft'
+                this.x -= this.game.state.getPlayerSpeed()
+                this.movement = true
+            } else {
+                this.xMap = Math.floor((this.x) / this.game.map.level.block_size)
+                this.yMap = Math.floor((this.y) / this.game.map.level.block_size)
+                if (this.game.map.isFreeSpaceInGrid(this.xMap - 1, this.yMap) && !this.game.state.isArrowDown()) return this.Up = true
+                this.yMap = Math.floor((this.y + this.playerCoordinate[this.direction][this.frameIndex].height) / this.game.map.level.block_size)
+                if (this.game.map.isFreeSpaceInGrid(this.xMap - 1, this.yMap) && !this.game.state.isArrowUp()) return this.Down = true
+            }
+        }
+    }
+
+    right() {
+        if (this.game.state.isArrowRight() || this.Right) {
+            this.Right = false
+            if (this.game.map.canPlayerMoveTo(this.x + this.game.state.getPlayerSpeed(), this.y)) {
+                this.direction = 'walkingRight'
+                this.x += this.game.state.getPlayerSpeed()
+                this.movement = true
+            } else {
+                this.xMap = Math.floor((this.x + this.playerCoordinate[this.direction][this.frameIndex].width) / this.game.map.level.block_size)
+                this.yMap = Math.floor((this.y) / this.game.map.level.block_size)
+                if (this.game.map.isFreeSpaceInGrid(this.xMap + 1, this.yMap) && !this.game.state.isArrowDown()) return this.Up = true
+                this.yMap = Math.floor((this.y + this.playerCoordinate[this.direction][this.frameIndex].height) / this.game.map.level.block_size)
+                if (this.game.map.isFreeSpaceInGrid(this.xMap + 1, this.yMap) && !this.game.state.isArrowUp()) return this.Down = true
+            }
+        }
+    }
+
     render() {
         if (this.reRender) return this.initClassData()
-
         if (this.renderExp) {
             this.exp.src = this.explosionImg
             this.player.style.opacity = this.player.style.opacity - 0.2
@@ -173,7 +226,6 @@ export class Player {
         );
     }
 
-    /// Checker For Get Speed 
     checkBonusSpeed() {
         for (const bonus of this.game.map.speedBonuses) {
             const blockSize = this.game.map.level.block_size;
@@ -186,18 +238,18 @@ export class Player {
             }
         }
     }
-    
+
     checkBonusTime() {
         for (const bonus of this.game.map.timeBonuses) {
             const blockSize = this.game.map.level.block_size;
             if (this.isColliding(bonus.x, bonus.y, blockSize, blockSize)) {
-                
-                this.game.state.addtime(10);             
-                bonus.removeitfromDOM();       
-                bonus.removeitfromgrid(); 
+
+                this.game.state.addtime(10);
+                bonus.removeitfromDOM();
+                bonus.removeitfromgrid();
                 bonus.audio1.play().catch(err => console.error(err))
                 this.game.map.timeBonuses = this.game.map.timeBonuses.filter(b => b !== bonus);
-                bonus.showTimeEffect();        
+                bonus.showTimeEffect();
             }
         }
     }

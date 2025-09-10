@@ -10,12 +10,9 @@ while (!game.player || !game.player.playerCoordinate) {
 window.startGame = async function () {
     document.getElementById('instructions').classList.add('hidden');
     const levelDisplay = document.getElementById('level-display');
-    levelDisplay.textContent = `${game.map.level.name}` // Is this showing the old name?
-    console.log("levelDisplay text set to:", levelDisplay.textContent); 
-    //levelDisplay.textContent = `${game.map.level.name}`
+    levelDisplay.textContent = `${game.map.level.name}`
     levelDisplay.classList.add('show');
     
-    //  Initialize Timer From JSON File To Be Depend On The Time Of Level !
     let rawTime = game.map.level.level_time;  
     let seconds;
 
@@ -26,10 +23,8 @@ window.startGame = async function () {
     }
     game.state.setTime(seconds);
     game.state.startTimer();
-    // <===============================================>
-    // Start the game now !!
     game.run();
-    //game.state.pauseStart()
+
     setTimeout(() => {
         game.state.pauseStart()
         levelDisplay.classList.remove('show');
