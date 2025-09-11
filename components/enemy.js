@@ -64,10 +64,10 @@ export class Enemy {
 
     updateRender() {
         if (this.dead) return
-       
+
         this.checkColision()
-        if (!this.game || !this.game.player)  return
-         
+        if (!this.game || !this.game.player) return
+
         if (this.game.player.isColliding(this.x, this.y, this.enemySize, this.enemySize)) this.game.player.kill()
 
         const directions = {
@@ -113,14 +113,14 @@ export class Enemy {
         if (!this.Div) return;
         const scale = this.game.map.currentScale || 1;
         const frame = this.AnimationCord[this.direction];
-    
+
         this.Div.style.backgroundPosition = `${frame.x * scale}px ${frame.y * scale}px`;
-    
-        this.Div.style.width  = `${frame.width * scale}px`;
+
+        this.Div.style.width = `${frame.width * scale}px`;
         this.Div.style.height = `${frame.height * scale}px`;
         this.Div.style.transform = `translate3d(${this.x * scale}px, ${this.y * scale}px, 10px)`;
     }
-    
+
 
     randomDirection() {
         const dirs = ["Up", "Down", "Left", "Right"]

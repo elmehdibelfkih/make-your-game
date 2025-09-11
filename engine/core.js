@@ -40,7 +40,7 @@ export class Game {
     async loop(timestamp) {
         if (this.state.isGameOver() || this.state.Isrestar()) {
             this.state.SetPause(false)
-            this.Detect = this.state.Isrestar() ? true : false 
+            this.Detect = this.state.Isrestar() ? true : false
             await this.gameOver()
             return
         }
@@ -83,10 +83,10 @@ export class Game {
             btn.textContent = "Continue ...";
             this.Detect = false
             this.state.Restar()
-        }else {
-        title.textContent = "GAME OVER";
-        message.textContent = "Time’s up or you lost all lives!";
-        btn.textContent = "PLAY AGAIN";
+        } else {
+            title.textContent = "GAME OVER";
+            message.textContent = "Time’s up or you lost all lives!";
+            btn.textContent = "PLAY AGAIN";
         }
 
         this.state.setScore(0)

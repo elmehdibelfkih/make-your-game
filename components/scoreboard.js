@@ -1,7 +1,3 @@
-
-// the scoreborad 
-// lives: ❤️❤️❤️    score: 0    level: 1    FPS: 0  menu
-
 export class Scoreboard {
 
     constructor(game) {
@@ -31,7 +27,6 @@ export class Scoreboard {
         this.updateTimer = () => this.timer.innerText = `time: ${this.game.state.getTime()}`
     }
 
-    //static getInstance = (game) => Scoreboard.instance ? Scoreboard.instance : new Scoreboard(game)
     static getInstance = (game) => {
         if (!Scoreboard.instance) {
             Scoreboard.instance = new Scoreboard(game);
@@ -39,13 +34,11 @@ export class Scoreboard {
         return Scoreboard.instance;
     }
 
-    reset() {
-    }
-    
     updateLives = () => this.lives.innerText = "lives: " + "❤️".repeat(this.game.state.getLives())
     updateScore = () => this.score.innerText = `score: ${this.game.state.getScore()}`
     updateLevel = () => this.level.innerText = `level: ${this.game.state.getLevel()}`
-    updateTimer = () => { let totalSeconds = this.game.state.getTime(); let minutes = Math.floor(totalSeconds / 60); let seconds = totalSeconds % 60;
+    updateTimer = () => {
+        let totalSeconds = this.game.state.getTime(); let minutes = Math.floor(totalSeconds / 60); let seconds = totalSeconds % 60;
         this.timer.innerText = `Time: ${minutes}m ${seconds}s`;
     };
 }

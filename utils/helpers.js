@@ -1,14 +1,14 @@
 
 export function throttle(cbf, wait) {
-    let block = false
-    return function (...args) {
-        if (block) return
-        block = true;
-        cbf(...args)
-        setTimeout(() => {
-            block = false;
-        }, wait)
-    }
+  let block = false
+  return function (...args) {
+    if (block) return
+    block = true;
+    cbf(...args)
+    setTimeout(() => {
+      block = false;
+    }, wait)
+  }
 }
 
 export function getCoordinates(map, target) {

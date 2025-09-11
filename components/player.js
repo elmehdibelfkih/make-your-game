@@ -95,6 +95,7 @@ export class Player {
         }
     }
 
+    // todo: enhance the player movment at high speed
     movePlayer(timestamp) {
         this.up()
         this.down()
@@ -224,7 +225,6 @@ export class Player {
             this.y >= y + height
         );
     }
-
 
     checkLoot() {
         for (const loot of this.game.map.loot) {
