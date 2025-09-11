@@ -58,8 +58,7 @@ export class Player {
     updateRender(timestamp) {
         this.playerDying(timestamp)
         this.movePlayer(timestamp)
-        this.checkBonusSpeed()
-        this.checkBonusTime()
+        this.checkLoot()
         this.render()
     }
 
@@ -226,30 +225,15 @@ export class Player {
         );
     }
 
-    checkBonusSpeed() {
-        for (const bonus of this.game.map.speedBonuses) {
-            const blockSize = this.game.map.level.block_size;
-            if (this.isColliding(bonus.x, bonus.y, blockSize, blockSize)) {
-                bonus.addspeed();
-                bonus.removeitfromDOM();
-                bonus.removeitfromgrid();
-                this.game.map.speedBonuses = this.game.map.speedBonuses.filter(b => b !== bonus);
-                bonus.showSpeedEffect();
-            }
-        }
-    }
 
-    checkBonusTime() {
-        for (const bonus of this.game.map.timeBonuses) {
+    checkLoot() {
+        for (const loot of this.game.map.loot) {
             const blockSize = this.game.map.level.block_size;
-            if (this.isColliding(bonus.x, bonus.y, blockSize, blockSize)) {
-
-                this.game.state.addtime(10);
-                bonus.removeitfromDOM();
-                bonus.removeitfromgrid();
-                bonus.audio1.play().catch(err => console.error(err))
-                this.game.map.timeBonuses = this.game.map.timeBonuses.filter(b => b !== bonus);
-                bonus.showTimeEffect();
+            if (this.isColliding(loot.x, loot.y, blockSize, blockSize)) {
+                loot.removeitfromDOM()
+                loot.removeitfromgrid()
+                loot.makeAction()
+                this.game.map.loot = this.game.map.loot.filter(b => b !== loot);
             }
         }
     }

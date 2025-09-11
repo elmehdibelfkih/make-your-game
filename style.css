@@ -12,7 +12,7 @@
      font-size: 18px;
      font-weight: bold;
      border-radius: 10px;
-     box-shadow: 0 4px 10px rgba(240, 167, 167, 0.3);      
+     box-shadow: 0 4px 10px rgba(240, 167, 167, 0.3);
  }
 
  #ScoreBoard span {
@@ -38,37 +38,38 @@
      align-items: center;
      background: #201414;
  }
+
  #grid-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    position: relative;
-}
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     width: 100vw;
+     height: 100vh;
+     overflow: hidden;
+     position: relative;
+ }
 
-#grid {
-    display: grid;
-    grid-template-rows: repeat(auto-fill, minmax(var(--tile-size), 1fr));
-    grid-template-columns: repeat(auto-fill, minmax(var(--tile-size), 1fr));
-    transform-origin: center;
-}
+ #grid {
+     display: grid;
+     grid-template-rows: repeat(auto-fill, minmax(var(--tile-size), 1fr));
+     grid-template-columns: repeat(auto-fill, minmax(var(--tile-size), 1fr));
+     transform-origin: center;
+ }
 
-button:hover {
+ button:hover {
      background-color: rgba(160, 131, 52, 0.267);
-}
+ }
 
-.Controls {
-    z-index: 100;
-    display: flex;
-    gap: 18px;
-    position: fixed;
-    top: 1.7%;
-    left: 66%;
-    font-family: 'Arial', sans-serif;
-    font-size: 10px;
-      box-shadow: 0 4px 10px rgb(221, 211, 211);
+ .Controls {
+     z-index: 100;
+     display: flex;
+     gap: 18px;
+     position: fixed;
+     top: 1.7%;
+     left: 66%;
+     font-family: 'Arial', sans-serif;
+     font-size: 10px;
+     box-shadow: 0 4px 10px rgb(221, 211, 211);
  }
 
  #star_pause {
@@ -94,6 +95,7 @@ button:hover {
      cursor: pointer;
      padding: 0;
  }
+
  #sound {
      position: absolute;
      top: 10px;
@@ -158,72 +160,93 @@ button:hover {
      background: #cc3333;
  }
 
-#level-display {
-    font-size: 10em;  
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #ffffff;
-    font-weight: bold;
-    z-index: 1500;
-    display: none;
-    font-size: 6vw; 
-    text-shadow: 2px 2px 4px rgba(255, 237, 237, 0.5); 
-}
+ #level-display {
+     font-size: 10em;
+     position: fixed;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     color: #ffffff;
+     font-weight: bold;
+     z-index: 1500;
+     display: none;
+     font-size: 6vw;
+     text-shadow: 2px 2px 4px rgba(255, 237, 237, 0.5);
+ }
 
-#level-display.show {
-    display: block;
-    animation: levelShow 3s ease-in-out;
-}
+ #level-display.show {
+     display: block;
+     animation: levelShow 3s ease-in-out;
+ }
 
-@keyframes levelShow {
-    0% { opacity: 0; }
-    50% { opacity: 1; }
-    99% { opacity: 0; }
-}
-
-
-/* for speed 
-/* Add this to your CSS file */
-.speed-effect {
-    position: absolute;
-    width: 50px;     
-    height: 50px;
-    border-radius: 50%;
-    background: rgba(240, 240, 34, 0.7);
-    animation: speed-burst 0.5s ease-out forwards;
-    pointer-events: none;  
-}
-
-@keyframes speed-burst {
-    0% {
-        transform: scale(0.5);
-        opacity: 1;
-    }
-    100% {
-        transform: scale(2);
-        opacity: 0;
-    }
-}
-
-.time-effect {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    background: rgb(0, 219, 248);
-    border-radius: 50%;
-    /*opacity: 0.8;*/
-    animation: pulse 0.5s ease-out;
-}
-
-@keyframes pulse {
+ @keyframes levelShow {
      0% {
-        transform: scale(0.5);
-        opacity: 1;
-    }
-    100% {
-        transform: scale(2);
-        opacity: 0;
-    }
-}
+         opacity: 0;
+     }
+
+     50% {
+         opacity: 1;
+     }
+
+     99% {
+         opacity: 0;
+     }
+ }
+
+
+ /* for speed 
+/* Add this to your CSS file */
+ .speed-effect {
+     position: absolute;
+     width: 50px;
+     height: 50px;
+     border-radius: 50%;
+     background: rgba(240, 240, 34, 0.7);
+     animation: speed-burst 0.5s ease-out forwards;
+     pointer-events: none;
+ }
+
+ @keyframes speed-burst {
+     0% {
+         transform: scale(0.5);
+         opacity: 1;
+     }
+
+     100% {
+         transform: scale(2);
+         opacity: 0;
+     }
+ }
+
+ .time-effect {
+     position: absolute;
+     width: 50px;
+     height: 50px;
+     background: rgb(0, 219, 248);
+     border-radius: 50%;
+     animation: speed-burst 0.5s ease-out forwards;
+     pointer-events: none;
+ }
+
+ .heart-effect {
+     position: absolute;
+     width: 50px;
+     height: 50px;
+     background: rgb(239, 92, 92);
+     border-radius: 50%;
+     animation: speed-burst 0.5s ease-out forwards;
+     pointer-events: none;
+ }
+
+
+ @keyframes pulse {
+     0% {
+         transform: scale(0.5);
+         opacity: 1;
+     }
+
+     100% {
+         transform: scale(2);
+         opacity: 0;
+     }
+ }

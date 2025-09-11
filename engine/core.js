@@ -84,7 +84,7 @@ export class Game {
             this.Detect = false
             this.state.Restar()
         }else {
-        title.textContent = "💀 GAME OVER";
+        title.textContent = "GAME OVER";
         message.textContent = "Time’s up or you lost all lives!";
         btn.textContent = "PLAY AGAIN";
         }
@@ -124,12 +124,12 @@ export class Game {
         instructions.classList.remove("hidden");
         const title = document.getElementById("menu-title");
         const message = document.getElementById("menu-message");
-        title.textContent = "➡️ NEXT LEVEL";
+        title.textContent = "NEXT LEVEL";
         message.textContent = "Get ready!";
         await new Promise(resolve => setTimeout(resolve, 1500));
         this.state.setScore(0);
         this.state.initState();
-        this.scoreboard.initScoreBaord(); // todo: update this
+        this.scoreboard.initScoreBaord();
         this.scoreboard.updateLives();
         this.scoreboard.updateScore();
         this.map.enemys.forEach(en => en.killEnemy(false));

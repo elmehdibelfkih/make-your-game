@@ -7,8 +7,9 @@ export class Map {
 
     constructor(game) {
         this.bonusArray = []
-        this.bonusArray.push(this.addTimeBonus.bind(this))
+        this.bonusArray.push(this.addTimeBonus.bind(this)) // todo: must be not fully random
         this.bonusArray.push(this.addSpeedBonus.bind(this))
+        this.bonusArray.push(this.addHeartBonus.bind(this))
         this.game = game
         this.level
         this.grid
@@ -18,8 +19,7 @@ export class Map {
         this.updateLevel = false
         this.bombs = []
         this.enemys = []
-        this.timeBonuses = []
-        this.speedBonuses = []
+        this.loot = []
         this.blocksToBlowing = []
         this.enemyCordination
         this.tiles = [];
@@ -47,7 +47,6 @@ export class Map {
         container[0].removeChild(img)
         const randomIndex = Math.floor(Math.random() * this.bonusArray.length);
         this.bonusArray[randomIndex](x, y, container[0])
-        // this.addTimeBonus
     }
 
     canPlayerMoveTo(x, y) {
@@ -160,7 +159,7 @@ export class Map {
 
     addSpeedBonus(xMap, yMap, node) {
         const bonus = document.createElement("img");
-        bonus.src = this.level.speed
+        bonus.src = this.level.speed_img
         bonus.className = "speed-bonus";
         bonus.style.width = `${30}px`;
         bonus.style.height = `${40}px`;
@@ -168,18 +167,18 @@ export class Map {
         var x = this.level.block_size * xMap
         var y = this.level.block_size * yMap
         bonus.style.transform = `translate(${20}px, ${10}px)`;
-        bonus.id = xMap.toString() + yMap.toString()
-        const id = xMap.toString() + yMap.toString()
-        const Bamboleao = new Bonus(this.game, x, y, this.level, id)
+        bonus.id = xMap.toString() + yMap.toString() + "T";
+        const id = xMap.toString() + yMap.toString() + "T";
+        const Bamboleao = new Bonus(this.game, x, y, this.level, id, 'speed')
         Bamboleao.originalWidth = 30
         Bamboleao.originalHeight = 40
-        this.speedBonuses.push(Bamboleao)
+        this.loot.push(Bamboleao)
         node.appendChild(bonus);
     }
 
     addTimeBonus(xMap, yMap, node) {
         const bonus = document.createElement("img");
-        bonus.src = this.level.time;
+        bonus.src = this.level.time_img;
         bonus.className = "time-bonus";
         bonus.style.width = `${35}px`;
         bonus.style.height = `${50}px`;
@@ -189,15 +188,30 @@ export class Map {
         bonus.style.transform = `translate(${15}px, ${10}px)`;
         bonus.id = xMap.toString() + yMap.toString() + "T";
         const id = xMap.toString() + yMap.toString() + "T";
-        const timeBonus = new Bonus(this.game, x, y, this.level, id);
+        const timeBonus = new Bonus(this.game, x, y, this.level, id, 'time');
         timeBonus.originalWidth = 35
         timeBonus.originalHeight = 50
-        this.timeBonuses.push(timeBonus);
+        this.loot.push(timeBonus);
         node.appendChild(bonus);
     }
 
     addHeartBonus(xMap, yMap, node) {
-
+        const bonus = document.createElement("img");
+        bonus.src = this.level.heart_img
+        bonus.className = "heart-bonus";
+        bonus.style.width = `${30}px`;
+        bonus.style.height = `${40}px`;
+        bonus.style.position = "absolute";
+        var x = this.level.block_size * xMap
+        var y = this.level.block_size * yMap
+        bonus.style.transform = `translate(${20}px, ${10}px)`;
+        bonus.id = xMap.toString() + yMap.toString() + "T";
+        const id = xMap.toString() + yMap.toString() + "T";
+        const Bamboleao = new Bonus(this.game, x, y, this.level, id, 'heart')
+        Bamboleao.originalWidth = 30
+        Bamboleao.originalHeight = 40
+        this.loot.push(Bamboleao)
+        node.appendChild(bonus);
     }
 
     initAudios() {
