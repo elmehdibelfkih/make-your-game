@@ -1,12 +1,16 @@
 {
   "name": "Tutorial Tumble",
   "initial_grid": [
-    [1,1,1,1,1,1,1,1,1],
-    [1,0,0,0,0,0,0,4,1],
-    [1,0,2,2,2,2,2,0,1],
-    [1,0,2,3,0,0,2,0,1],
-    [1,0,0,0,2,0,0,0,1],
-    [1,1,1,1,1,1,1,1,1]
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [1,0,2,0,2,0,2,0,2,0,2,0,4,1],
+    [1,2,0,2,0,2,0,2,0,2,0,0,2,1],
+    [1,0,2,0,1,1,1,0,1,1,0,2,0,1],
+    [1,2,0,0,1,0,1,2,0,1,0,0,2,1],
+    [1,0,2,0,1,0,1,0,2,1,0,2,0,1],
+    [1,2,0,0,1,1,1,2,0,1,0,0,2,1],
+    [1,0,2,0,2,0,0,0,0,2,0,2,0,1],
+    [1,0,0,2,0,2,0,3,2,0,2,0,0,1],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1]
   ],
   
   "enemy_quantity": 2,
@@ -20,8 +24,8 @@
   "enemy": "./assets/images/grue.png",
   "player": "./assets/images/player.png",
 
-  "wall": "./assets/images/wall/wall_2.png",
-  "floor": "./assets/images/floor/floor_2.png",
+  "wall": "./assets/images/wall/wall_29.png",
+  "floor": "./assets/images/floor/floor_104.png",
   "block": "./assets/images/soft_block/block_2.png",
 
   "bomb": "./assets/images/Bomb/bomb0.png",
@@ -39,6 +43,5 @@
   "time_sound": "./assets/audios/timesounde.mp3",
   "speed_sound": "./assets/audios/CoinGet.mp3",
   "heart_sound": "./assets/audios/heart.mp3"
-
 
 }
