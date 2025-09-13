@@ -1,5 +1,6 @@
-
+/* CSS Custom Properties for easy theming */
 :root {
+  /* Colors */
   --primary-bg: #1a0e0e;
   --secondary-bg: #2d1b1b;
   --accent-color: #ff4757;
@@ -11,25 +12,30 @@
   --shadow-light: rgba(255, 255, 255, 0.1);
   --shadow-dark: rgba(0, 0, 0, 0.5);
   
+  /* Game Colors */
   --lives-color: #ff4757;
   --score-color: #ffa502;
   --level-color: #3742fa;
   --timer-color: #2ed573;
   
+  /* Power-up Colors */
   --speed-color: #f1c40f;
   --time-color: #00d2d3;
   --heart-color: #e74c3c;
   
+  /* Spacing */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
   
+  /* Borders */
   --border-radius-sm: 4px;
   --border-radius-md: 8px;
   --border-radius-lg: 12px;
   
+  /* Typography */
   --font-pixel: 'Press Start 2P', monospace;
   --font-size-xs: 10px;
   --font-size-sm: 12px;
@@ -37,6 +43,7 @@
   --font-size-lg: 18px;
   --font-size-xl: 24px;
   
+  /* Game Grid */
   --tile-size: 68px;
   --grid-width: 612px;
   --grid-height: 408px;
@@ -55,7 +62,6 @@ html, body {
   overflow: hidden;
   user-select: none;
 }
-
 
 #grid-container {
   position: fixed;
@@ -276,6 +282,7 @@ html, body {
   filter: drop-shadow(1px 1px 2px var(--shadow-dark));
 }
 
+/* Soft blocks styling */
 div[class*="soft-block"] img {
   width: 100%;
   height: 100%;
@@ -434,6 +441,7 @@ div[class*="soft-block"] img {
   animation: pulse 2s infinite;
 }
 
+/* Game state indicators */
 .game-paused #grid {
   filter: grayscale(50%) blur(2px);
 }

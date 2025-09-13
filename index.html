@@ -14,16 +14,30 @@
 <body>
 
   <div id="level-display"></div>
-  <div id="instructions">
+  <div id="instructions" role="region" aria-labelledby="menu-title">
     <div class="instruction-box">
-      <h2 id="menu-title">🎮 Bomberman</h2>
-      <p id="menu-message"><strong>Controls:</strong></p>
-      <p>Arrow Keys - Move</p>
-      <p>Space - Drop Bomb</p>
-      <p><strong>Goal:</strong> Destroy blocks, avoid bombs, find exit!</p>
-      <button id="start-btn" class="start-btn" onclick="startGame()">START GAME</button>
+      <h2 id="menu-title">🎮 Bomberman — Ready?</h2>
+      <p id="menu-message" aria-live="polite"><strong>Controls:</strong> Use the arrow keys to move. Press
+        <kbd>Space</kbd> to drop a bomb.</p>
+      <p><strong>Move</strong>: Arrow Keys (↑ ↓ ← →)</p>
+      <p><strong>Drop Bomb</strong>: <kbd>Space</kbd></p>
+      <p id="menu-story" aria-label="Game story">
+        <strong>Story:</strong>
+        The Crystal Labyrinth once sang, but the Iron Overlord rewired it into a ticking maze. You are a Blast Runner —
+        your bombs wake sleeping shards, break clockwork guards, and reveal hidden paths. Gather shards to reach the
+        Heart and choose: restore the old wild song or forge a new order. Your blasts will decide the melody of the
+        maze.
+      </p>
+      <p><strong>Tip</strong>: Break destructible blocks to reveal power-ups. Time your bomb drops — stay clear of the
+        blast radius!</p>
+      <p><strong>Goal</strong>: Destroy blocks, collect power-ups, avoid explosions, and find the exit to advance to the
+        next level.</p>
+      <button id="start-btn" class="start-btn" onclick="startGame()" aria-label="Start game">START GAME</button>
     </div>
   </div>
+
+
+
   <div class="Controls">
     <button id="star_pause">
       <img id="icon" src="./icon/play.svg" alt="star" width="16" height="16"> </img>

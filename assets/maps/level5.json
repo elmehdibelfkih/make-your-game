@@ -26,8 +26,8 @@
   "enemy": "./assets/images/grue.png",
   "player": "./assets/images/player.png",
 
-  "wall": "./assets/images/wall/wall_24.png",
-  "floor": "./assets/images/floor/floor_100.png",
+  "wall": "./assets/images/wall/wall_17.png",
+  "floor": "./assets/images/floor/floor_58.png",
   "block": "./assets/images/soft_block/block_3.png",
 
   "bomb": "./assets/images/Bomb/bomb0.png",
