@@ -37,10 +37,10 @@ export class Bomb {
 
         this.game.state.setBombCount(1)
         this.game.map.grid.appendChild(this.bomb)
-
-
-        this.bomb.style.transform = `translate(${this.xMap * this.game.map.level.block_size}px,
-        ${this.yMap * this.game.map.level.block_size}px)`;
+        // Her It's What's i Scall 
+        this.updateScale();
+        //this.bomb.style.transform = `translate(${this.xMap * this.game.map.level.block_size}px,
+        //${this.yMap * this.game.map.level.block_size}px)`;
         this.game.map.gridArray[this.yMap][this.xMap] = consts.BOMB
 
         this.game.map.gridArray[this.yMap][this.xMap - 1] !== consts.WALL ? this.freeBlocks.push(1) : 0
@@ -49,6 +49,31 @@ export class Bomb {
         this.game.map.gridArray[this.yMap + 1][this.xMap] !== consts.WALL ? this.freeBlocks.push(0) : 0
 
         this.electricShock = new Audio(this.game.map.level.shock_sound);
+    }
+
+    updateScale() {
+        const scale = this.game.map.currentScale || 1;
+        const size = this.game.map.level.block_size * scale;
+
+        // ==============
+        this.bomb.style.width = `${size}px`;
+        this.bomb.style.height = `${size}px`;
+        this.bomb.style.transform = `translate(${this.xMap * size}px, ${this.yMap * size}px)`;
+        // ===========
+        this.img.style.width = `${size}px`;
+        this.img.style.height = `${size}px`;
+        // =============
+        this.exp?.forEach((piece, i) => {
+            if (!piece) return;
+            piece.style.width = `${size}px`;
+            piece.style.height = `${size}px`;
+            switch (i) {
+                case 0: piece.style.transform = `translate(${-size}px, ${size / 2}px)`; break;
+                case 1: piece.style.transform = `rotate(90deg) translate(${-size / 4}px, ${size * 1.5}px)`; break;
+                case 2: piece.style.transform = `rotate(180deg) translate(${size}px, ${size}px)`; break;
+                case 3: piece.style.transform = `rotate(270deg) translate(${size / 4}px, ${-size / 2}px)`; break;
+            }
+        });
     }
 
     render() {
@@ -61,6 +86,7 @@ export class Bomb {
             this.makeShockSound()
             this.makeExplosion()
             this.explosion = false
+            this.updateScale();
         }
         if (this.disappearing) {
             this.makeDisappearing()
@@ -135,6 +161,7 @@ export class Bomb {
         }
     }
 
+    // I Still To Optimize This BECS THERE IS APROBLEM !!    
     makeExplosion() {
         if (!this.exp) {
             this.exp = []
@@ -149,10 +176,8 @@ export class Bomb {
                 i === 3 ? this.exp[i].style.transform = "rotate(270deg) translate(17px, -17px)" : 0
             }
         }
-
         this.exp?.forEach(b => b ? b.src = this.explosionImg : 0);
     }
-
     makeDisappearing() {
         this.bomb.style.opacity = parseFloat(this.bomb.style.opacity) - 0.1;
         if (this.bomb.style.opacity <= 0) {
@@ -161,11 +186,9 @@ export class Bomb {
             this.done = true;
         }
     }
-
     cleanDOM() {
         this.done = true;
         this.active = false;
-
         if (this.bomb && this.bomb.parentNode) {
             this.bomb.parentNode.removeChild(this.bomb);
         }

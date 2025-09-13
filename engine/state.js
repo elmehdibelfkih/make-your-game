@@ -24,7 +24,17 @@ export class State {
     }
 
     static getInstance = (game) => State.instance ? State.instance : new State(game)
-
+      
+    resetTimer = () => {
+        console.log("State.resetTimer called");
+        this.stopTimer();
+        this.#TIME = 0;
+        console.log("Timer reset to:", this.#TIME);
+        if (this.game && this.game.scoreboard) {
+            this.game.scoreboard.updateTimer();
+        }
+    }
+    
     stopTimer = () => {
         if (this.#TIMER_ID) {
             clearInterval(this.#TIMER_ID);
@@ -47,7 +57,16 @@ export class State {
         //this.#RESTAR = false;
 
     }
+    
+    updateSoundIcon = () => {
+        const ic = document.getElementById('Icon');
+        if (!ic) return;
+        ic.src = this.#SOUND ? './icon/volume-2.svg' : './icon/volume-x.svg';
+    };
 
+
+    // sound 
+    isSoundOn = () => this.#SOUND;
     isArrowUp = () => this.#ARROW_UP
     isArrowDown = () => this.#ARROW_DOWN
     isArrowRight = () => this.#ARROW_RIGHT
@@ -79,7 +98,7 @@ export class State {
         document.addEventListener('keyup', this.setArrowStateKeyUp.bind(this))
 
     }
-
+    updatesound = (ff) => this.#SOUND  = ff
     nextLevel = () => this.#CURRENT_LEVEL = this.#CURRENT_LEVEL += 1
 
     getTime = () => this.#TIME
@@ -157,6 +176,7 @@ export class State {
 
     switch() {
         const ic = document.getElementById('Icon')
+        if (!this.game.map.backGroundMusic) return;
         if (this.#SOUND) {
             ic.src = './icon/volume-x.svg'
             this.game.map.backGroundMusic.volume = 0.0;
@@ -168,13 +188,11 @@ export class State {
         }
     }
 
-
     update = () => {
         if (!this.#LIVES) {
             this.GameOver()
         }
     }
-
     Isrestar() {
         return this.#RESTAR
     }
@@ -186,12 +204,10 @@ export class State {
     SetPause(env) {
         this.#PAUSE = env
     }
-
     Restar() {
         this.#RESTAR = !this.#RESTAR
         return this.#RESTAR
     }
-
     removeEventListeners() {
         document.getElementById('ref').removeEventListener('click', this.Restar.bind(this))
         document.getElementById('star_pause')?.removeEventListener('click', this.transeferit.bind(this))

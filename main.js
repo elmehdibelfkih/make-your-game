@@ -21,6 +21,7 @@ window.startGame = async function () {
     } else {
         seconds = parseInt(rawTime); 
     }
+    game.state.resetTimer();
     game.state.setTime(seconds);
     game.state.startTimer();
     game.run();

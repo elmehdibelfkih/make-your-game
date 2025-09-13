@@ -1,11 +1,9 @@
 export class Enemy {
-
     constructor(game, level, x, y, Cordination) {
         this.game = game
         this.x = x
         this.y = y
         this.level = level
-
         this.direction = "Right"
         this.enemySize = 40
         this.speed = 2
@@ -17,15 +15,17 @@ export class Enemy {
         this.Div = null
         this.dead = false
         this.AnimationCord = Cordination
+        this.isMoving = false
+        this.stuckCounter = 0
+        this.maxStuckFrames = 5
     }
-
+    
     killEnemy(cs = true) {
         if (this.Div && this.Div.parentNode) {
             this.Div.parentNode.removeChild(this.Div);
             if (cs) this.game.state.setScore(100)
             this.dead = true;
         }
-
         this.Div = null;
         this.game = null;
         this.level = null;
@@ -62,71 +62,162 @@ export class Enemy {
         }
     }
 
+  
+    getValidDirections() {
+        const directions = {
+            Up: { rowset: -1, colset: 0 },
+            Down: { rowset: 1, colset: 0 },
+            Left: { rowset: 0, colset: -1 },
+            Right: { rowset: 0, colset: 1 }
+        };
+        
+        const blockSize = this.level.block_size;
+        const col = Math.floor(this.x / blockSize);
+        const row = Math.floor(this.y / blockSize);
+        
+        const validDirections = [];
+        
+        for (let [dirName, dirData] of Object.entries(directions)) {
+            const nextRow = row + dirData.rowset;
+            const nextCol = col + dirData.colset;
+            
+            if (this.game.map.Canmove(nextRow, nextCol)) {
+                validDirections.push(dirName);
+            }
+        }
+        
+        return validDirections;
+    }
+
+    // ====
+    getOppositeDirection(direction) {
+        const opposites = {
+            Up: "Down",
+            Down: "Up",
+            Left: "Right",
+            Right: "Left"
+        };
+        return opposites[direction];
+    }
+
+    // Choose best direction smartly
+    chooseNewDirection() {
+        const validDirections = this.getValidDirections();
+        
+        if (validDirections.length === 0) {
+            // No valid directions, stay in place
+            return this.direction;
+        }
+        
+        if (validDirections.length === 1) {
+            // Only one valid direction
+            return validDirections[0];
+        }
+        
+        
+        const oppositeOfLast = this.getOppositeDirection(this.lastposition);
+        const filteredDirections = validDirections.filter(dir => dir !== oppositeOfLast);
+        
+        const finalDirections = filteredDirections.length > 0 ? filteredDirections : validDirections;
+
+        return finalDirections[Math.floor(Math.random() * finalDirections.length)];
+
+    }
+
+   
+    hasReachedTarget() {
+        return Math.abs(this.x - this.targetX) < this.speed && 
+               Math.abs(this.y - this.targetY) < this.speed;
+    }
+
     updateRender() {
-        if (this.dead) return
+        if (this.dead) return;
+        
+        this.checkColision();
+        if (!this.game || !this.game.player) return;
 
-        this.checkColision()
-        if (!this.game || !this.game.player) return
-
-        if (this.game.player.isColliding(this.x, this.y, this.enemySize, this.enemySize)) this.game.player.kill()
+        if (this.game.player.isColliding(this.x, this.y, this.enemySize, this.enemySize)) {
+            this.game.player.kill();
+        }
 
         const directions = {
             Up: { rowset: -1, colset: 0 },
             Down: { rowset: 1, colset: 0 },
             Left: { rowset: 0, colset: -1 },
             Right: { rowset: 0, colset: 1 }
-        }
+        };
 
-        const blockSize = this.level.block_size
-        const col = (this.direction === "Left") ? Math.round(this.x / blockSize) : Math.floor(this.x / blockSize);
-        const row = (this.direction === "Left") ? Math.round(this.y / blockSize) : Math.floor(this.y / blockSize);
-        if (this.detect) {
-            const nextRow = row + directions[this.direction].rowset
-            const nextCol = col + directions[this.direction].colset
+        const blockSize = this.level.block_size;
+        const col = Math.floor(this.x / blockSize);
+        const row = Math.floor(this.y / blockSize);
 
+         if (this.hasReachedTarget()) {
+            this.x = this.targetX;
+            this.y = this.targetY;
+            this.isMoving = false;
+            
+            // Try to continue in current direction first
+            const nextRow = row + directions[this.direction].rowset;
+            const nextCol = col + directions[this.direction].colset;
+            
             if (this.game.map.Canmove(nextRow, nextCol)) {
-                this.targetX = nextCol * blockSize + 12
-                this.targetY = nextRow * blockSize + 12
+                // Can continue in same direction
+                this.targetX = nextCol * blockSize + 12;
+                this.targetY = nextRow * blockSize + 12;
+                this.isMoving = true;
+                this.stuckCounter = 0;
             } else {
-                this.detect = false
-                this.lastposition = this.direction
-            }
-        } else {
-            this.direction = this.randomDirection()
-            this.detect = true
-
-            if (this.direction === this.lastposition) {
-                this.direction = this.randomDirection()
+                // Can't continue, need new direction
+                this.lastposition = this.direction;
+                this.direction = this.chooseNewDirection();
+                
+                // Set new target
+                const newNextRow = row + directions[this.direction].rowset;
+                const newNextCol = col + directions[this.direction].colset;
+                
+                if (this.game.map.Canmove(newNextRow, newNextCol)) {
+                    this.targetX = newNextCol * blockSize + 12;
+                    this.targetY = newNextRow * blockSize + 12;
+                    this.isMoving = true;
+                    this.stuckCounter = 0;
+                } else {
+                    // Still can't move, increment THIS STACK
+                    this.stuckCounter++;
+                    
+                    // If stuck for too long, force a random valid direction
+                    if (this.stuckCounter > this.maxStuckFrames) {
+                        const validDirs = this.getValidDirections();
+                        if (validDirs.length > 0) {
+                            this.direction = validDirs[Math.floor(Math.random() * validDirs.length)];
+                            const forceNextRow = row + directions[this.direction].rowset;
+                            const forceNextCol = col + directions[this.direction].colset;
+                            this.targetX = forceNextCol * blockSize + 12;
+                            this.targetY = forceNextRow * blockSize + 12;
+                            this.isMoving = true;
+                        }
+                        this.stuckCounter = 0;
+                    }
+                }
             }
         }
-        if (this.x < this.targetX) this.x += this.speed
-        if (this.x > this.targetX) this.x -= this.speed
-        if (this.y < this.targetY) this.y += this.speed
-        if (this.y > this.targetY) this.y -= this.speed
-
-        if (Math.abs(this.x - this.targetX) < this.speed) this.x = this.targetX
-        if (Math.abs(this.y - this.targetY) < this.speed) this.y = this.targetY
-        this.arzigid()
+        if (this.isMoving) {
+            if (this.x < this.targetX) this.x += this.speed;
+            if (this.x > this.targetX) this.x -= this.speed;
+            if (this.y < this.targetY) this.y += this.speed;
+            if (this.y > this.targetY) this.y -= this.speed;
+        }
+        this.arzigid();
     }
-
     arzigid() {
         if (!this.Div) return;
         const scale = this.game.map.currentScale || 1;
         const frame = this.AnimationCord[this.direction];
 
         this.Div.style.backgroundPosition = `${frame.x * scale}px ${frame.y * scale}px`;
-
         this.Div.style.width = `${frame.width * scale}px`;
         this.Div.style.height = `${frame.height * scale}px`;
         this.Div.style.transform = `translate3d(${this.x * scale}px, ${this.y * scale}px, 10px)`;
     }
-
-
-    randomDirection() {
-        const dirs = ["Up", "Down", "Left", "Right"]
-        return dirs[Math.floor(Math.random() * dirs.length)]
-    }
-
     isColliding(x, y, w, h) {
         return !(this.x + this.enemySize < x || this.x > x + w ||
             this.y + this.enemySize < y || this.y > y + h);

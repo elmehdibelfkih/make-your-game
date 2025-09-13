@@ -24,6 +24,7 @@ export class Map {
         this.enemyCordination
         this.tiles = [];
         this.blockElements = [];
+        this.backGroundMusic;
         this.container = document.createElement("div");
         this.container.id = "grid-container";
         document.body.appendChild(this.container)
@@ -98,6 +99,71 @@ export class Map {
         const gridHeight = rows * tileSize;
         this.grid.style.width = `${gridWidth}px`;
         this.grid.style.height = `${gridHeight}px`;
+        const scaleGrid = () => {
+            const containerWidth = this.container.clientWidth;
+            const containerHeight = this.container.clientHeight;
+            const scaleX = (containerWidth) / gridWidth;
+            const scaleY = containerHeight / gridHeight;
+            const scale = Math.min(scaleX, scaleY, 1);
+            /// <==========> |(-)| <==========> 
+            this.currentScale = scale;
+            this.tiles.forEach((tile) => {
+                //if (!tile) return 
+                const rowIndex = parseInt(tile.dataset.rowIndex);
+                const colIndex = parseInt(tile.dataset.colIndex);
+                tile.style.width = `${tileSize * scale}px`;
+                tile.style.height = `${tileSize * scale}px`;
+                tile.style.transform = `translate(${tileSize * rowIndex * scale}px, ${tileSize * colIndex * scale}px)`;
+                tile.style.backgroundSize = `${tileSize * scale}px ${tileSize * scale}px`;
+            });
+            // her i handle the block !! responsive scale !!
+            this.blockElements.forEach(block => {
+                //if (block) return 
+                block.style.width = `${tileSize * scale}px`;
+                block.style.height = `${tileSize * scale}px`;
+            });
+            this.enemys.forEach(enemy => {
+                if (!enemy) return
+                enemy.Div.style.width = `${enemy.originalWidth * scale}px`;
+                enemy.Div.style.height = `${enemy.originalHeight * scale}px`;
+                // REMOVED THE TRANSFORM LINE
+                enemy.Div.style.zIndex = "20";
+                enemy.Div.style.backgroundSize = `${160 * scale}px ${160 * scale}px`;
+                enemy.Div.style.imageRendering = 'pixelated';
+                enemy.Div.style.backgroundRepeat = 'no-repeat';
+
+            });
+            this.loot.forEach(bonus => {
+                const bonusElement = document.getElementById(bonus.id);
+                //if (!bonusElement) return 
+                if (bonusElement) {
+                    bonusElement.style.width = `${bonus.originalWidth * scale}px`;
+                    bonusElement.style.height = `${bonus.originalHeight * scale}px`;
+                    // You might also need to scale the transform offset
+                    const offsetX = bonus.type === 'time' ? 15 : 20;
+                    const offsetY = 10;
+                    bonusElement.style.transform = `translate(${offsetX * scale}px, ${offsetY * scale}px)`;
+                }
+            });
+            //this.scaleBombs() 
+
+            // HER I WILL HANDLE SCALL PLAYER !!
+            if (this.game.player && this.game.player.forceScaleUpdate) {
+                this.game.player.forceScaleUpdate();
+            }
+            //this.game.player.forceScaleUpdate();        
+            this.grid.style.width = `${gridWidth * scale}px`;
+            this.grid.style.height = `${gridHeight * scale}px`;
+            this.grid.style.position = "absolute";
+            this.grid.style.left = `${(containerWidth - gridWidth * scale) / 2}px`;
+            this.grid.style.top = `${(containerHeight - gridHeight * scale) / 2}px`;
+        };
+        // safe call function !!
+        this._scaleGrid = scaleGrid;
+        // initial scale
+        scaleGrid();
+        // update scale on window resize
+        window.addEventListener("resize", scaleGrid);
 
         this.level.initial_grid.forEach((row, colIndex) => {
 
@@ -110,7 +176,6 @@ export class Map {
 
                 if (cell === consts.WALL) tile.style.backgroundImage = `url(${this.level.wall})`;
                 else tile.style.backgroundImage = `url(${this.level.floor})`;
-
                 if (cell === consts.BLOCK) {
                     const block = document.createElement("img");
                     block.src = this.level.block
@@ -146,71 +211,76 @@ export class Map {
                     this.enemys.push(en);
 
                 }
-
                 tile.style.width = `${this.level.block_size}px`;
                 tile.style.height = `${this.level.block_size}px`;
                 tile.style.backgroundSize = "cover";
                 this.grid.appendChild(tile);
                 this.tiles.push(tile);
             });
-
         });
     }
-
     addSpeedBonus(xMap, yMap, node) {
+        const scale = this.currentScale || 1;  
         const bonus = document.createElement("img");
-        bonus.src = this.level.speed_img
+        bonus.src = this.level.speed_img;
         bonus.className = "speed-bonus";
-        bonus.style.width = `${30}px`;
-        bonus.style.height = `${40}px`;
-        bonus.style.position = "absolute";
-        var x = this.level.block_size * xMap
-        var y = this.level.block_size * yMap
-        bonus.style.transform = `translate(${20}px, ${10}px)`;
-        bonus.id = xMap.toString() + yMap.toString() + "T";
-        const id = xMap.toString() + yMap.toString() + "T";
-        const Bamboleao = new Bonus(this.game, x, y, this.level, id, 'speed')
-        Bamboleao.originalWidth = 30
-        Bamboleao.originalHeight = 40
-        this.loot.push(Bamboleao)
-        node.appendChild(bonus);
-    }
-
-    addTimeBonus(xMap, yMap, node) {
-        const bonus = document.createElement("img");
-        bonus.src = this.level.time_img;
-        bonus.className = "time-bonus";
-        bonus.style.width = `${35}px`;
-        bonus.style.height = `${50}px`;
+        bonus.style.width = `${30 * scale}px`
+        bonus.style.height = `${40 * scale}px`;
         bonus.style.position = "absolute";
         const x = this.level.block_size * xMap;
         const y = this.level.block_size * yMap;
-        bonus.style.transform = `translate(${15}px, ${10}px)`;
+        bonus.style.transform = `translate(${20 * scale}px, ${10 * scale}px)`;
         bonus.id = xMap.toString() + yMap.toString() + "T";
         const id = xMap.toString() + yMap.toString() + "T";
-        const timeBonus = new Bonus(this.game, x, y, this.level, id, 'time');
-        timeBonus.originalWidth = 35
-        timeBonus.originalHeight = 50
-        this.loot.push(timeBonus);
+        const Bamboleao = new Bonus(this.game, x, y, this.level, id, 'speed');
+        Bamboleao.originalWidth = 30;
+        Bamboleao.originalHeight = 40;
+        this.loot.push(Bamboleao);
         node.appendChild(bonus);
     }
-
-    addHeartBonus(xMap, yMap, node) {
+    addTimeBonus(xMap, yMap, node) {
+        const scale = this.currentScale || 1;
         const bonus = document.createElement("img");
-        bonus.src = this.level.heart_img
-        bonus.className = "heart-bonus";
-        bonus.style.width = `${30}px`;
-        bonus.style.height = `${40}px`;
+        bonus.src = this.level.time_img;
+        bonus.className = "time-bonus";
+        bonus.style.width = `${35 * scale}px`;
+        bonus.style.height = `${50 * scale}px`;
         bonus.style.position = "absolute";
-        var x = this.level.block_size * xMap
-        var y = this.level.block_size * yMap
-        bonus.style.transform = `translate(${20}px, ${10}px)`;
+    
+        const x = this.level.block_size * xMap;
+        const y = this.level.block_size * yMap;
+        bonus.style.transform = `translate(${15 * scale}px, ${10 * scale}px)`;
+    
         bonus.id = xMap.toString() + yMap.toString() + "T";
         const id = xMap.toString() + yMap.toString() + "T";
-        const Bamboleao = new Bonus(this.game, x, y, this.level, id, 'heart')
-        Bamboleao.originalWidth = 30
-        Bamboleao.originalHeight = 40
-        this.loot.push(Bamboleao)
+    
+        const timeBonus = new Bonus(this.game, x, y, this.level, id, 'time');
+        timeBonus.originalWidth = 35;
+        timeBonus.originalHeight = 50;
+        this.loot.push(timeBonus);
+        node.appendChild(bonus);
+    }    
+
+    addHeartBonus(xMap, yMap, node) {
+        const scale = this.currentScale || 1;
+        const bonus = document.createElement("img");
+        bonus.src = this.level.heart_img;
+        bonus.className = "heart-bonus";
+        bonus.style.width = `${30 * scale}px`;
+        bonus.style.height = `${40 * scale}px`;
+        bonus.style.position = "absolute";
+    
+        const x = this.level.block_size * xMap;
+        const y = this.level.block_size * yMap;
+        bonus.style.transform = `translate(${20 * scale}px, ${10 * scale}px)`;
+    
+        bonus.id = xMap.toString() + yMap.toString() + "T";
+        const id = xMap.toString() + yMap.toString() + "T";
+    
+        const Bamboleao = new Bonus(this.game, x, y, this.level, id, 'heart');
+        Bamboleao.originalWidth = 30;
+        Bamboleao.originalHeight = 40;
+        this.loot.push(Bamboleao);
         node.appendChild(bonus);
     }
 
@@ -219,7 +289,8 @@ export class Map {
         this.grid.appendChild(this.backGroundMusic)
         this.backGroundMusic.preload = 'auto';
         this.backGroundMusic.loop = true;
-        this.backGroundMusic.volume = 0.3;
+        const soundOn = this.game.state.isSoundOn();
+        this.backGroundMusic.volume = soundOn ? 0.3 : 0.0;
         const playMusic = () => {
             this.backGroundMusic.play().catch(err => {
                 console.error("Playback failed:", err);
@@ -229,10 +300,11 @@ export class Map {
         };
         document.body.addEventListener('click', playMusic);
         document.body.addEventListener('keydown', playMusic);
+        this.game.state.updateSoundIcon();
     }
-
+    
     destructeur() {
         document.body.removeChild(this.container)
     }
-}
 
+}

@@ -17,8 +17,6 @@ export class Bonus {
 
     removeitfromDOM = () => document.getElementById(this.id).remove()
 
-
-
     makeAction() {
         switch (this.name) {
             case 'speed':
@@ -46,9 +44,8 @@ export class Bonus {
     addLive() {
         this.game.state.setLives(1);
         this.game.scoreboard.updateLives()
-
     }
-
+    
     addSpeed() {
         this.game.state.setPlayerspped(6)
         this.audio.currentTime = 0
@@ -59,58 +56,42 @@ export class Bonus {
     }
 
     showSpeedEffect() {
+        const scale = this.game.map.currentScale || 1;
         const effect = document.createElement("div");
         effect.className = "speed-effect";
-        effect.style.left = `${this.x}px`;
-        effect.style.top = `${this.y}px`;
+        effect.style.left = `${this.x * scale}px`;
+        effect.style.top = `${this.y * scale}px`;
+        effect.style.transform = `scale(${scale})`;
         this.game.map.grid.appendChild(effect);
         const id = setTimeout(() => effect.remove(), 500);
-        this.activeTiming.push(id)
-        this.audio.play().catch(err => console.error(err))
+        this.activeTiming.push(id);
+        this.audio.play().catch(err => console.error(err));
     }
 
     showTimeEffect() {
+        const scale = this.game.map.currentScale || 1;
         const effect = document.createElement("div");
         effect.className = "time-effect";
-        effect.style.left = `${this.x}px`;
-        effect.style.top = `${this.y}px`;
+        effect.style.left = `${this.x * scale}px`;
+        effect.style.top = `${this.y * scale}px`;
+        effect.style.transform = `scale(${scale})`;
         this.game.map.grid.appendChild(effect);
         const id = setTimeout(() => effect.remove(), 500);
-        this.activeTiming.push(id)
-        this.audio.play().catch(err => console.error(err))
+        this.activeTiming.push(id);
+        this.audio.play().catch(err => console.error(err));
     }
 
     showLiveEffect() {
+        const scale = this.game.map.currentScale || 1;
         const effect = document.createElement("div");
         effect.className = "heart-effect";
-        effect.style.left = `${this.x}px`;
-        effect.style.top = `${this.y}px`;
+        effect.style.left = `${this.x * scale}px`;
+        effect.style.top = `${this.y * scale}px`;
+        effect.style.transform = `scale(${scale})`;
         this.game.map.grid.appendChild(effect);
         const id = setTimeout(() => effect.remove(), 500);
-        this.activeTiming.push(id)
-        this.audio.play().catch(err => console.error(err))
+        this.activeTiming.push(id);
+        this.audio.play().catch(err => console.error(err));
     }
 
-    // cleanDOM() {
-
-    //     this.removeitfromgrid();
-    //     const div = document.getElementById(this.id);
-    //     if (div && div.parentNode) div.parentNode.removeChild(div);
-
-    //     if (this.audio) {
-    //         this.audio.pause();
-    //         this.audio.currentTime = 0;
-    //         this.audio = null;
-    //     }
-
-    //     if (this.audio1) {
-    //         this.audio1.pause();
-    //         this.audio1.currentTime = 0;
-    //         this.audio1 = null;
-    //     }
-
-    //     this.activeTiming.forEach(tt => {
-    //         clearTimeout(tt)
-    //     })
-    // }
 }
