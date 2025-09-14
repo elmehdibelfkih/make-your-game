@@ -260,7 +260,7 @@ export class Map {
         this.loot.push(timeBonus);
         node.appendChild(bonus);
     }    
-
+    
     addHeartBonus(xMap, yMap, node) {
         const scale = this.currentScale || 1;
         const bonus = document.createElement("img");

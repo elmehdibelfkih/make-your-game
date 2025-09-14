@@ -66,6 +66,7 @@ export class Game {
     }
 
     async gameOver() {
+        this.state.stopTimer(); 
         if (this.IDRE) {
             cancelAnimationFrame(this.IDRE);
             this.IDRE = null;
@@ -116,6 +117,7 @@ export class Game {
     }
 
     async nextLevel() {
+        this.state.stopTimer(); 
         if (this.IDRE) {
             cancelAnimationFrame(this.IDRE);
             this.IDRE = null;

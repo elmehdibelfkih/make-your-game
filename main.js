@@ -24,6 +24,8 @@ window.startGame = async function () {
     game.state.resetTimer();
     game.state.setTime(seconds);
     game.state.startTimer();
+    //game.state.SetPause(false);  // or game.state.pauseStart() if currently paused
+
     game.run();
 
     setTimeout(() => {
