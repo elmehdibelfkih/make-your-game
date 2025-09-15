@@ -50,30 +50,17 @@ export class Bomb {
 
         this.electricShock = new Audio(this.game.map.level.shock_sound);
     }
-
+    
     updateScale() {
         const scale = this.game.map.currentScale || 1;
         const size = this.game.map.level.block_size * scale;
-
-        // ==============
+    
         this.bomb.style.width = `${size}px`;
         this.bomb.style.height = `${size}px`;
         this.bomb.style.transform = `translate(${this.xMap * size}px, ${this.yMap * size}px)`;
-        // ===========
+        
         this.img.style.width = `${size}px`;
         this.img.style.height = `${size}px`;
-        // =============
-        this.exp?.forEach((piece, i) => {
-            if (!piece) return;
-            piece.style.width = `${size}px`;
-            piece.style.height = `${size}px`;
-            switch (i) {
-                case 0: piece.style.transform = `translate(${-size}px, ${size / 2}px)`; break;
-                case 1: piece.style.transform = `rotate(90deg) translate(${-size / 4}px, ${size * 1.5}px)`; break;
-                case 2: piece.style.transform = `rotate(180deg) translate(${size}px, ${size}px)`; break;
-                case 3: piece.style.transform = `rotate(270deg) translate(${size / 4}px, ${-size / 2}px)`; break;
-            }
-        });
     }
 
     render() {
@@ -86,7 +73,7 @@ export class Bomb {
             this.makeShockSound()
             this.makeExplosion()
             this.explosion = false
-            this.updateScale();
+            //this.updateScale();
         }
         if (this.disappearing) {
             this.makeDisappearing()
@@ -163,6 +150,7 @@ export class Bomb {
 
     // I Still To Optimize This BECS THERE IS APROBLEM !!    
     makeExplosion() {
+
         if (!this.exp) {
             this.exp = []
             for (let i = 0; i < 4; i++) {
@@ -178,6 +166,7 @@ export class Bomb {
         }
         this.exp?.forEach(b => b ? b.src = this.explosionImg : 0);
     }
+
     makeDisappearing() {
         this.bomb.style.opacity = parseFloat(this.bomb.style.opacity) - 0.1;
         if (this.bomb.style.opacity <= 0) {
@@ -197,7 +186,6 @@ export class Bomb {
         this.img = null;
         this.exp = null;
     }
-
 }
 
 

@@ -123,15 +123,17 @@ export class Map {
                 block.style.height = `${tileSize * scale}px`;
             });
             this.enemys.forEach(enemy => {
-                if (!enemy) return
-                enemy.Div.style.width = `${enemy.originalWidth * scale}px`;
-                enemy.Div.style.height = `${enemy.originalHeight * scale}px`;
-                // REMOVED THE TRANSFORM LINE
+                if (!enemy || !enemy.Div) return;
+                const scale = this.currentScale || 1;
+                const frame = enemy.currentFrame || { width: enemy.originalWidth, height: enemy.originalHeight, x: 0, y: 0 };
+                enemy.Div.style.width = `${frame.width * scale}px`;
+                enemy.Div.style.height = `${frame.height * scale}px`;
+                enemy.Div.style.backgroundSize = `${160 * scale}px ${160 * scale}px`;  
+                enemy.Div.style.backgroundPosition = `${frame.x * scale}px ${frame.y * scale}px`;
+                enemy.Div.style.transform = `translate3d(${enemy.x * scale}px, ${enemy.y * scale}px, 10px)`;
                 enemy.Div.style.zIndex = "20";
-                enemy.Div.style.backgroundSize = `${160 * scale}px ${160 * scale}px`;
                 enemy.Div.style.imageRendering = 'pixelated';
                 enemy.Div.style.backgroundRepeat = 'no-repeat';
-
             });
             this.loot.forEach(bonus => {
                 const bonusElement = document.getElementById(bonus.id);
@@ -143,6 +145,11 @@ export class Map {
                     const offsetX = bonus.type === 'time' ? 15 : 20;
                     const offsetY = 10;
                     bonusElement.style.transform = `translate(${offsetX * scale}px, ${offsetY * scale}px)`;
+                }
+            });
+            this.bombs.forEach(bomb => {
+                if (!bomb.isDone()) {
+                    bomb.updateScale();
                 }
             });
             //this.scaleBombs() 
@@ -260,7 +267,7 @@ export class Map {
         this.loot.push(timeBonus);
         node.appendChild(bonus);
     }    
-    
+
     addHeartBonus(xMap, yMap, node) {
         const scale = this.currentScale || 1;
         const bonus = document.createElement("img");
@@ -302,7 +309,7 @@ export class Map {
         document.body.addEventListener('keydown', playMusic);
         this.game.state.updateSoundIcon();
     }
-    
+
     destructeur() {
         document.body.removeChild(this.container)
     }

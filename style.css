@@ -101,6 +101,7 @@ html, body {
   transition: all 0.3s ease;
 }
 
+ 
 #ScoreBoard:hover {
   transform: translateX(-50%) translateY(-2px);
   box-shadow: 0 12px 40px var(--shadow-dark);
@@ -441,3 +442,4 @@ div[class*="soft-block"] img {
 .game-over #grid {
   filter: grayscale(100%) brightness(0.5);
 }
+

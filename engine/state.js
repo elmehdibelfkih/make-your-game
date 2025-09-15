@@ -1,6 +1,6 @@
 export class State {
 
-    #CURRENT_LEVEL = 1
+    #CURRENT_LEVEL = 10
     #LIVES = 3
     #SCORE = 0
     #PAUSE = true
@@ -16,15 +16,23 @@ export class State {
     #TIME = 0
     #TIMER_ID = null
     #RESTAR = false
+    #MAXLEVEL = 10
 
     constructor(game) {
         State.instance = this;
         this.game = game
         this.isStar = true;
+        this._boundTransfer = this.transeferit.bind(this);
+        this._boundRestar  = this.Restar.bind(this);
+        this._boundSwitch  = this.switch.bind(this);
+        this._boundKeyDown = this.setArrowStateKeyDown.bind(this);
+        this._boundKeyUp   = this.setArrowStateKeyUp.bind(this);
+
     }
 
+
     static getInstance = (game) => State.instance ? State.instance : new State(game)
-      
+
     resetTimer = () => {
         console.log("State.resetTimer called");
         this.stopTimer();
@@ -34,7 +42,7 @@ export class State {
             this.game.scoreboard.updateTimer();
         }
     }
-    
+
     stopTimer = () => {
         if (this.#TIMER_ID) {
             clearInterval(this.#TIMER_ID);
@@ -57,13 +65,12 @@ export class State {
         //this.#RESTAR = false;
 
     }
-    
+
     updateSoundIcon = () => {
         const ic = document.getElementById('Icon');
         if (!ic) return;
         ic.src = this.#SOUND ? './icon/volume-2.svg' : './icon/volume-x.svg';
     };
-
 
     // sound 
     isSoundOn = () => this.#SOUND;
@@ -91,15 +98,24 @@ export class State {
 
     initArrowState() {
         //FIXME: REMOVE THIS
-        document.getElementById('star_pause').addEventListener('click', this.transeferit.bind(this))
-        document.getElementById('ref').addEventListener('click', this.Restar.bind(this))
-        document.getElementById('sound').addEventListener('click', this.switch.bind(this))
-        document.addEventListener('keydown', this.setArrowStateKeyDown.bind(this))
-        document.addEventListener('keyup', this.setArrowStateKeyUp.bind(this))
+        document.getElementById('star_pause').addEventListener('click', this._boundTransfer)
+        document.getElementById('ref').addEventListener('click', this._boundRestar)
+        document.getElementById('sound').addEventListener('click', this._boundSwitch)
+        document.addEventListener('keydown', this._boundKeyDown)
+        document.addEventListener('keyup', this._boundKeyUp)
 
     }
     updatesound = (ff) => this.#SOUND  = ff
     nextLevel = () => this.#CURRENT_LEVEL = this.#CURRENT_LEVEL += 1
+    
+    // Current level is her !!
+    getcurentlevel = () => this.#CURRENT_LEVEL
+    maxlevel = () => this.#MAXLEVEL
+    
+    resetLevel = () => {
+        this.#CURRENT_LEVEL = 1;
+    }
+    // 
 
     getTime = () => this.#TIME
     setLives = (val = 1) => this.#LIVES += val
@@ -193,6 +209,7 @@ export class State {
             this.GameOver()
         }
     }
+
     Isrestar() {
         return this.#RESTAR
     }
@@ -204,15 +221,17 @@ export class State {
     SetPause(env) {
         this.#PAUSE = env
     }
+
     Restar() {
         this.#RESTAR = !this.#RESTAR
         return this.#RESTAR
     }
+
     removeEventListeners() {
-        document.getElementById('ref').removeEventListener('click', this.Restar.bind(this))
-        document.getElementById('star_pause')?.removeEventListener('click', this.transeferit.bind(this))
-        document.getElementById('sound')?.removeEventListener('click', this.switch.bind(this))
-        document.removeEventListener('keydown', this.setArrowStateKeyDown.bind(this))
-        document.removeEventListener('keyup', this.setArrowStateKeyUp.bind(this))
+        document.getElementById('ref')?.removeEventListener('click', this._boundRestar);
+        document.getElementById('star_pause')?.removeEventListener('click', this._boundTransfer);
+        document.getElementById('sound')?.removeEventListener('click', this._boundSwitch);
+        document.removeEventListener('keydown', this._boundKeyDown);
+        document.removeEventListener('keyup', this._boundKeyUp);
     }
 }

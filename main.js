@@ -12,7 +12,7 @@ window.startGame = async function () {
     const levelDisplay = document.getElementById('level-display');
     levelDisplay.textContent = `${game.map.level.name}`
     levelDisplay.classList.add('show');
-    
+
     let rawTime = game.map.level.level_time;  
     let seconds;
 
@@ -21,13 +21,13 @@ window.startGame = async function () {
     } else {
         seconds = parseInt(rawTime); 
     }
-    game.state.resetTimer();
-    game.state.setTime(seconds);
-    game.state.startTimer();
+
+    game.state.stopTimer();        
+    game.state.resetTimer();       
+    game.state.setTime(seconds);   
+    game.state.startTimer(); 
     //game.state.SetPause(false);  // or game.state.pauseStart() if currently paused
-
     game.run();
-
     setTimeout(() => {
         game.state.pauseStart()
         levelDisplay.classList.remove('show');

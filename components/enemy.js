@@ -212,6 +212,8 @@ export class Enemy {
         if (!this.Div) return;
         const scale = this.game.map.currentScale || 1;
         const frame = this.AnimationCord[this.direction];
+        this.currentFrame = frame; // <-- store last frame
+
 
         this.Div.style.backgroundPosition = `${frame.x * scale}px ${frame.y * scale}px`;
         this.Div.style.width = `${frame.width * scale}px`;
