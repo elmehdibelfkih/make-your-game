@@ -28,11 +28,25 @@ export class State {
         this._boundKeyDown = this.setArrowStateKeyDown.bind(this);
         this._boundKeyUp = this.setArrowStateKeyUp.bind(this);
 
+        this._throttledRestar = this.throttle(this._boundRestar, 1000);
+
+    }
+
+    throttle(fn, delay) {
+        let lastCall = 0;
+        return function (...args) {
+            const now = Date.now();
+            if (now - lastCall >= delay) {
+                lastCall = now;
+                fn.apply(this, args);
+            }
+        };
     }
 
 
+
     static getInstance = (game) => State.instance ? State.instance : new State(game)
-    
+
 
     resetTimer = () => {
         console.log("State.resetTimer called");
@@ -98,9 +112,11 @@ export class State {
     }
 
     initArrowState() {
-        //FIXME: REMOVE THIS
+       
+        document.getElementById('ref').addEventListener('click', this._throttledRestar);
+        //document.getElementById('ref').addEventListener('click', throttledRestart);
         document.getElementById('star_pause').addEventListener('click', this._boundTransfer)
-        document.getElementById('ref').addEventListener('click', this._boundRestar)
+
         document.getElementById('sound').addEventListener('click', this._boundSwitch)
         document.addEventListener('keydown', this._boundKeyDown)
         document.addEventListener('keyup', this._boundKeyUp)
@@ -229,7 +245,7 @@ export class State {
     }
 
     removeEventListeners() {
-        document.getElementById('ref')?.removeEventListener('click', this._boundRestar);
+        document.getElementById('ref')?.removeEventListener('click', this._throttledRestar);
         document.getElementById('star_pause')?.removeEventListener('click', this._boundTransfer);
         document.getElementById('sound')?.removeEventListener('click', this._boundSwitch);
         document.removeEventListener('keydown', this._boundKeyDown);
