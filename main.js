@@ -8,6 +8,8 @@ while (!game.player || !game.player.playerCoordinate) {
 }
 
 window.startGame = async function () {
+
+    await game.waitForLevel();
     document.getElementById('instructions').classList.add('hidden');
     const levelDisplay = document.getElementById('level-display');
     levelDisplay.textContent = `${game.map.level.name}`

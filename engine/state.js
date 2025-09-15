@@ -23,15 +23,16 @@ export class State {
         this.game = game
         this.isStar = true;
         this._boundTransfer = this.transeferit.bind(this);
-        this._boundRestar  = this.Restar.bind(this);
-        this._boundSwitch  = this.switch.bind(this);
+        this._boundRestar = this.Restar.bind(this);
+        this._boundSwitch = this.switch.bind(this);
         this._boundKeyDown = this.setArrowStateKeyDown.bind(this);
-        this._boundKeyUp   = this.setArrowStateKeyUp.bind(this);
+        this._boundKeyUp = this.setArrowStateKeyUp.bind(this);
 
     }
 
 
     static getInstance = (game) => State.instance ? State.instance : new State(game)
+    
 
     resetTimer = () => {
         console.log("State.resetTimer called");
@@ -105,13 +106,13 @@ export class State {
         document.addEventListener('keyup', this._boundKeyUp)
 
     }
-    updatesound = (ff) => this.#SOUND  = ff
+    updatesound = (ff) => this.#SOUND = ff
     nextLevel = () => this.#CURRENT_LEVEL = this.#CURRENT_LEVEL += 1
-    
+
     // Current level is her !!
     getcurentlevel = () => this.#CURRENT_LEVEL
     maxlevel = () => this.#MAXLEVEL
-    
+
     resetLevel = () => {
         this.#CURRENT_LEVEL = 1;
     }

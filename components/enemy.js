@@ -19,7 +19,7 @@ export class Enemy {
         this.stuckCounter = 0
         this.maxStuckFrames = 5
     }
-    
+ 
     killEnemy(cs = true) {
         if (this.Div && this.Div.parentNode) {
             this.Div.parentNode.removeChild(this.Div);
@@ -31,7 +31,7 @@ export class Enemy {
         this.level = null;
         this.AnimationCord = null;
     }
-
+    
     checkColision() {
         const blockSize = this.level.block_size;
         const now = performance.now();
