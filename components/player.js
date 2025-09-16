@@ -25,9 +25,11 @@ export class Player {
         document.addEventListener('keyup', (event) => event.key === ' ' ? this.canPutBomb = true : 0)
 
     }
+
     removeplayer() {
         this.player.remove()
     }
+
     initClassData() {
         this.movement = false
         this.dying = false
@@ -39,7 +41,6 @@ export class Player {
         this.direction = 'Down'
         this.lastTime = performance.now()
         this.MS_PER_FRAME = 100
-
         const tmp = helpers.getCoordinates(this.game.map.level.initial_grid, consts.PLAYER)
         this.y = tmp[0] * this.game.map.level.block_size
         this.x = tmp[1] * this.game.map.level.block_size + 15
@@ -48,22 +49,9 @@ export class Player {
         this.player.style.backgroundRepeat = 'no-repeat';
         this.player.style.imageRendering = 'pixelated';
         this.player.style.position = 'absolute';
-        /*
-        this.player.style.transform = `translate(${this.x}px, ${this.y}px)`;
-        this.frame = this.playerCoordinate[this.direction][this.frameIndex];
-        this.player.style.width = this.frame.width + "px";
-        this.player.style.height = this.frame.height + "px";
-        this.player.style.backgroundPosition = `${this.frame.x} ${this.frame.y}`;
-        this.player.style.opacity = 1;
-        old of mehdi wihout handle the scale responsive
-        */
-        // new with soubaaiss handle scale 
         const scale = this.game.map.currentScale || 1;
         this.player.style.transform = `translate(${this.x * scale}px, ${this.y * scale}px)`;
-
         this.frame = this.playerCoordinate[this.direction][this.frameIndex];
-
-        // MODIFIED FOR SCALING
         this.player.style.width = `${this.frame.width * scale}px`;
         this.player.style.height = `${this.frame.height * scale}px`;
         this.player.style.backgroundPosition = `${this.frame.x} ${this.frame.y}`;
@@ -88,23 +76,14 @@ export class Player {
             this.exp = document.createElement("img")
             this.game.map.grid.appendChild(this.exp)
             this.exp.style.position = "absolute";
-            // the old one is her !!
-            /*
-            this.exp.style.transform = `translate(${this.x - 20}px, ${this.y}px)`;
-            this.explosionFrameIndex = 0
-            this.explosionImg = this.game.map.level.player_explosion_img
-            this.renderExp = true
-            */
             const scale = this.game.map.currentScale || 1;
             this.exp.style.transform = `translate(${(this.x - 20) * scale}px, ${this.y * scale}px)`;
-            const expSize = 64; // adjust to your explosion image size
+            const expSize = 64; 
             this.exp.style.width = `${expSize * scale}px`;
             this.exp.style.height = `${expSize * scale}px`;
-
             this.explosionFrameIndex = 0
             this.explosionImg = this.game.map.level.player_explosion_img
             this.renderExp = true
-
         }
         const delta = timestamp - this.lastTimeDying;
 
@@ -231,32 +210,13 @@ export class Player {
             this.renderExp = false
             return
         }
-
         if (!this.movement && !this.animate) return
-
-        // old : this.player.style.transform = `translate(${this.x}px, ${this.y}px)`;
-        // news with soubaaiss
         const scale = this.game.map.currentScale || 1;
         this.player.style.transform = `translate(${this.x * scale}px, ${this.y * scale}px)`;
 
-
-        //if (this.animate) {
-        /*
-        this.player.style.width = this.frame.width + "px";
-        this.player.style.height = this.frame.height + "px";
-        this.player.style.backgroundPosition = `${this.frame.x} ${this.frame.y}`;
-        this.animate = false
-        */
-        // this.player.style.width = `${this.frame.width * scale}px`;
-        //this.player.style.height = `${this.frame.height * scale}px`;
-        //this.player.style.backgroundPosition = `${this.frame.x} ${this.frame.y}`;
-        //this.animate = false
-        //}
-
         if (this.animate) {
-            const fx = parseFloat(this.frame.x); // "-1090px" → -1090
-            const fy = parseFloat(this.frame.y); // "-4px"    → -4
-
+            const fx = parseFloat(this.frame.x);
+            const fy = parseFloat(this.frame.y);
             this.player.style.width = `${this.frame.width * scale}px`;
             this.player.style.height = `${this.frame.height * scale}px`;
             this.player.style.backgroundPosition = `${fx * scale}px ${fy * scale}px`;
@@ -286,45 +246,20 @@ export class Player {
             }
         }
     }
-    /*
-    forceScaleUpdate() {
-        // I Will Add This For Scaling The Player On Responsive 
-        const scale = this.game.map.currentScale || 1;
-        if (this.player && this.frame) {
-            this.player.style.transform = `translate(${this.x * scale}px, ${this.y * scale}px)`;
-            this.player.style.width = `${this.frame.width * scale}px`;
-            this.player.style.height = `${this.frame.height * scale}px`;
-            //this.player.style.backgroundPosition = `${Number(this.frame.x * scale)}px ${Number(this.frame.y) * scale}px`;
-            //this.player.style.backgroundSize = `${1236 * scale}px ${473 * scale}px`;
-        }
 
-        if (this.exp) {
-            const expSize = 64;
-            this.exp.style.transform = `translate(${(this.x - 20) * scale}px, ${this.y * scale}px)`;
-            this.exp.style.width = `${expSize * scale}px`;
-            this.exp.style.height = `${expSize * scale}px`;
-        }
-    }
-    */
     forceScaleUpdate() {
         const scale = this.game.map.currentScale || 1;
         if (this.player && this.frame) {
-            const x = Number(this.x);                 // already numbers
+            const x = Number(this.x);
             const y = Number(this.y);
-
-            const fw = Number(this.frame.width);      // width/height are numbers already
+            const fw = Number(this.frame.width);
             const fh = Number(this.frame.height);
-
-            // strip "px" and convert negative offsets to numbers
-            const fx = parseFloat(this.frame.x);      // "-1090px" -> -1090
-            const fy = parseFloat(this.frame.y);      // "-4px"    -> -4
-
+            const fx = parseFloat(this.frame.x);
+            const fy = parseFloat(this.frame.y);
             this.player.style.transform =
                 `translate(${x * scale}px, ${y * scale}px)`;
             this.player.style.width = `${fw * scale}px`;
             this.player.style.height = `${fh * scale}px`;
-
-            // re-add "px" after scaling
             this.player.style.backgroundPosition =
                 `${fx * scale}px ${fy * scale}px`;
             this.player.style.backgroundSize =
@@ -338,6 +273,7 @@ export class Player {
             this.exp.style.height = `${expSize * scale}px`;
         }
     }
+
     kill = () => this.dying = true
     getPlayerHeight = () => this.playerCoordinate[this.direction][this.frameIndex].height
     getPlayerWidth = () => this.playerCoordinate[this.direction][this.frameIndex].width

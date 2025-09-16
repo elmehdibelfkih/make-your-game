@@ -30,35 +30,26 @@ export class Bomb {
         this.bomb.id = "bomb" + this.id
         this.bomb.style.opacity = 1
         this.bomb.style.position = "absolute";
-
         this.img = document.createElement("img")
         this.img.src = this.image
         this.bomb.appendChild(this.img)
-
         this.game.state.setBombCount(1)
         this.game.map.grid.appendChild(this.bomb)
-        // Her It's What's i Scall 
         this.updateScale();
-        //this.bomb.style.transform = `translate(${this.xMap * this.game.map.level.block_size}px,
-        //${this.yMap * this.game.map.level.block_size}px)`;
         this.game.map.gridArray[this.yMap][this.xMap] = consts.BOMB
-
         this.game.map.gridArray[this.yMap][this.xMap - 1] !== consts.WALL ? this.freeBlocks.push(1) : 0
         this.game.map.gridArray[this.yMap][this.xMap + 1] !== consts.WALL ? this.freeBlocks.push(3) : 0
         this.game.map.gridArray[this.yMap - 1][this.xMap] !== consts.WALL ? this.freeBlocks.push(2) : 0
         this.game.map.gridArray[this.yMap + 1][this.xMap] !== consts.WALL ? this.freeBlocks.push(0) : 0
-
         this.electricShock = new Audio(this.game.map.level.shock_sound);
     }
-    
+
     updateScale() {
         const scale = this.game.map.currentScale || 1;
         const size = this.game.map.level.block_size * scale;
-    
         this.bomb.style.width = `${size}px`;
         this.bomb.style.height = `${size}px`;
         this.bomb.style.transform = `translate(${this.xMap * size}px, ${this.yMap * size}px)`;
-        
         this.img.style.width = `${size}px`;
         this.img.style.height = `${size}px`;
     }
@@ -73,7 +64,6 @@ export class Bomb {
             this.makeShockSound()
             this.makeExplosion()
             this.explosion = false
-            //this.updateScale();
         }
         if (this.disappearing) {
             this.makeDisappearing()
@@ -98,7 +88,6 @@ export class Bomb {
             this.render()
             return
         }
-
         if (timestamp - this.startTime >= this.explosionTime) {
             if (!this.kill) {
                 const tmp = this.game.map.level.block_size
@@ -124,12 +113,10 @@ export class Bomb {
                 this.explosionImg = this.explosionImg.replace(this.frameIndex + ".png", ((this.frameIndex + 1) % 4) + ".png")
                 this.lastTime = timestamp;
             }
-
             this.explosion = true
             this.render()
             return
         }
-
         if (delta >= 300) {
             this.frameIndex = (this.frameIndex + 1) % 2;
             this.image = this.image.replace(this.frameIndex + ".png", ((this.frameIndex + 1) % 2) + ".png")
@@ -148,9 +135,7 @@ export class Bomb {
         }
     }
 
-    // I Still To Optimize This BECS THERE IS APROBLEM !!    
     makeExplosion() {
-
         if (!this.exp) {
             this.exp = []
             for (let i = 0; i < 4; i++) {
@@ -178,9 +163,7 @@ export class Bomb {
     cleanDOM() {
         this.done = true;
         this.active = false;
-        if (this.bomb && this.bomb.parentNode) {
-            this.bomb.parentNode.removeChild(this.bomb);
-        }
+        if (this.bomb && this.bomb.parentNode) this.bomb.parentNode.removeChild(this.bomb);
         this.game.state.setBombCount(-1);
         this.bomb = null;
         this.img = null;

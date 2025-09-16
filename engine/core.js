@@ -61,12 +61,9 @@ export class Game {
         this.map.bombs?.forEach(b => b.updateRender(timestamp));
         this.state.update()
         this.map.enemys?.forEach(enemy => enemy.updateRender())
-
         const alive = this.map.enemys.filter(enemy => !enemy.dead)
         if (alive.length === 0 && !this.levelComplete) {
             this.levelComplete = true;
-            //const i= this.state.getcurentlevel()
-            console.log("the max", this.state.maxlevel)
             if (this.state.getcurentlevel() >= this.state.maxlevel()) {
                 const Id = setTimeout(() => {
                     this.handleWin();
@@ -105,20 +102,14 @@ export class Game {
             message.textContent = "Time’s up or you lost all lives!";
             btn.textContent = "PLAY AGAIN";
         }
-
         this.state.setScore(0)
         this.state.initState()
         this.scoreboard.initScoreBaord() // todo: update this
         this.scoreboard.updateLives()
         this.scoreboard.updateScore()
-
-        this.map.enemys.forEach(en => {
-            en.killEnemy(false)
-        })
+        this.map.enemys.forEach(en => en.killEnemy(false))
         this.map.enemys = []
-        this.map.bombs.forEach(Boom => {
-            Boom.cleanDOM()
-        })
+        this.map.bombs.forEach(Boom => Boom.cleanDOM())
         this.map.Booms = []
         this.player.removeplayer()
         this.map.destructeur()
@@ -166,15 +157,11 @@ export class Game {
         await this.map.initMap();
         this.player = Player.getInstance(this);
         await this.player.initPlayer();
-        await this.waitForLevel(); 
-
+        await this.waitForLevel();
         let rawTime = this.map.level.level_time;
         let seconds;
-        if (typeof rawTime === "string" && rawTime.endsWith("min")) {
-            seconds = parseInt(rawTime) * 60;
-        } else {
-            seconds = parseInt(rawTime);
-        }
+        if (typeof rawTime === "string" && rawTime.endsWith("min")) seconds = parseInt(rawTime) * 60;
+        else seconds = parseInt(rawTime);
         this.state.stopTimer();
         this.state.resetTimer();
         this.state.setTime(seconds);
@@ -182,6 +169,7 @@ export class Game {
         this.stateofrest = false;
         this.levelComplete = false;
     }
+
     async handleWin() {
         this.state.stopTimer();
         if (this.IDRE) {
@@ -211,8 +199,6 @@ export class Game {
         this.map.Booms = [];
         this.player.removeplayer();
         this.map.destructeur();
-        // her i will handle racing 
-
         this.state.removeEventListeners();
         this.state = State.getInstance(this);
         this.state.initArrowState();
@@ -223,7 +209,7 @@ export class Game {
         await this.map.initMap();
         this.player = Player.getInstance(this);
         await this.player.initPlayer();
-        await this.waitForLevel(); 
+        await this.waitForLevel();
         let rawTime = this.map.level.level_time;
         let seconds;
         if (typeof rawTime === "string" && rawTime.endsWith("min")) {

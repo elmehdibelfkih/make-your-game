@@ -1,6 +1,7 @@
+import * as helpers from '../utils/helpers.js';
 export class State {
 
-    #CURRENT_LEVEL = 10
+    #CURRENT_LEVEL = 1
     #LIVES = 3
     #SCORE = 0
     #PAUSE = true
@@ -27,25 +28,41 @@ export class State {
         this._boundSwitch = this.switch.bind(this);
         this._boundKeyDown = this.setArrowStateKeyDown.bind(this);
         this._boundKeyUp = this.setArrowStateKeyUp.bind(this);
-
-        this._throttledRestar = this.throttle(this._boundRestar, 1000);
-
+        this._throttledRestar = helpers.throttle(this._boundRestar, 1000);
     }
-
-    throttle(fn, delay) {
-        let lastCall = 0;
-        return function (...args) {
-            const now = Date.now();
-            if (now - lastCall >= delay) {
-                lastCall = now;
-                fn.apply(this, args);
-            }
-        };
-    }
-
-
 
     static getInstance = (game) => State.instance ? State.instance : new State(game)
+    isSoundOn = () => this.#SOUND;
+    isArrowUp = () => this.#ARROW_UP
+    isArrowDown = () => this.#ARROW_DOWN
+    isArrowRight = () => this.#ARROW_RIGHT
+    isArrowLeft = () => this.#ARROW_LEFT
+    updatesound = (ff) => this.#SOUND = ff
+    nextLevel = () => this.#CURRENT_LEVEL = this.#CURRENT_LEVEL += 1
+    getcurentlevel = () => this.#CURRENT_LEVEL
+    maxlevel = () => this.#MAXLEVEL
+    resetLevel = () => this.#CURRENT_LEVEL = 1;
+    update = () => !this.#LIVES ? this.GameOver() : 0
+    Isrestar = () => this.#RESTAR
+    SetPause = (env) => this.#PAUSE = env
+    Restar = () => this.#RESTAR = !this.#RESTAR
+    getTime = () => this.#TIME
+    setLives = (val = 1) => this.#LIVES += val
+    getLives = () => this.#LIVES
+    setLevel = (val) => this.#CURRENT_LEVEL = val
+    getLevel = () => this.#CURRENT_LEVEL
+    setPlayerspped = (val) => this.#PLAYER_SPEED = val
+    getScore = () => this.#SCORE
+    setScore = (val) => this.#SCORE = val
+    getBombCount = () => this.#BOMB_COUNT
+    setBombCount = (val = 1) => this.#BOMB_COUNT += val
+    getMaxAllowdBombCount = () => this.#MAX_ALLOWD_BOMBS
+    setMaxAllowdBombCount = (val = 1) => this.#MAX_ALLOWD_BOMBS += val
+    isPaused = () => this.#PAUSE
+    isGameOver = () => this.#GAME_OVER
+    GameOver = () => this.#GAME_OVER = true
+    getPlayerSpeed = () => this.#PLAYER_SPEED
+    addtime = (val) => this.#TIME += val;
 
 
     resetTimer = () => {
@@ -77,8 +94,6 @@ export class State {
         this.#SOUND = true;
         this.#TIME = 0;
         this.#TIMER_ID = null;
-        //this.#RESTAR = false;
-
     }
 
     updateSoundIcon = () => {
@@ -87,21 +102,12 @@ export class State {
         ic.src = this.#SOUND ? './icon/volume-2.svg' : './icon/volume-x.svg';
     };
 
-    // sound 
-    isSoundOn = () => this.#SOUND;
-    isArrowUp = () => this.#ARROW_UP
-    isArrowDown = () => this.#ARROW_DOWN
-    isArrowRight = () => this.#ARROW_RIGHT
-    isArrowLeft = () => this.#ARROW_LEFT
-
     setArrowStateKeyDown = (event) => {
         if (event.key === 'ArrowUp') this.#ARROW_UP = true
         if (event.key === 'ArrowDown') this.#ARROW_DOWN = true
         if (event.key === 'ArrowRight') this.#ARROW_RIGHT = true
         if (event.key === 'ArrowLeft') this.#ARROW_LEFT = true
-        if (event.key.toLowerCase() === 'p') {
-            this.pauseStart()
-        }
+        if (event.key.toLowerCase() === 'p') this.pauseStart()
     }
 
     setArrowStateKeyUp = (event) => {
@@ -112,50 +118,17 @@ export class State {
     }
 
     initArrowState() {
-       
         document.getElementById('ref').addEventListener('click', this._throttledRestar);
-        //document.getElementById('ref').addEventListener('click', throttledRestart);
         document.getElementById('star_pause').addEventListener('click', this._boundTransfer)
-
         document.getElementById('sound').addEventListener('click', this._boundSwitch)
         document.addEventListener('keydown', this._boundKeyDown)
         document.addEventListener('keyup', this._boundKeyUp)
-
     }
-    updatesound = (ff) => this.#SOUND = ff
-    nextLevel = () => this.#CURRENT_LEVEL = this.#CURRENT_LEVEL += 1
 
-    // Current level is her !!
-    getcurentlevel = () => this.#CURRENT_LEVEL
-    maxlevel = () => this.#MAXLEVEL
-
-    resetLevel = () => {
-        this.#CURRENT_LEVEL = 1;
-    }
-    // 
-
-    getTime = () => this.#TIME
-    setLives = (val = 1) => this.#LIVES += val
-    getLives = () => this.#LIVES
-    setLevel = (val) => this.#CURRENT_LEVEL = val
-    getLevel = () => this.#CURRENT_LEVEL
-    setPlayerspped = (val) => this.#PLAYER_SPEED = val
-    getScore = () => this.#SCORE
-    setScore = (val) => this.#SCORE = val
-
-    getBombCount = () => this.#BOMB_COUNT
-    setBombCount = (val = 1) => this.#BOMB_COUNT += val
-
-    getMaxAllowdBombCount = () => this.#MAX_ALLOWD_BOMBS
-    setMaxAllowdBombCount = (val = 1) => this.#MAX_ALLOWD_BOMBS += val
-    pauseStart = () => {
+    pauseStart = helpers.throttle(() => {
         this.#PAUSE = !this.#PAUSE;
         this.updatePauseIcon();
-    }
-    isPaused = () => this.#PAUSE
-    isGameOver = () => this.#GAME_OVER
-    GameOver = () => this.#GAME_OVER = true
-    getPlayerSpeed = () => this.#PLAYER_SPEED
+    }, 300)
 
     setScore = (val) => {
         this.#SCORE += val;
@@ -184,10 +157,6 @@ export class State {
         }
     }
 
-    addtime = (val) => {
-        this.#TIME += val;
-        return this.#TIME;
-    }
 
     startTimer = () => {
         if (this.#TIMER_ID) clearInterval(this.#TIMER_ID);
@@ -221,34 +190,16 @@ export class State {
         }
     }
 
-    update = () => {
-        if (!this.#LIVES) {
-            this.GameOver()
-        }
-    }
-
-    Isrestar() {
-        return this.#RESTAR
-    }
-
-    transeferit = () => {
-        this.pauseStart()
-    }
-
-    SetPause(env) {
-        this.#PAUSE = env
-    }
-
-    Restar() {
-        this.#RESTAR = !this.#RESTAR
-        return this.#RESTAR
-    }
-
     removeEventListeners() {
         document.getElementById('ref')?.removeEventListener('click', this._throttledRestar);
         document.getElementById('star_pause')?.removeEventListener('click', this._boundTransfer);
         document.getElementById('sound')?.removeEventListener('click', this._boundSwitch);
         document.removeEventListener('keydown', this._boundKeyDown);
         document.removeEventListener('keyup', this._boundKeyUp);
+    }
+
+    // FIXME: why???
+    transeferit = () => {
+        this.pauseStart()
     }
 }

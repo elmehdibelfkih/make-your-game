@@ -1,7 +1,6 @@
 export class Scoreboard {
 
     constructor(game) {
-
         this.game = game
         let ScoreBoard = document.createElement("div")
         ScoreBoard.id = "ScoreBoard"
@@ -28,9 +27,7 @@ export class Scoreboard {
     }
 
     static getInstance = (game) => {
-        if (!Scoreboard.instance) {
-            Scoreboard.instance = new Scoreboard(game);
-        }
+        if (!Scoreboard.instance) Scoreboard.instance = new Scoreboard(game);
         return Scoreboard.instance;
     }
 

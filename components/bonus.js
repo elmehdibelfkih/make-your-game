@@ -11,10 +11,7 @@ export class Bonus {
         this.name = name
     }
 
-    removeitfromgrid() {
-        this.game.map.gridArray[this.at[0]][this.at[1]] = 0
-    }
-
+    removeitfromgrid = () => this.game.map.gridArray[this.at[0]][this.at[1]] = 0
     removeitfromDOM = () => document.getElementById(this.id).remove()
 
     makeAction() {
@@ -30,22 +27,20 @@ export class Bonus {
             case 'heart':
                 this.addLive()
                 this.showTimeEffect()
-                this.showLiveEffect() //todo
+                this.showLiveEffect()
                 break;
             default:
                 break;
         }
     }
 
-    addTime() {
-        this.game.state.addtime(10);
-    }
+    addTime = () => this.game.state.addtime(10);
 
     addLive() {
         this.game.state.setLives(1);
         this.game.scoreboard.updateLives()
     }
-    
+
     addSpeed() {
         this.game.state.setPlayerspped(6)
         this.audio.currentTime = 0
