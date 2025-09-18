@@ -71,7 +71,7 @@ export class Bomb {
         }
     }
 
-    updateRender(timestamp) {
+    async updateRender(timestamp) {
         if (this.done) {
             this.render()
             return true

@@ -54,7 +54,7 @@ export class Player {
         this.player.style.opacity = 1;
     }
 
-    updateRender(timestamp) {
+    async updateRender(timestamp) {
         this.playerDying(timestamp)
         this.movePlayer(timestamp)
         this.checkLoot()

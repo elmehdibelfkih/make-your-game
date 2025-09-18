@@ -110,7 +110,7 @@ export class Enemy {
             Math.abs(this.y - this.targetY) < this.speed;
     }
 
-    updateRender() {
+    async updateRender() {
         if (this.dead) return;
         this.checkColision();
         if (!this.game || !this.game.player) return;
