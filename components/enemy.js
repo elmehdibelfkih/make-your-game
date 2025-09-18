@@ -1,29 +1,32 @@
 export class Enemy {
     constructor(game, level, x, y, Cordination) {
-        this.game = game
-        this.x = x
-        this.y = y
-        this.level = level
-        this.direction = "Right"
-        this.enemySize = 40
-        this.speed = this.game.map.level.enemy_speed
-        this.detect = true
-        this.lastposition = ""
-        this.mustrender = true
-        this.targetX = x
-        this.targetY = y
-        this.Div = null
-        this.dead = false
-        this.AnimationCord = Cordination
-        this.isMoving = false
-        this.stuckCounter = 0
-        this.maxStuckFrames = 5
+        this.game = game;
+        this.x = x;
+        this.y = y;
+        this.level = level;
+        this.direction = "Right";
+        this.enemySize = 40;
+        this.speed = this.game.map.level.enemy_speed;
+        this.detect = true;
+        this.lastposition = "";
+        this.mustrender = true;
+        this.targetX = x;
+        this.targetY = y;
+        this.Div = null;
+        this.dead = false;
+        this.AnimationCord = Cordination;
+        this.isMoving = false;
+        this.stuckCounter = 0;
+        this.maxStuckFrames = 5;
+
+        this.currentFrame = null; // store current frame info
+        this._collisionTimer = 0; // throttle collision checks
     }
 
     killEnemy(cs = true) {
         if (this.Div && this.Div.parentNode) {
             this.Div.parentNode.removeChild(this.Div);
-            if (cs) this.game.state.setScore(100)
+            if (cs) this.game.state.setScore(100);
             this.dead = true;
         }
         this.Div = null;
@@ -42,10 +45,11 @@ export class Enemy {
             const bombY = bomb.yMap * blockSize;
 
             if (this.isColliding(bombX, bombY, blockSize, blockSize)) {
-                this.killEnemy()
-                this.dead = true
+                this.killEnemy();
+                this.dead = true;
                 return;
             }
+
             for (let dir of bomb.freeBlocks) {
                 let ex = bombX, ey = bombY;
                 if (dir === 0) ey += blockSize;
@@ -61,7 +65,6 @@ export class Enemy {
         }
     }
 
-
     getValidDirections() {
         const directions = {
             Up: { rowset: -1, colset: 0 },
@@ -69,13 +72,11 @@ export class Enemy {
             Left: { rowset: 0, colset: -1 },
             Right: { rowset: 0, colset: 1 }
         };
-
         const blockSize = this.level.block_size;
         const col = Math.floor(this.x / blockSize);
         const row = Math.floor(this.y / blockSize);
 
         const validDirections = [];
-
         for (let [dirName, dirData] of Object.entries(directions)) {
             const nextRow = row + dirData.rowset;
             const nextCol = col + dirData.colset;
@@ -104,33 +105,31 @@ export class Enemy {
         return finalDirections[Math.floor(Math.random() * finalDirections.length)];
     }
 
-
     hasReachedTarget() {
         return Math.abs(this.x - this.targetX) < this.speed &&
             Math.abs(this.y - this.targetY) < this.speed;
     }
 
-    updateRender() {
-        if (this.dead) return;
-        this.checkColision();
-        if (!this.game || !this.game.player) return;
-        if (this.game.player.isColliding(this.x, this.y, this.enemySize, this.enemySize))
-            this.game.player.kill();
+    moveTowardsTarget() {
         const directions = {
             Up: { rowset: -1, colset: 0 },
             Down: { rowset: 1, colset: 0 },
             Left: { rowset: 0, colset: -1 },
             Right: { rowset: 0, colset: 1 }
         };
+        if (!this.level) return
         const blockSize = this.level.block_size;
         const col = Math.floor(this.x / blockSize);
         const row = Math.floor(this.y / blockSize);
+
         if (this.hasReachedTarget()) {
             this.x = this.targetX;
             this.y = this.targetY;
             this.isMoving = false;
-            const nextRow = row + directions[this.direction].rowset;
-            const nextCol = col + directions[this.direction].colset;
+
+            let nextRow = row + directions[this.direction].rowset;
+            let nextCol = col + directions[this.direction].colset;
+
             if (this.game.map.Canmove(nextRow, nextCol)) {
                 this.targetX = nextCol * blockSize + 12;
                 this.targetY = nextRow * blockSize + 12;
@@ -139,11 +138,12 @@ export class Enemy {
             } else {
                 this.lastposition = this.direction;
                 this.direction = this.chooseNewDirection();
-                const newNextRow = row + directions[this.direction].rowset;
-                const newNextCol = col + directions[this.direction].colset;
-                if (this.game.map.Canmove(newNextRow, newNextCol)) {
-                    this.targetX = newNextCol * blockSize + 12;
-                    this.targetY = newNextRow * blockSize + 12;
+                nextRow = row + directions[this.direction].rowset;
+                nextCol = col + directions[this.direction].colset;
+
+                if (this.game.map.Canmove(nextRow, nextCol)) {
+                    this.targetX = nextCol * blockSize + 12;
+                    this.targetY = nextRow * blockSize + 12;
                     this.isMoving = true;
                     this.stuckCounter = 0;
                 } else {
@@ -152,10 +152,10 @@ export class Enemy {
                         const validDirs = this.getValidDirections();
                         if (validDirs.length > 0) {
                             this.direction = validDirs[Math.floor(Math.random() * validDirs.length)];
-                            const forceNextRow = row + directions[this.direction].rowset;
-                            const forceNextCol = col + directions[this.direction].colset;
-                            this.targetX = forceNextCol * blockSize + 12;
-                            this.targetY = forceNextRow * blockSize + 12;
+                            nextRow = row + directions[this.direction].rowset;
+                            nextCol = col + directions[this.direction].colset;
+                            this.targetX = nextCol * blockSize + 12;
+                            this.targetY = nextRow * blockSize + 12;
                             this.isMoving = true;
                         }
                         this.stuckCounter = 0;
@@ -163,12 +163,31 @@ export class Enemy {
                 }
             }
         }
+
         if (this.isMoving) {
             if (this.x < this.targetX) this.x += this.speed;
             if (this.x > this.targetX) this.x -= this.speed;
             if (this.y < this.targetY) this.y += this.speed;
             if (this.y > this.targetY) this.y -= this.speed;
         }
+    }
+
+    updateRender(timestamp) {
+        if (this.dead) return;
+
+        // Throttle collision checks to avoid FPS drop
+        this._collisionTimer += 16;
+        if (this._collisionTimer >= 100) {
+            this.checkColision();
+            this._collisionTimer = 0;
+        }
+
+        if (this.game && this.game.player &&
+            this.game.player.isColliding(this.x, this.y, this.enemySize, this.enemySize)) {
+            this.game.player.kill();
+        }
+
+        this.moveTowardsTarget();
         this.arzigid();
     }
 
@@ -176,11 +195,25 @@ export class Enemy {
         if (!this.Div) return;
         const scale = this.game.map.currentScale || 1;
         const frame = this.AnimationCord[this.direction];
-        this.currentFrame = frame;
-        this.Div.style.backgroundPosition = `${frame.x * scale}px ${frame.y * scale}px`;
-        this.Div.style.width = `${frame.width * scale}px`;
-        this.Div.style.height = `${frame.height * scale}px`;
+
+        // Only update width/height if changed
+        if (!this.currentFrame ||
+            this.currentFrame.width !== frame.width ||
+            this.currentFrame.height !== frame.height) {
+            this.Div.style.width = `${frame.width * scale}px`;
+            this.Div.style.height = `${frame.height * scale}px`;
+            this.Div.style.backgroundPosition = `${frame.x * scale}px ${frame.y * scale}px`;
+            this.currentFrame = frame;
+
+
+        }
+
+        // Always update background position
+        //this.Div.style.backgroundPosition = `${frame.x * scale}px ${frame.y * scale}px`;
+
+        // Transform is cheap
         this.Div.style.transform = `translate3d(${this.x * scale}px, ${this.y * scale}px, 10px)`;
+
     }
 
     isColliding(x, y, w, h) {
