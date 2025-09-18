@@ -208,15 +208,13 @@ export class Player {
         }
         if (!this.movement && !this.animate) return
         const scale = this.game.map.currentScale || 1;
-        this.player.style.transform = `translate(${this.x * scale}px, ${this.y * scale}px)`;
-
+        this.player.style.transform = `translate3d(${this.x * scale}px, ${this.y * scale}px, 10px)`;
         if (this.animate) {
             const fx = parseFloat(this.frame.x);
             const fy = parseFloat(this.frame.y);
             this.player.style.width = `${this.frame.width * scale}px`;
             this.player.style.height = `${this.frame.height * scale}px`;
             this.player.style.backgroundPosition = `${fx * scale}px ${fy * scale}px`;
-
             this.animate = false;
         }
         this.movement = false
