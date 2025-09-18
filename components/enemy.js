@@ -14,12 +14,13 @@ export class Enemy {
         this.targetY = y;
         this.Div = null;
         this.dead = false;
+        this.change = true
         this.AnimationCord = Cordination;
         this.isMoving = false;
         this.stuckCounter = 0;
         this.maxStuckFrames = 5;
-        this.currentFrame = null;  
-        this._collisionTimer = 0;  
+        this.currentFrame = null;
+        this._collisionTimer = 0;
     }
 
     killEnemy(cs = true) {
@@ -69,7 +70,7 @@ export class Enemy {
             Left: { rowset: 0, colset: -1 },
             Right: { rowset: 0, colset: 1 }
         };
-        if (!this.level) return 
+        if (!this.level) return
         const blockSize = this.level.block_size;
         const col = Math.floor(this.x / blockSize);
         const row = Math.floor(this.y / blockSize);
@@ -138,6 +139,7 @@ export class Enemy {
                 this.direction = this.chooseNewDirection();
                 nextRow = row + directions[this.direction].rowset;
                 nextCol = col + directions[this.direction].colset;
+                this.change = true
 
                 if (this.game.map.Canmove(nextRow, nextCol)) {
                     this.targetX = nextCol * blockSize + 12;
@@ -170,6 +172,8 @@ export class Enemy {
     }
 
     updateRender() {
+        console.log('hani dkhalt hna');
+
         if (this.dead) return;
         // Throttle collision checks to avoid FPS drop ..... .,.
         this._collisionTimer += 16;
@@ -190,11 +194,15 @@ export class Enemy {
         const scale = this.game.map.currentScale || 1;
         const frame = this.AnimationCord[this.direction];
         // Only update width/height if changed
-        if (!this.currentFrame || this.currentFrame.width !== frame.width || this.currentFrame.height !== frame.height) {
+        if (!this.currentFrame) {
             this.Div.style.width = `${frame.width * scale}px`;
             this.Div.style.height = `${frame.height * scale}px`;
-            this.Div.style.backgroundPosition = `${frame.x * scale}px ${frame.y * scale}px`;
             this.currentFrame = frame;
+
+        }
+        if (this.change) {
+            this.Div.style.backgroundPosition = `${frame.x * scale}px ${frame.y * scale}px`;
+            this.change = false
         }
         // Transform is cheap
         this.Div.style.transform = `translate3d(${this.x * scale}px, ${this.y * scale}px, 10px)`;

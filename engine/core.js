@@ -57,8 +57,8 @@ export class Game {
     updateRender(timestamp) {
         if (this.stateofrest) return
         this.player.updateRender(timestamp);
-        this.map.bombs = this.map.bombs?.filter(b => b.updateRender(timestamp) && !b.done);        
-        this.map.enemys = this.map.enemys?.filter(b => b.updateRender(timestamp) && !b.dead);        
+        this.map.bombs = this.map.bombs?.filter(b => b.updateRender(timestamp) && !b.done);  
+        this.map.enemys = this.map.enemys?.filter(b => b.updateRender(timestamp) || !b.dead);        
         this.state.update()
         this.checkState()
     }
