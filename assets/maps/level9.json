@@ -15,7 +15,7 @@
 
   ],
 
-  "enemy_speed": 4,
+  "enemy_speed": 1,
   "hiden_harts_quantity": 3,
   "bomb_quantity_at_time": 1,
   "block_size": 68,

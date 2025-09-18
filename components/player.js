@@ -26,10 +26,6 @@ export class Player {
 
     }
 
-    removeplayer() {
-        this.player.remove()
-    }
-
     initClassData() {
         this.movement = false
         this.dying = false
@@ -78,7 +74,7 @@ export class Player {
             this.exp.style.position = "absolute";
             const scale = this.game.map.currentScale || 1;
             this.exp.style.transform = `translate(${(this.x - 20) * scale}px, ${this.y * scale}px)`;
-            const expSize = 64; 
+            const expSize = 64;
             this.exp.style.width = `${expSize * scale}px`;
             this.exp.style.height = `${expSize * scale}px`;
             this.explosionFrameIndex = 0
@@ -114,7 +110,7 @@ export class Player {
             this.putBomb = false
             this.canPutBomb = false
         }
-        
+
         if (!this.movement && this.direction.includes("walking")) {
             this.direction = this.direction.replace("walking", '')
             this.animate = true
@@ -256,19 +252,15 @@ export class Player {
             const fh = Number(this.frame.height);
             const fx = parseFloat(this.frame.x);
             const fy = parseFloat(this.frame.y);
-            this.player.style.transform =
-                `translate(${x * scale}px, ${y * scale}px)`;
+            this.player.style.transform = `translate(${x * scale}px, ${y * scale}px)`;
             this.player.style.width = `${fw * scale}px`;
             this.player.style.height = `${fh * scale}px`;
-            this.player.style.backgroundPosition =
-                `${fx * scale}px ${fy * scale}px`;
-            this.player.style.backgroundSize =
-                `${1236 * scale}px ${473 * scale}px`;
+            this.player.style.backgroundPosition = `${fx * scale}px ${fy * scale}px`;
+            this.player.style.backgroundSize = `${1236 * scale}px ${473 * scale}px`;
         }
         if (this.exp) {
             const expSize = 64;
-            this.exp.style.transform =
-                `translate(${(Number(this.x) - 20) * scale}px, ${Number(this.y) * scale}px)`;
+            this.exp.style.transform = `translate(${(Number(this.x) - 20) * scale}px, ${Number(this.y) * scale}px)`;
             this.exp.style.width = `${expSize * scale}px`;
             this.exp.style.height = `${expSize * scale}px`;
         }
@@ -277,5 +269,5 @@ export class Player {
     kill = () => this.dying = true
     getPlayerHeight = () => this.playerCoordinate[this.direction][this.frameIndex].height
     getPlayerWidth = () => this.playerCoordinate[this.direction][this.frameIndex].width
-
+    removeplayer = () => this.player.remove()
 }
