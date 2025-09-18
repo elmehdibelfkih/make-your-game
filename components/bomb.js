@@ -54,7 +54,7 @@ export class Bomb {
         this.img.style.height = `${size}px`;
     }
 
-    render() {
+    async render() {
         if (this.done) return
         if (this.flashing) {
             this.img.src = this.image
@@ -126,7 +126,7 @@ export class Bomb {
         this.render()
     }
 
-    makeShockSound() {
+    async makeShockSound() {
         if (!this.shock) {
             this.electricShock.play().catch(err => {
                 console.error("Playback failed:", err);
@@ -135,7 +135,7 @@ export class Bomb {
         }
     }
 
-    makeExplosion() {
+    async makeExplosion() {
         if (!this.exp) {
             this.exp = []
             for (let i = 0; i < 4; i++) {
@@ -152,7 +152,7 @@ export class Bomb {
         this.exp?.forEach(b => b ? b.src = this.explosionImg : 0);
     }
 
-    makeDisappearing() {
+    async makeDisappearing() {
         this.bomb.style.opacity = parseFloat(this.bomb.style.opacity) - 0.1;
         if (this.bomb.style.opacity <= 0) {
             this.game.map.grid.removeChild(this.bomb);

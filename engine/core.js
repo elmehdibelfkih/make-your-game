@@ -57,24 +57,10 @@ export class Game {
     updateRender(timestamp) {
         if (this.stateofrest) return
         this.player.updateRender(timestamp);
-        this.map.bombs?.forEach(b => b.updateRender(timestamp));
+        this.map.bombs = this.map.bombs?.filter(b => b.updateRender(timestamp) && !b.done);        
+        this.map.enemys = this.map.enemys?.filter(b => b.updateRender(timestamp) && !b.dead);        
         this.state.update()
-        this.map.enemys?.forEach(enemy => enemy.updateRender())
-        const alive = this.map.enemys.filter(enemy => !enemy.dead)
-        if (alive.length === 0 && !this.levelComplete) {
-            this.levelComplete = true;
-            if (this.state.getcurentlevel() >= this.state.maxlevel()) {
-                const Id = setTimeout(() => {
-                    this.handleWin();
-                    clearTimeout(Id)
-                }, 1600)
-            } else {
-                const id = setTimeout(() => {
-                    this.nextLevel();
-                    clearTimeout(id)
-                }, 1600);
-            }
-        }
+        this.checkState()
     }
 
     async gameOver() {
@@ -211,5 +197,22 @@ export class Game {
         this.state.startTimer();
         this.stateofrest = false;
         this.levelComplete = false;
+    }
+
+    async checkState() {
+        if (this.map.enemys.length === 0 && !this.levelComplete) {
+            this.levelComplete = true;
+            if (this.state.getcurentlevel() >= this.state.maxlevel()) {
+                const Id = setTimeout(() => {
+                    this.handleWin();
+                    clearTimeout(Id)
+                }, 1600)
+            } else {
+                const id = setTimeout(() => {
+                    this.nextLevel();
+                    clearTimeout(id)
+                }, 1600);
+            }
+        }
     }
 }
