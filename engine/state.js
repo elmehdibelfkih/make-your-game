@@ -66,13 +66,9 @@ export class State {
 
 
     resetTimer = () => {
-        console.log("State.resetTimer called");
         this.stopTimer();
         this.#TIME = 0;
-        console.log("Timer reset to:", this.#TIME);
-        if (this.game && this.game.scoreboard) {
-            this.game.scoreboard.updateTimer();
-        }
+        if (this.game && this.game.scoreboard) this.game.scoreboard.updateTimer();
     }
 
     stopTimer = () => {

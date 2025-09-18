@@ -8,27 +8,15 @@ while (!game.player || !game.player.playerCoordinate) {
 }
 
 window.startGame = async function () {
-
     await game.waitForLevel();
     document.getElementById('instructions').classList.add('hidden');
     const levelDisplay = document.getElementById('level-display');
     levelDisplay.textContent = `${game.map.level.name}`
-    levelDisplay.classList.add('show');
-
-    let rawTime = game.map.level.level_time;  
-    let seconds;
-
-    if (typeof rawTime === "string" && rawTime.endsWith("min")) {
-        seconds = parseInt(rawTime) * 60;  
-    } else {
-        seconds = parseInt(rawTime); 
-    }
-
-    game.state.stopTimer();        
-    game.state.resetTimer();       
-    game.state.setTime(seconds);   
-    game.state.startTimer(); 
-    //game.state.SetPause(false);  // or game.state.pauseStart() if currently paused
+    levelDisplay.classList.add('show')
+    game.state.stopTimer();
+    game.state.resetTimer();
+    game.state.setTime(game.map.level.level_time);
+    game.state.startTimer();
     game.run();
     setTimeout(() => {
         game.state.pauseStart()

@@ -50,8 +50,7 @@ export class Game {
             await this.gameOver()
             return
         }
-        if (!this.state.isPaused())
-            this.updateRender(timestamp);
+        if (!this.state.isPaused()) this.updateRender(timestamp);
         this.IDRE = requestAnimationFrame(this.loop.bind(this));
     }
 
@@ -158,13 +157,9 @@ export class Game {
         this.player = Player.getInstance(this);
         await this.player.initPlayer();
         await this.waitForLevel();
-        let rawTime = this.map.level.level_time;
-        let seconds;
-        if (typeof rawTime === "string" && rawTime.endsWith("min")) seconds = parseInt(rawTime) * 60;
-        else seconds = parseInt(rawTime);
         this.state.stopTimer();
         this.state.resetTimer();
-        this.state.setTime(seconds);
+        this.state.setTime(this.map.level.level_time);
         this.state.startTimer();
         this.stateofrest = false;
         this.levelComplete = false;
@@ -210,16 +205,9 @@ export class Game {
         this.player = Player.getInstance(this);
         await this.player.initPlayer();
         await this.waitForLevel();
-        let rawTime = this.map.level.level_time;
-        let seconds;
-        if (typeof rawTime === "string" && rawTime.endsWith("min")) {
-            seconds = parseInt(rawTime) * 60;
-        } else {
-            seconds = parseInt(rawTime);
-        }
         this.state.stopTimer();
         this.state.resetTimer();
-        this.state.setTime(seconds);
+        this.state.setTime(map.level.level_time);
         this.state.startTimer();
         this.stateofrest = false;
         this.levelComplete = false;

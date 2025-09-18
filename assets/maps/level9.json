@@ -20,7 +20,7 @@
   "bomb_quantity_at_time": 1,
   "block_size": 68,
   "explosion_time": 5000,
-  "level_time": "2min",
+  "level_time": 90,
 
   "enemy": "./assets/images/grue.png",
   "player": "./assets/images/player.png",

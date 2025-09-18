@@ -201,6 +201,7 @@ export class Map {
             });
         });
     }
+
     addSpeedBonus(xMap, yMap, node) {
         const scale = this.currentScale || 1;
         const bonus = document.createElement("img");
@@ -213,8 +214,7 @@ export class Map {
         const y = this.level.block_size * yMap;
         bonus.style.transform = `translate(${20 * scale}px, ${10 * scale}px)`;
         bonus.id = xMap.toString() + yMap.toString() + "T";
-        const id = xMap.toString() + yMap.toString() + "T";
-        const Bamboleao = new Bonus(this.game, x, y, this.level, id, 'speed');
+        const Bamboleao = new Bonus(this.game, x, y, this.level, bonus.id, 'speed');
         Bamboleao.originalWidth = 30;
         Bamboleao.originalHeight = 40;
         this.loot.push(Bamboleao);
@@ -233,8 +233,7 @@ export class Map {
         const y = this.level.block_size * yMap;
         bonus.style.transform = `translate(${15 * scale}px, ${10 * scale}px)`;
         bonus.id = xMap.toString() + yMap.toString() + "T";
-        const id = xMap.toString() + yMap.toString() + "T";
-        const timeBonus = new Bonus(this.game, x, y, this.level, id, 'time');
+        const timeBonus = new Bonus(this.game, x, y, this.level,  bonus.id, 'time');
         timeBonus.originalWidth = 35;
         timeBonus.originalHeight = 50;
         this.loot.push(timeBonus);
@@ -253,8 +252,7 @@ export class Map {
         const y = this.level.block_size * yMap;
         bonus.style.transform = `translate(${20 * scale}px, ${10 * scale}px)`;
         bonus.id = xMap.toString() + yMap.toString() + "T";
-        const id = xMap.toString() + yMap.toString() + "T";
-        const Bamboleao = new Bonus(this.game, x, y, this.level, id, 'heart');
+        const Bamboleao = new Bonus(this.game, x, y, this.level,  bonus.id, 'heart');
         Bamboleao.originalWidth = 30;
         Bamboleao.originalHeight = 40;
         this.loot.push(Bamboleao);
