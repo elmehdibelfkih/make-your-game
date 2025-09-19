@@ -1,7 +1,7 @@
 import * as helpers from '../utils/helpers.js';
 export class State {
 
-    #CURRENT_LEVEL = 3
+    #CURRENT_LEVEL = 1
     #LIVES = 3
     #SCORE = 0
     #PAUSE = true
@@ -17,6 +17,7 @@ export class State {
     #TIME = 0
     #TIMER_ID = null
     #RESTAR = false
+    #STATE = false
     #MAXLEVEL = 10
 
     constructor(game) {
@@ -63,7 +64,10 @@ export class State {
     GameOver = () => this.#GAME_OVER = true
     getPlayerSpeed = () => this.#PLAYER_SPEED
     addtime = (val) => this.#TIME += val;
-
+    // There Is Aloooot <!>
+    updateStateof = (val) => this.#STATE = val
+    // Her i will get state !!
+    GetState = () => this.#STATE
 
     resetTimer = () => {
         this.stopTimer();
@@ -77,7 +81,7 @@ export class State {
             this.#TIMER_ID = null;
         }
     }
-
+    
     initState() {
         this.stopTimer();
         this.#LIVES = 3;

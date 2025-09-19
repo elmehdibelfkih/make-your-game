@@ -198,14 +198,13 @@ export class Enemy {
             this.Div.style.width = `${frame.width * scale}px`;
             this.Div.style.height = `${frame.height * scale}px`;
             this.currentFrame = frame;
-
         }
         if (this.change) {
             this.Div.style.backgroundPosition = `${frame.x * scale}px ${frame.y * scale}px`;
             this.change = false
         }
         // Transform is cheap
-        this.Div.style.transform = `translate3d(${this.x * scale}px, ${this.y * scale}px, 10px)`;
+        this.Div.style.transform = `translate(${this.x * scale}px, ${this.y * scale}px)`;
     }
     isColliding(x, y, w, h) {
         return !(this.x + this.enemySize < x || this.x > x + w ||
