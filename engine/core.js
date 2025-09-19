@@ -3,6 +3,7 @@ import { Player } from '../components/player.js';
 import { Map } from '../components/map.js';
 import { State } from './state.js';
 import { Enemy } from '../components/enemy.js';
+import { UI } from '../components/ui.js';
 
 export class Game {
 
@@ -12,41 +13,40 @@ export class Game {
         if (!Game.#instance) Game.#instance = new Game();
         return Game.#instance;
     }
-
     constructor() {
         this.state = State.getInstance(this);
         this.scoreboard = Scoreboard.getInstance(this)
         this.map = Map.getInstance(this)
         this.player = Player.getInstance(this)
+        // her i will call UI :
+        this.ui =  UI.getInstance(this)
         this.IDRE = null
         this.stateofrest = false
         this.nextLevelTimeoutId = null;
         this.levelComplete = false;
         this.Detect = false
     }
-
     async waitForLevel() {
         while (!this.map || !this.map.level) {
             await new Promise(r => setTimeout(r, 50));
         }
     }
-
     async intiElements() {
         this.state.initArrowState()
         await this.map.initMap()
         await this.player.initPlayer()
         return
     }
-
     run = () => {
         if (this.IDRE) return;
         this.IDRE = requestAnimationFrame(this.loop.bind(this));
     }
-
     async loop(timestamp) {
         if (this.state.isGameOver() || this.state.Isrestar()) {
             this.state.SetPause(false)
             this.Detect = this.state.Isrestar() ? true : false
+            // <===> !! <===>
+            this.state.updateStateof(this.Detect)
             await this.gameOver()
             return
         }
@@ -74,22 +74,7 @@ export class Game {
         }
         this.stateofrest = true
         this.levelComplete = false;
-        const instructions = document.getElementById("instructions");
-        const title = document.getElementById("menu-title");
-        const message = document.getElementById("menu-message");
-        const btn = document.getElementById("start-btn");
-        instructions.classList.remove("hidden");
-        if (this.Detect) {
-            title.textContent = "REFRECH GAME IS DONE";
-            message.textContent = "Enjoy .....";
-            btn.textContent = "Continue ...";
-            this.Detect = false
-            this.state.Restar()
-        } else {
-            title.textContent = "GAME OVER";
-            message.textContent = "Time’s up or you lost all lives!";
-            btn.textContent = "PLAY AGAIN";
-        }
+        this.ui.GameOver()
         this.state.setScore(0)
         this.state.initState()
         this.scoreboard.initScoreBaord() // todo: update this
@@ -116,12 +101,7 @@ export class Game {
             cancelAnimationFrame(this.IDRE);
             this.IDRE = null;
         }
-        const instructions = document.getElementById("instructions");
-        instructions.classList.remove("hidden");
-        const title = document.getElementById("menu-title");
-        const message = document.getElementById("menu-message");
-        title.textContent = "NEXT LEVEL";
-        message.textContent = "Get ready!";
+        this.ui.nextLevel()
         await new Promise(resolve => setTimeout(resolve, 1500));
         this.state.setScore(0);
         this.state.initState();
@@ -157,16 +137,7 @@ export class Game {
             this.IDRE = null;
         }
         this.stateofrest = true
-
-        const instructions = document.getElementById("instructions");
-        instructions.classList.remove("hidden");
-
-        const title = document.getElementById("menu-title");
-        const message = document.getElementById("menu-message");
-
-        title.textContent = "YOU WIN!";
-        message.textContent = "Congratulations, you completed all levels!";
-
+        this.ui.win()
         await new Promise(resolve => setTimeout(resolve, 1500));
         this.state.setScore(0);
         this.state.initState();

@@ -17,13 +17,14 @@ export class State {
     #TIME = 0
     #TIMER_ID = null
     #RESTAR = false
+    #STATE = false
     #MAXLEVEL = 10
 
     constructor(game) {
         State.instance = this;
         this.game = game
         this.isStar = true;
-        this._boundTransfer = this.transeferit.bind(this);
+        this._boundTransfer = this.pauseStart.bind(this);
         this._boundRestar = this.Restar.bind(this);
         this._boundSwitch = this.switch.bind(this);
         this._boundKeyDown = this.setArrowStateKeyDown.bind(this);
@@ -63,7 +64,10 @@ export class State {
     GameOver = () => this.#GAME_OVER = true
     getPlayerSpeed = () => this.#PLAYER_SPEED
     addtime = (val) => this.#TIME += val;
-
+    // There Is Aloooot <!>
+    updateStateof = (val) => this.#STATE = val
+    // Her i will get state !!
+    GetState = () => this.#STATE
 
     resetTimer = () => {
         this.stopTimer();
@@ -77,7 +81,7 @@ export class State {
             this.#TIMER_ID = null;
         }
     }
-
+    
     initState() {
         this.stopTimer();
         this.#LIVES = 3;
@@ -166,7 +170,6 @@ export class State {
                 } else {
                     clearInterval(this.#TIMER_ID);
                     this.#GAME_OVER = true
-
                 }
             }
         }, 1000);
@@ -192,10 +195,5 @@ export class State {
         document.getElementById('sound')?.removeEventListener('click', this._boundSwitch);
         document.removeEventListener('keydown', this._boundKeyDown);
         document.removeEventListener('keyup', this._boundKeyUp);
-    }
-
-    // FIXME: why???
-    transeferit = () => {
-        this.pauseStart()
     }
 }
