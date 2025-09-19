@@ -35,23 +35,16 @@ export class Bomb {
         this.bomb.appendChild(this.img)
         this.game.state.setBombCount(1)
         this.game.map.grid.appendChild(this.bomb)
-        this.updateScale();
+        const size = this.game.map.level.block_size;
+        this.bomb.style.width = `${size}px`;
+        this.bomb.style.height = `${size}px`;
+        this.bomb.style.transform = `translate(${this.xMap * size}px, ${this.yMap * size}px)`;
         this.game.map.gridArray[this.yMap][this.xMap] = consts.BOMB
         this.game.map.gridArray[this.yMap][this.xMap - 1] !== consts.WALL ? this.freeBlocks.push(1) : 0
         this.game.map.gridArray[this.yMap][this.xMap + 1] !== consts.WALL ? this.freeBlocks.push(3) : 0
         this.game.map.gridArray[this.yMap - 1][this.xMap] !== consts.WALL ? this.freeBlocks.push(2) : 0
         this.game.map.gridArray[this.yMap + 1][this.xMap] !== consts.WALL ? this.freeBlocks.push(0) : 0
         this.electricShock = new Audio(this.game.map.level.shock_sound);
-    }
-
-    updateScale() {
-        const scale = this.game.map.currentScale || 1;
-        const size = this.game.map.level.block_size * scale;
-        this.bomb.style.width = `${size}px`;
-        this.bomb.style.height = `${size}px`;
-        this.bomb.style.transform = `translate(${this.xMap * size}px, ${this.yMap * size}px)`;
-        this.img.style.width = `${size}px`;
-        this.img.style.height = `${size}px`;
     }
 
     async render() {

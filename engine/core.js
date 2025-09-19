@@ -105,8 +105,8 @@ export class Game {
         this.map = Map.getInstance(this)
         this.player = Player.getInstance(this)
         await this.map.initMap()
-        this.enemie = new Enemy(this);
         await this.player.initPlayer()
+        this.enemie = new Enemy(this);
         this.stateofrest = false
     }
 
@@ -138,8 +138,8 @@ export class Game {
         this.scoreboard.updateLevel();
         this.map = null
         this.map = Map.getInstance(this);
-        await this.map.initMap();
         this.player = Player.getInstance(this);
+        await this.map.initMap();
         await this.player.initPlayer();
         await this.waitForLevel();
         this.state.stopTimer();
@@ -173,9 +173,7 @@ export class Game {
         this.scoreboard.initScoreBaord();
         this.scoreboard.updateLives();
         this.scoreboard.updateScore();
-        this.map.enemys.forEach(en => en.killEnemy(false));
         this.map.enemys = [];
-        this.map.bombs.forEach(B => B.cleanDOM());
         this.map.Booms = [];
         this.player.removeplayer();
         this.map.destructeur();
@@ -186,8 +184,8 @@ export class Game {
         this.scoreboard.updateLevel();
         this.map = null
         this.map = Map.getInstance(this);
-        await this.map.initMap();
         this.player = Player.getInstance(this);
+        await this.map.initMap();
         await this.player.initPlayer();
         await this.waitForLevel();
         this.state.stopTimer();

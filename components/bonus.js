@@ -51,12 +51,10 @@ export class Bonus {
     }
 
     showSpeedEffect() {
-        const scale = this.game.map.currentScale || 1;
         const effect = document.createElement("div");
         effect.className = "speed-effect";
-        effect.style.left = `${this.x * scale}px`;
-        effect.style.top = `${this.y * scale}px`;
-        effect.style.transform = `scale(${scale})`;
+        effect.style.left = `${this.x}px`;
+        effect.style.top = `${this.y}px`;
         this.game.map.grid.appendChild(effect);
         const id = setTimeout(() => effect.remove(), 500);
         this.activeTiming.push(id);
@@ -64,12 +62,10 @@ export class Bonus {
     }
 
     showTimeEffect() {
-        const scale = this.game.map.currentScale || 1;
         const effect = document.createElement("div");
         effect.className = "time-effect";
-        effect.style.left = `${this.x * scale}px`;
-        effect.style.top = `${this.y * scale}px`;
-        effect.style.transform = `scale(${scale})`;
+        effect.style.left = `${this.x}px`;
+        effect.style.top = `${this.y}px`;
         this.game.map.grid.appendChild(effect);
         const id = setTimeout(() => effect.remove(), 500);
         this.activeTiming.push(id);
@@ -77,12 +73,10 @@ export class Bonus {
     }
 
     showLiveEffect() {
-        const scale = this.game.map.currentScale || 1;
         const effect = document.createElement("div");
         effect.className = "heart-effect";
-        effect.style.left = `${this.x * scale}px`;
-        effect.style.top = `${this.y * scale}px`;
-        effect.style.transform = `scale(${scale})`;
+        effect.style.left = `${this.x}px`;
+        effect.style.top = `${this.y}px`;
         this.game.map.grid.appendChild(effect);
         const id = setTimeout(() => effect.remove(), 500);
         this.activeTiming.push(id);

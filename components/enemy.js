@@ -174,7 +174,6 @@ export class Enemy {
 
     async updateRender() {
         if (this.dead) return;
-        // Throttle collision checks to avoid FPS drop ..... .,.
         this._collisionTimer += 16;
         if (this._collisionTimer >= 100) {
             this.checkColision();
@@ -190,21 +189,17 @@ export class Enemy {
 
     async arzigid() {
         if (!this.Div) return;
-        const scale = this.game.map.currentScale || 1;
         const frame = this.AnimationCord[this.direction];
-        // Only update width/height if changed
         if (!this.currentFrame) {
-            this.Div.style.width = `${frame.width * scale}px`;
-            this.Div.style.height = `${frame.height * scale}px`;
+            this.Div.style.width = `${frame.width}px`;
+            this.Div.style.height = `${frame.height}px`;
             this.currentFrame = frame;
-
         }
         if (this.change) {
-            this.Div.style.backgroundPosition = `${frame.x * scale}px ${frame.y * scale}px`;
+            this.Div.style.backgroundPosition = `${frame.x}px ${frame.y}px`;
             this.change = false
         }
-        // Transform is cheap
-        this.Div.style.transform = `translate(${this.x * scale}px, ${this.y * scale}px)`;
+        this.Div.style.transform = `translate(${this.x}px, ${this.y}px)`;
     }
 
     isColliding(x, y, w, h) {

@@ -5,7 +5,6 @@ import * as helpers from '../utils/helpers.js';
 export class Player {
 
     constructor(game) {
-        this.currentScale = 1
         this.game = game
     }
 
@@ -45,11 +44,10 @@ export class Player {
         this.player.style.backgroundRepeat = 'no-repeat';
         this.player.style.imageRendering = 'pixelated';
         this.player.style.position = 'absolute';
-        const scale = this.game.map.currentScale || 1;
-        this.player.style.transform = `translate(${this.x * scale}px, ${this.y * scale}px)`;
+        this.player.style.transform = `translate(${this.x}px, ${this.y}px)`;
         this.frame = this.playerCoordinate[this.direction][this.frameIndex];
-        this.player.style.width = `${this.frame.width * scale}px`;
-        this.player.style.height = `${this.frame.height * scale}px`;
+        this.player.style.width = `${this.frame.width}px`;
+        this.player.style.height = `${this.frame.height}px`;
         this.player.style.backgroundPosition = `${this.frame.x} ${this.frame.y}`;
         this.player.style.opacity = 1;
     }
@@ -72,11 +70,10 @@ export class Player {
             this.exp = document.createElement("img")
             this.game.map.grid.appendChild(this.exp)
             this.exp.style.position = "absolute";
-            const scale = this.game.map.currentScale || 1;
-            this.exp.style.transform = `translate(${(this.x - 20) * scale}px, ${this.y * scale}px)`;
+            this.exp.style.transform = `translate(${(this.x - 20)}px, ${this.y}px)`;
             const expSize = 64;
-            this.exp.style.width = `${expSize * scale}px`;
-            this.exp.style.height = `${expSize * scale}px`;
+            this.exp.style.width = `${expSize}px`;
+            this.exp.style.height = `${expSize}px`;
             this.explosionFrameIndex = 0
             this.explosionImg = this.game.map.level.player_explosion_img
             this.renderExp = true
@@ -207,14 +204,13 @@ export class Player {
             return
         }
         if (!this.movement && !this.animate) return
-        const scale = this.game.map.currentScale || 1;
-        this.player.style.transform = `translate(${this.x * scale}px, ${this.y * scale}px)`;
+        this.player.style.transform = `translate(${this.x}px, ${this.y}px)`;
         if (this.animate) {
             const fx = parseFloat(this.frame.x);
             const fy = parseFloat(this.frame.y);
-            this.player.style.width = `${this.frame.width * scale}px`;
-            this.player.style.height = `${this.frame.height * scale}px`;
-            this.player.style.backgroundPosition = `${fx * scale}px ${fy * scale}px`;
+            this.player.style.width = `${this.frame.width}px`;
+            this.player.style.height = `${this.frame.height}px`;
+            this.player.style.backgroundPosition = `${fx}px ${fy}px`;
             this.animate = false;
         }
         this.movement = false
@@ -241,28 +237,6 @@ export class Player {
         }
     }
 
-    forceScaleUpdate() {
-        const scale = this.game.map.currentScale || 1;
-        if (this.player && this.frame) {
-            const x = Number(this.x);
-            const y = Number(this.y);
-            const fw = Number(this.frame.width);
-            const fh = Number(this.frame.height);
-            const fx = parseFloat(this.frame.x);
-            const fy = parseFloat(this.frame.y);
-            this.player.style.transform = `translate(${x * scale}px, ${y * scale}px)`;
-            this.player.style.width = `${fw * scale}px`;
-            this.player.style.height = `${fh * scale}px`;
-            this.player.style.backgroundPosition = `${fx * scale}px ${fy * scale}px`;
-            this.player.style.backgroundSize = `${1236 * scale}px ${473 * scale}px`;
-        }
-        if (this.exp) {
-            const expSize = 64;
-            this.exp.style.transform = `translate(${(Number(this.x) - 20) * scale}px, ${Number(this.y) * scale}px)`;
-            this.exp.style.width = `${expSize * scale}px`;
-            this.exp.style.height = `${expSize * scale}px`;
-        }
-    }
 
     kill = () => this.dying = true
     getPlayerHeight = () => this.playerCoordinate[this.direction][this.frameIndex].height
