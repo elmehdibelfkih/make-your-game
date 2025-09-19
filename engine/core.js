@@ -18,7 +18,6 @@ export class Game {
         this.scoreboard = Scoreboard.getInstance(this)
         this.map = Map.getInstance(this)
         this.player = Player.getInstance(this)
-        // her i will call UI :
         this.ui =  UI.getInstance(this)
         this.IDRE = null
         this.stateofrest = false
@@ -45,7 +44,6 @@ export class Game {
         if (this.state.isGameOver() || this.state.Isrestar()) {
             this.state.SetPause(false)
             this.Detect = this.state.Isrestar() ? true : false
-            // <===> !! <===>
             this.state.updateStateof(this.Detect)
             await this.gameOver()
             return
@@ -77,7 +75,7 @@ export class Game {
         this.ui.GameOver()
         this.state.setScore(0)
         this.state.initState()
-        this.scoreboard.initScoreBaord() // todo: update this
+        this.scoreboard.initScoreBaord()
         this.scoreboard.updateLives()
         this.scoreboard.updateScore()
         this.map.enemys = []

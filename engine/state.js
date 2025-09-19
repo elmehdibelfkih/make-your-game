@@ -64,9 +64,7 @@ export class State {
     GameOver = () => this.#GAME_OVER = true
     getPlayerSpeed = () => this.#PLAYER_SPEED
     addtime = (val) => this.#TIME += val;
-    // There Is Aloooot <!>
     updateStateof = (val) => this.#STATE = val
-    // Her i will get state !!
     GetState = () => this.#STATE
 
     resetTimer = () => {
@@ -156,7 +154,6 @@ export class State {
             this.game.scoreboard.updateTimer();
         }
     }
-
 
     startTimer = () => {
         if (this.#TIMER_ID) clearInterval(this.#TIMER_ID);

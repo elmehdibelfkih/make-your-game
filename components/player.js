@@ -94,7 +94,6 @@ export class Player {
         }
     }
 
-    // todo: enhance the player movment at high speed
     async movePlayer(timestamp) {
         if (this.dying) return
         this.up()

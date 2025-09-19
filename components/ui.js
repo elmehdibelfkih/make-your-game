@@ -15,7 +15,6 @@ export class UI {
             title.textContent = "REFRECH GAME IS DONE";
             message.textContent = "Enjoy .....";
             btn.textContent = "Continue ...";
-            //this.game.Detect = false
             this.game.state.updateStateof(false)
             this.game.state.Restar()
         } else {

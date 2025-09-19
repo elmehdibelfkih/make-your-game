@@ -7,7 +7,7 @@ export class Map {
 
     constructor(game) {
         this.bonusArray = []
-        this.bonusArray.push(this.addTimeBonus.bind(this)) // todo: must be not fully random
+        this.bonusArray.push(this.addTimeBonus.bind(this))
         this.bonusArray.push(this.addSpeedBonus.bind(this))
         this.bonusArray.push(this.addHeartBonus.bind(this))
         this.game = game
