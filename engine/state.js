@@ -7,7 +7,7 @@ export class State {
     #PAUSE = true
     #PLAYER_SPEED = 3
     #BOMB_COUNT = 0
-    #MAX_ALLOWD_BOMBS = 3
+    #MAX_ALLOWD_BOMBS = 1
     #GAME_OVER = false
     #SOUND = true
     #ARROW_UP = false

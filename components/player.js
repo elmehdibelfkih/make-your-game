@@ -18,14 +18,14 @@ export class Player {
         this.dyingSound = new Audio(this.game.map.level.dying_sound);
         this.player.appendChild(this.dyingSound)
         this.game.map.grid.appendChild(this.player)
-        this.initClassData()
+        await this.initClassData()
         this.canPutBomb = true
         document.addEventListener('keydown', (event) => event.key === ' ' ? this.putBomb = true : 0)
         document.addEventListener('keyup', (event) => event.key === ' ' ? this.canPutBomb = true : 0)
 
     }
 
-    initClassData() {
+    async initClassData() {
         this.movement = false
         this.dying = false
         this.reRender = false
@@ -61,7 +61,6 @@ export class Player {
 
     async playerDying(timestamp) {
         if (!this.dying) return
-
         if (!this.lastTimeDying) {
             this.dyingSound.play().catch(err => {
                 console.error("Playback failed:", err);
@@ -97,6 +96,7 @@ export class Player {
 
     // todo: enhance the player movment at high speed
     async movePlayer(timestamp) {
+        if (this.dying) return
         this.up()
         this.down()
         this.right()
