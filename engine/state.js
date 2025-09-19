@@ -1,7 +1,7 @@
 import * as helpers from '../utils/helpers.js';
 export class State {
 
-    #CURRENT_LEVEL = 3
+    #CURRENT_LEVEL = 1
     #LIVES = 3
     #SCORE = 0
     #PAUSE = true

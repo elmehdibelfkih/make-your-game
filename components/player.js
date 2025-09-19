@@ -61,7 +61,7 @@ export class Player {
         this.render()
     }
 
-    playerDying(timestamp) {
+    async playerDying(timestamp) {
         if (!this.dying) return
 
         if (!this.lastTimeDying) {
@@ -99,7 +99,7 @@ export class Player {
     }
 
     // todo: enhance the player movment at high speed
-    movePlayer(timestamp) {
+    async movePlayer(timestamp) {
         this.up()
         this.down()
         this.right()
@@ -128,7 +128,7 @@ export class Player {
         }
     }
 
-    up() {
+    async up() {
         if (this.game.state.isArrowUp() || this.Up) {
             this.Up = false
             if (this.game.map.canPlayerMoveTo(this.x, this.y - this.game.state.getPlayerSpeed())) {
@@ -146,7 +146,7 @@ export class Player {
         }
     }
 
-    down() {
+    async down() {
         if (this.game.state.isArrowDown() || this.Down) {
             this.Down = false
             if (this.game.map.canPlayerMoveTo(this.x, this.y + this.game.state.getPlayerSpeed())) {
@@ -164,7 +164,7 @@ export class Player {
         }
     }
 
-    left() {
+    async left() {
         if (this.game.state.isArrowLeft() || this.Left) {
             this.Left = false
             if (this.game.map.canPlayerMoveTo(this.x - this.game.state.getPlayerSpeed(), this.y)) {
@@ -181,7 +181,7 @@ export class Player {
         }
     }
 
-    right() {
+    async right() {
         if (this.game.state.isArrowRight() || this.Right) {
             this.Right = false
             if (this.game.map.canPlayerMoveTo(this.x + this.game.state.getPlayerSpeed(), this.y)) {
@@ -198,7 +198,7 @@ export class Player {
         }
     }
 
-    render() {
+    async render() {
         if (this.reRender) return this.initClassData()
         if (this.renderExp) {
             this.exp.src = this.explosionImg
@@ -208,7 +208,7 @@ export class Player {
         }
         if (!this.movement && !this.animate) return
         const scale = this.game.map.currentScale || 1;
-        this.player.style.transform = `translate3d(${this.x * scale}px, ${this.y * scale}px, 10px)`;
+        this.player.style.transform = `translate(${this.x * scale}px, ${this.y * scale}px)`;
         if (this.animate) {
             const fx = parseFloat(this.frame.x);
             const fy = parseFloat(this.frame.y);
@@ -229,7 +229,7 @@ export class Player {
         );
     }
 
-    checkLoot() {
+    async checkLoot() {
         for (const loot of this.game.map.loot) {
             const blockSize = this.game.map.level.block_size;
             if (this.isColliding(loot.x, loot.y, blockSize, blockSize)) {

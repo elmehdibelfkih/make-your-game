@@ -119,7 +119,7 @@ export class Map {
                 enemy.Div.style.height = `${frame.height * scale}px`;
                 enemy.Div.style.backgroundSize = `${160 * scale}px ${160 * scale}px`;
                 enemy.Div.style.backgroundPosition = `${frame.x * scale}px ${frame.y * scale}px`;
-                enemy.Div.style.transform = `translate3d(${enemy.x * scale}px, ${enemy.y * scale}px, 10px)`;
+                enemy.Div.style.transform = `translate(${enemy.x * scale}px, ${enemy.y * scale}px, 10px)`;
                 enemy.Div.style.zIndex = "20";
                 enemy.Div.style.imageRendering = 'pixelated';
                 enemy.Div.style.backgroundRepeat = 'no-repeat';

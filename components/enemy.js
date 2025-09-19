@@ -35,7 +35,8 @@ export class Enemy {
         this.AnimationCord = null;
     }
 
-    checkColision() {
+    async checkColision() {
+        if (this.dead) return
         const blockSize = this.level.block_size;
         const now = performance.now();
         for (let bomb of this.game.map.bombs) {
@@ -109,7 +110,7 @@ export class Enemy {
             Math.abs(this.y - this.targetY) < this.speed;
     }
 
-    moveTowardsTarget() {
+    async moveTowardsTarget() {
         const directions = {
             Up: { rowset: -1, colset: 0 },
             Down: { rowset: 1, colset: 0 },
@@ -171,9 +172,7 @@ export class Enemy {
         }
     }
 
-    updateRender() {
-        console.log('hani dkhalt hna');
-
+    async updateRender() {
         if (this.dead) return;
         // Throttle collision checks to avoid FPS drop ..... .,.
         this._collisionTimer += 16;
@@ -189,7 +188,7 @@ export class Enemy {
         this.arzigid();
     }
 
-    arzigid() {
+    async arzigid() {
         if (!this.Div) return;
         const scale = this.game.map.currentScale || 1;
         const frame = this.AnimationCord[this.direction];
@@ -205,8 +204,9 @@ export class Enemy {
             this.change = false
         }
         // Transform is cheap
-        this.Div.style.transform = `translate3d(${this.x * scale}px, ${this.y * scale}px, 10px)`;
+        this.Div.style.transform = `translate(${this.x * scale}px, ${this.y * scale}px)`;
     }
+
     isColliding(x, y, w, h) {
         return !(this.x + this.enemySize < x || this.x > x + w ||
             this.y + this.enemySize < y || this.y > y + h);

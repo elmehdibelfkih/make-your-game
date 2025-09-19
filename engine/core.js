@@ -54,11 +54,14 @@ export class Game {
         this.IDRE = requestAnimationFrame(this.loop.bind(this));
     }
 
-    updateRender(timestamp) {
+    async updateRender(timestamp) {
         if (this.stateofrest) return
         this.player.updateRender(timestamp);
-        this.map.bombs = this.map.bombs?.filter(b => b.updateRender(timestamp) && !b.done);  
-        this.map.enemys = this.map.enemys?.filter(b => b.updateRender(timestamp) || !b.dead);        
+        this.map.bombs = this.map.bombs?.filter(b => b.updateRender(timestamp) && !b.done);
+        this.map.enemys = this.map.enemys?.filter(b => {
+            b.updateRender(timestamp)
+            return !b.dead
+        });
         this.state.update()
         this.checkState()
     }
@@ -92,9 +95,7 @@ export class Game {
         this.scoreboard.initScoreBaord() // todo: update this
         this.scoreboard.updateLives()
         this.scoreboard.updateScore()
-        this.map.enemys.forEach(en => en.killEnemy(false))
         this.map.enemys = []
-        this.map.bombs.forEach(Boom => Boom.cleanDOM())
         this.map.Booms = []
         this.player.removeplayer()
         this.map.destructeur()
@@ -127,9 +128,7 @@ export class Game {
         this.scoreboard.initScoreBaord();
         this.scoreboard.updateLives();
         this.scoreboard.updateScore();
-        this.map.enemys.forEach(en => en.killEnemy(false));
         this.map.enemys = [];
-        this.map.bombs.forEach(B => B.cleanDOM());
         this.map.Booms = [];
         this.player.removeplayer();
         this.map.destructeur();
