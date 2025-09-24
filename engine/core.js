@@ -18,7 +18,7 @@ export class Game {
         this.scoreboard = Scoreboard.getInstance(this)
         this.map = Map.getInstance(this)
         this.player = Player.getInstance(this)
-        this.ui =  UI.getInstance(this)
+        this.ui = UI.getInstance(this)
         this.IDRE = null
         this.stateofrest = false
         this.nextLevelTimeoutId = null;
@@ -48,6 +48,22 @@ export class Game {
             await this.gameOver()
             return
         }
+        // her i will call the handle score !!
+        // =====>
+
+        const score = this.state.getScore();
+        if (!this.lastScore) this.lastScore = 0;
+        /// 
+        const previousMilestone = Math.floor(this.lastScore / 175);
+        const currentMilestone = Math.floor(score / 175);
+
+        if (currentMilestone > previousMilestone) {
+            this.lastScoreMilestone = currentMilestone * 175;
+            this.state.SetPause(true);
+            this.state.pauseStart()
+            this.ui.story(score)
+        }
+        this.lastScore = score;
         if (!this.state.isPaused()) this.updateRender(timestamp);
         this.IDRE = requestAnimationFrame(this.loop.bind(this));
     }
@@ -159,7 +175,7 @@ export class Game {
         await this.waitForLevel();
         this.state.stopTimer();
         this.state.resetTimer();
-        this.state.setTime(map.level.level_time);
+        this.state.setTime(this.map.level.level_time);
         this.state.startTimer();
         this.stateofrest = false;
         this.levelComplete = false;

@@ -3,16 +3,16 @@
   "initial_grid": [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-    [1,1,1,0,0,0,0,4,0,0,0,0,0,1,1,1],
+    [1,1,1,0,2,2,0,4,0,0,0,0,0,1,1,1],
     [1,1,1,0,0,1,1,1,2,1,1,0,0,1,1,1],
     [1,1,1,0,2,1,0,1,0,0,1,2,0,1,1,1],
-    [1,1,1,2,0,1,0,1,0,0,1,0,2,1,1,1],
+    [1,1,1,0,0,1,0,1,0,0,1,0,2,1,1,1],
     [1,1,1,0,0,1,1,1,0,0,1,0,0,1,1,1],
     [1,1,1,0,0,0,0,0,3,0,0,0,0,1,1,1],
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
   ],
-  
+
   "enemy_speed": 2,
   "hiden_harts_quantity": 3,
   "bomb_quantity_at_time": 1,
@@ -41,6 +41,21 @@
 
   "time_sound": "./assets/audios/timesounde.mp3",
   "speed_sound": "./assets/audios/CoinGet.mp3",
-  "heart_sound": "./assets/audios/heart.mp3"
+  "heart_sound": "./assets/audios/heart.mp3",
 
+  "story": [
+    "The ancient training grounds echo with forgotten detonations. Welcome, rookie Bomber Runner.",
+    "Long ago, masters of the blast tested their courage in these tunnels.",
+    "Today you step where legends once danced with fire. Each crate hides a secret.",
+    "The old guardians watch from the shadows—prove your spark or be lost to the dust.",
+    "Light the fuse. Show the maze that the art of the bomb still lives in you."
+  ],
+  
+  "game_over_story": [
+  "The last echo of your blast fades. The maze exhales, unbeaten.",
+  "Your fuse burned bright, but the labyrinth’s heart still beats in darkness.",
+  "Shattered crates and silent corridors are all that remain of your charge.",
+  "The guardians reclaim the tunnels. Your spark is now a memory in the dust.",
+  "Defeat is only a pause—the bombs of tomorrow wait for your return."
+  ]
 }

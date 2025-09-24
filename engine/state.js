@@ -18,7 +18,8 @@ export class State {
     #TIMER_ID = null
     #RESTAR = false
     #STATE = false
-    #MAXLEVEL = 10
+    #MAXLEVEL = 1
+    #INDEX = 0
 
     constructor(game) {
         State.instance = this;
@@ -33,6 +34,15 @@ export class State {
     }
 
     static getInstance = (game) => State.instance ? State.instance : new State(game)
+
+    getcurentindex() {
+        return this.#INDEX
+    }
+    setIndex = () => {
+        const len = this.game.map.level.story.length; 
+        this.#INDEX = (this.#INDEX + 1) % len;
+    };
+    // <===> ... <===> 
     isSoundOn = () => this.#SOUND;
     isArrowUp = () => this.#ARROW_UP
     isArrowDown = () => this.#ARROW_DOWN
@@ -79,7 +89,7 @@ export class State {
             this.#TIMER_ID = null;
         }
     }
-    
+
     initState() {
         this.stopTimer();
         this.#LIVES = 3;
