@@ -34,9 +34,14 @@ export class Map {
 
     async initMap() {
         this.level = await fetch(`assets/maps/level${this.game.state.getLevel()}.json`).then(res => res.json());
-        this.enemyCordination = await fetch(`assets/enemycordinate.json`).then(res => res.json())
-        this.initGrid()
-        this.initAudios()
+        this.enemyCordination = await fetch(`assets/enemycordinate.json`).then(res => res.json());
+
+        if (!document.getElementById("grid-container")) {
+            document.body.appendChild(this.container);
+        }
+
+        this.initGrid();
+        this.initAudios();
     }
 
     blowingUpBlock(x, y) {
@@ -78,6 +83,9 @@ export class Map {
 
     initGrid() {
         this.gridArray = this.level.initial_grid.map(row => [...row])
+        if (this.grid && this.grid.parentNode) {
+            this.grid.parentNode.removeChild(this.grid);
+        }
         if (this.grid) document.body.removeChild(grid)
         this.grid = document.createElement("div")
         this.grid.id = "grid"
@@ -169,7 +177,7 @@ export class Map {
         const y = this.level.block_size * yMap;
         bonus.style.transform = `translate(15px, 10px)`;
         bonus.id = xMap.toString() + yMap.toString() + "T";
-        const timeBonus = new Bonus(this.game, x, y, this.level,  bonus.id, 'time');
+        const timeBonus = new Bonus(this.game, x, y, this.level, bonus.id, 'time');
         timeBonus.originalWidth = 35;
         timeBonus.originalHeight = 50;
         this.loot.push(timeBonus);
@@ -187,7 +195,7 @@ export class Map {
         const y = this.level.block_size * yMap;
         bonus.style.transform = `translate(20px, 10px)`;
         bonus.id = xMap.toString() + yMap.toString() + "T";
-        const Bamboleao = new Bonus(this.game, x, y, this.level,  bonus.id, 'heart');
+        const Bamboleao = new Bonus(this.game, x, y, this.level, bonus.id, 'heart');
         Bamboleao.originalWidth = 30;
         Bamboleao.originalHeight = 40;
         this.loot.push(Bamboleao);

@@ -106,6 +106,7 @@ export class Game {
             cancelAnimationFrame(this.IDRE);
             this.IDRE = null;
         }
+        this.state.SetPause(true);
         this.ui.nextLevel();
         await new Promise(resolve => setTimeout(resolve, 1500));
 
