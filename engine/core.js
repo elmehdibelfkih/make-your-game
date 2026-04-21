@@ -4,6 +4,7 @@ import { Map } from '../components/map.js';
 import { State } from './state.js';
 import { Enemy } from '../components/enemy.js';
 import { UI } from '../components/ui.js';
+import { ScoreboardModal } from '../components/scoreboardModal.js'
 
 export class Game {
 
@@ -18,7 +19,8 @@ export class Game {
         this.scoreboard = Scoreboard.getInstance(this)
         this.map = Map.getInstance(this)
         this.player = Player.getInstance(this)
-        this.ui =  UI.getInstance(this)
+        this.scoreboardModal = new ScoreboardModal(this);
+        this.ui = UI.getInstance(this)
         this.IDRE = null
         this.stateofrest = false
         this.nextLevelTimeoutId = null;
@@ -72,12 +74,17 @@ export class Game {
         }
         this.stateofrest = true
         this.levelComplete = false;
+        // should show the leaderboard first
+        const playerName = await this.scoreboardModal.promptPlayerName();
+        const data = await this.scoreboardModal.submitScore(playerName, this.state.getScore(), this.formatTime(this.state.getTime()));
+
         this.ui.GameOver()
         this.state.setScore(0)
         this.state.initState()
         this.scoreboard.initScoreBaord()
         this.scoreboard.updateLives()
         this.scoreboard.updateScore()
+        this.scoreboard.updateLevel();
         this.map.enemys = []
         this.map.Booms = []
         this.player.removeplayer()
@@ -99,28 +106,26 @@ export class Game {
             cancelAnimationFrame(this.IDRE);
             this.IDRE = null;
         }
-        this.ui.nextLevel()
+        this.ui.nextLevel();
         await new Promise(resolve => setTimeout(resolve, 1500));
-        this.state.setScore(0);
-        this.state.initState();
-        this.scoreboard.initScoreBaord();
-        this.scoreboard.updateLives();
-        this.scoreboard.updateScore();
+
         this.map.enemys = [];
         this.map.Booms = [];
         this.player.removeplayer();
         this.map.destructeur();
+
         this.state.removeEventListeners();
         this.state.initArrowState();
+
         this.state.nextLevel();
         this.scoreboard.updateLevel();
-        this.map = null
+
         this.map = Map.getInstance(this);
         this.player = Player.getInstance(this);
         await this.map.initMap();
         await this.player.initPlayer();
+
         await this.waitForLevel();
-        this.state.stopTimer();
         this.state.resetTimer();
         this.state.setTime(this.map.level.level_time);
         this.state.startTimer();
@@ -181,4 +186,11 @@ export class Game {
             }
         }
     }
+
+    formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
 }

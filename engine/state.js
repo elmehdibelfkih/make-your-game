@@ -54,7 +54,6 @@ export class State {
     getLevel = () => this.#CURRENT_LEVEL
     setPlayerspped = (val) => this.#PLAYER_SPEED = val
     getScore = () => this.#SCORE
-    setScore = (val) => this.#SCORE = val
     getBombCount = () => this.#BOMB_COUNT
     setBombCount = (val = 1) => this.#BOMB_COUNT += val
     getMaxAllowdBombCount = () => this.#MAX_ALLOWD_BOMBS
@@ -66,6 +65,13 @@ export class State {
     addtime = (val) => this.#TIME += val;
     updateStateof = (val) => this.#STATE = val
     GetState = () => this.#STATE
+
+    setScore = (val) => {
+        this.#SCORE += val;
+        if (this.game && this.game.scoreboard) {
+            this.game.scoreboard.updateScore();
+        }
+    }
 
     resetTimer = () => {
         this.stopTimer();
@@ -79,7 +85,12 @@ export class State {
             this.#TIMER_ID = null;
         }
     }
-    
+
+    resetScore = () => {
+        this.#SCORE = 0;
+        if (this.game && this.game.scoreboard) this.game.scoreboard.updateScore();
+    }
+
     initState() {
         this.stopTimer();
         this.#LIVES = 3;
@@ -92,6 +103,7 @@ export class State {
         this.#SOUND = true;
         this.#TIME = 0;
         this.#TIMER_ID = null;
+        this.#CURRENT_LEVEL = 1
     }
 
     updateSoundIcon = () => {
