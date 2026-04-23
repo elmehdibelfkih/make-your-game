@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"sort"
+	"strconv"
 	"sync"
 )
 
@@ -35,11 +36,14 @@ var (
 	mu         sync.RWMutex
 )
 
+const MAX_ITEMS_PER_PAGE = 5
+
 func main() {
 	loadScores()
 
-	http.HandleFunc("/api/scores", handleScores)
-	http.HandleFunc("/api/health", handleHealth)
+	mux := http.NewServeMux()
+	mux.HandleFunc("/api/scores", handleScores)
+	mux.HandleFunc("/api/health", handleHealth)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -47,7 +51,7 @@ func main() {
 	}
 
 	log.Printf("Server starting on port %s", port)
-	if err := http.ListenAndServe(":"+port, enableCORS(http.DefaultServeMux)); err != nil {
+	if err := http.ListenAndServe(":"+port, enableCORS(mux)); err != nil {
 		log.Fatal(err)
 	}
 }
@@ -62,7 +66,6 @@ func enableCORS(next http.Handler) http.Handler {
 			w.WriteHeader(http.StatusOK)
 			return
 		}
-
 		next.ServeHTTP(w, r)
 	})
 }
@@ -99,47 +102,13 @@ func handlePostScore(w http.ResponseWriter, r *http.Request) {
 
 	mu.Lock()
 	scores = append(scores, newScore)
+
+	sortScores()
 	saveScores()
-	mu.Unlock()
-
-	position, percentile := calculatePosition(newScore.Score)
-
-	response := ScoreResponse{
-		Scores:      getTopScores(5),
-		TotalScores: len(scores),
-		Percentile:  percentile,
-		Position:    position,
-	}
-
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(response)
-}
-
-func handleGetScores(w http.ResponseWriter, r *http.Request) {
-	mu.RLock()
-	defer mu.RUnlock()
-
-	response := ScoreResponse{
-		Scores:      getAllScoresWithRank(),
-		TotalScores: len(scores),
-	}
-
-	json.NewEncoder(w).Encode(response)
-}
-
-func calculatePosition(score int) (int, float64) {
-	mu.RLock()
-	defer mu.RUnlock()
-
-	sortedScores := make([]Score, len(scores))
-	copy(sortedScores, scores)
-	sort.Slice(sortedScores, func(i, j int) bool {
-		return sortedScores[i].Score > sortedScores[j].Score
-	})
 
 	position := 1
-	for i, s := range sortedScores {
-		if s.Score == score {
+	for i, s := range scores {
+		if s.Name == newScore.Name && s.Score == newScore.Score && s.Time == newScore.Time {
 			position = i + 1
 			break
 		}
@@ -151,65 +120,83 @@ func calculatePosition(score int) (int, float64) {
 		percentile = (float64(total-position+1) / float64(total)) * 100
 	}
 
-	return position, percentile
+	topLimit := 5
+	if total < 5 {
+		topLimit = total
+	}
+
+	topScores := make([]ScoreWithRank, topLimit)
+	for i := 0; i < topLimit; i++ {
+		topScores[i] = ScoreWithRank{
+			Name:  scores[i].Name,
+			Rank:  i + 1,
+			Score: scores[i].Score,
+			Time:  scores[i].Time,
+		}
+	}
+	mu.Unlock()
+
+	response := ScoreResponse{
+		Scores:      topScores,
+		TotalScores: total,
+		Percentile:  percentile,
+		Position:    position,
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(response)
 }
 
-func getTopScores(limit int) []ScoreWithRank {
+func sortScores() {
+	sort.Slice(scores, func(i, j int) bool {
+		return scores[i].Score > scores[j].Score
+	})
+}
+
+func handleGetScores(w http.ResponseWriter, r *http.Request) {
+	page := 1
+	pageStr := r.URL.Query().Get("page")
+	if pageStr != "" {
+		if parsed, err := strconv.Atoi(pageStr); err == nil && parsed > 0 {
+			page = parsed
+		}
+	}
+
+	start := (page - 1) * MAX_ITEMS_PER_PAGE
+	end := start + MAX_ITEMS_PER_PAGE
+
 	mu.RLock()
-	defer mu.RUnlock()
+	total := len(scores)
 
-	sortedScores := make([]Score, len(scores))
-	copy(sortedScores, scores)
-	sort.Slice(sortedScores, func(i, j int) bool {
-		return sortedScores[i].Score > sortedScores[j].Score
-	})
-
-	end := limit
-	if len(sortedScores) < limit {
-		end = len(sortedScores)
+	if start > total {
+		start = total
+	}
+	if end > total {
+		end = total
 	}
 
-	result := make([]ScoreWithRank, end)
-	for i := 0; i < end; i++ {
-		result[i] = ScoreWithRank{
-			Name:  sortedScores[i].Name,
-			Rank:  i + 1,
-			Score: sortedScores[i].Score,
-			Time:  sortedScores[i].Time,
+	pagedScores := make([]ScoreWithRank, end-start)
+	for i, s := range scores[start:end] {
+		pagedScores[i] = ScoreWithRank{
+			Name:  s.Name,
+			Rank:  start + i + 1,
+			Score: s.Score,
+			Time:  s.Time,
 		}
 	}
+	mu.RUnlock()
 
-	return result
-}
-
-func getAllScoresWithRank() []ScoreWithRank {
-	sortedScores := make([]Score, len(scores))
-	copy(sortedScores, scores)
-	sort.Slice(sortedScores, func(i, j int) bool {
-		return sortedScores[i].Score > sortedScores[j].Score
-	})
-
-	result := make([]ScoreWithRank, len(sortedScores))
-	for i, score := range sortedScores {
-		result[i] = ScoreWithRank{
-			Name:  score.Name,
-			Rank:  i + 1,
-			Score: score.Score,
-			Time:  score.Time,
-		}
+	response := ScoreResponse{
+		Scores:      pagedScores,
+		TotalScores: total,
 	}
 
-	return result
+	json.NewEncoder(w).Encode(response)
 }
 
 func loadScores() {
 	data, err := os.ReadFile(scoresFile)
 	if err != nil {
-		if os.IsNotExist(err) {
-			scores = []Score{}
-			return
-		}
-		log.Printf("Error loading scores: %v", err)
 		scores = []Score{}
 		return
 	}
@@ -218,6 +205,11 @@ func loadScores() {
 		log.Printf("Error parsing scores: %v", err)
 		scores = []Score{}
 	}
+
+	// Ensure loaded data is sorted
+	sort.Slice(scores, func(i, j int) bool {
+		return scores[i].Score > scores[j].Score
+	})
 }
 
 func saveScores() {
@@ -227,7 +219,7 @@ func saveScores() {
 		return
 	}
 
-	if err := os.WriteFile(scoresFile, data, 0644); err != nil {
+	if err := os.WriteFile(scoresFile, data, 0o644); err != nil {
 		log.Printf("Error saving scores: %v", err)
 	}
 }
