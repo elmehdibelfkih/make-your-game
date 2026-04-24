@@ -2,11 +2,14 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
+	"math"
 	"net/http"
 	"os"
 	"sort"
 	"strconv"
+	"strings"
 	"sync"
 )
 
@@ -45,13 +48,8 @@ func main() {
 	mux.HandleFunc("/api/scores", handleScores)
 	mux.HandleFunc("/api/health", handleHealth)
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
-
-	log.Printf("Server starting on port %s", port)
-	if err := http.ListenAndServe(":"+port, enableCORS(mux)); err != nil {
+	log.Printf("Server starting on port %s", ":8080")
+	if err := http.ListenAndServe(":"+"8080", enableCORS(mux)); err != nil {
 		log.Fatal(err)
 	}
 }
@@ -88,6 +86,22 @@ func handleScores(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func validateScore(score Score) error {
+	name := strings.TrimSpace(score.Name)
+	if name == "" || len(name) > 12 {
+		return errors.New("Name must be between 1 and 12 characters")
+	}
+	points := score.Score
+	if points < 0 || points > math.MaxInt32 {
+		return errors.New("Score must be a valid integer")
+	}
+
+	if score.Time == "" {
+		return errors.New("Time is required")
+	}
+	return nil
+}
+
 func handlePostScore(w http.ResponseWriter, r *http.Request) {
 	var newScore Score
 	if err := json.NewDecoder(r.Body).Decode(&newScore); err != nil {
@@ -95,8 +109,8 @@ func handlePostScore(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if newScore.Name == "" || newScore.Score < 0 || newScore.Time == "" {
-		http.Error(w, "Invalid score data", http.StatusBadRequest)
+	if err := validateScore(newScore); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -206,10 +220,7 @@ func loadScores() {
 		scores = []Score{}
 	}
 
-	// Ensure loaded data is sorted
-	sort.Slice(scores, func(i, j int) bool {
-		return scores[i].Score > scores[j].Score
-	})
+	sortScores()
 }
 
 func saveScores() {

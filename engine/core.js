@@ -96,7 +96,6 @@ export class Game {
         this.player = Player.getInstance(this)
         await this.map.initMap()
         await this.player.initPlayer()
-        this.enemie = new Enemy(this);
         this.stateofrest = false
     }
 

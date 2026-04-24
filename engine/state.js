@@ -66,13 +66,6 @@ export class State {
     updateStateof = (val) => this.#STATE = val
     GetState = () => this.#STATE
 
-    setScore = (val) => {
-        this.#SCORE += val;
-        if (this.game && this.game.scoreboard) {
-            this.game.scoreboard.updateScore();
-        }
-    }
-
     resetTimer = () => {
         this.stopTimer();
         this.#TIME = 0;

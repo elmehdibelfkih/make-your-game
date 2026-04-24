@@ -5,7 +5,7 @@ export class ScoreboardModal {
         this.currentPage = 1;
         this.scoresPerPage = 5;
         this.allScores = [];
-        this.totalScores = 0;
+        this.totalScores = 0
         this.createModal();
     }
 
@@ -73,7 +73,7 @@ export class ScoreboardModal {
             <p class="player-stats">
                 Congrats ${name}, you are in the top ${percentile.toFixed(1)}%, on the ${ordinal} position.
             </p>
-        `; ``
+        `
     }
 
     displayScores() {
@@ -81,8 +81,6 @@ export class ScoreboardModal {
         tbody.innerHTML = '';
 
         const totalPages = Math.ceil(this.totalScores / this.scoresPerPage);
-        const start = (this.currentPage - 1) * this.scoresPerPage;
-        const end = start + this.scoresPerPage;
 
         this.allScores.forEach(score => {
             const row = document.createElement('tr');
@@ -109,7 +107,7 @@ export class ScoreboardModal {
             if (!response.ok) throw new Error('Failed to fetch scores')
             const data = await response.json();
             this.allScores = data.scores;
-            this.totalScores = data.totalScores;
+            this.totalScores = Number(data.totalScores);
         } catch (error) {
             console.warn(error);
         }
