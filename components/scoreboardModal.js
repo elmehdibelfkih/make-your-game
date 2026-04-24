@@ -5,6 +5,7 @@ export class ScoreboardModal {
         this.currentPage = 1;
         this.scoresPerPage = 5;
         this.allScores = [];
+        this.totalScores = 0;
         this.createModal();
     }
 
@@ -28,9 +29,9 @@ export class ScoreboardModal {
                     <tbody id="scoreboard-body"></tbody>
                 </table>
                 <div class="pagination">
-                    <button id="prev-page">&lt;</button>
+                    <button type="button" id="prev-page">&lt;</button>
                     <span id="page-info">Page 1/1</span>
-                    <button id="next-page">&gt;</button>
+                    <button type="button" id="next-page">&gt;</button>
                 </div>
                 <button type="button" id="close-scoreboard">Close</button>
             </div>
@@ -54,7 +55,7 @@ export class ScoreboardModal {
 
             const data = await response.json();
             this.allScores = data.scores;
-            console.log(response);
+            this.totalScores = Number(data.totalScores)
 
             this.displayPlayerStats(playerName, data.position, data.percentile);
             this.displayScores();
@@ -62,21 +63,6 @@ export class ScoreboardModal {
         } catch (error) {
             console.error('Error submitting score:', error);
             alert('Failed to submit score. Please check if the server is running.');
-        }
-    }
-
-    async loadScores() {
-        try {
-            const response = await fetch(this.apiUrl);
-            if (!response.ok) throw new Error('Failed to load scores');
-
-            const data = await response.json();
-            this.allScores = data.scores || [];
-            this.displayScores();
-            this.show();
-        } catch (error) {
-            console.error('Error loading scores:', error);
-            alert('Failed to load scores. Please check if the server is running.');
         }
     }
 
@@ -94,12 +80,11 @@ export class ScoreboardModal {
         const tbody = document.getElementById('scoreboard-body');
         tbody.innerHTML = '';
 
-        const totalPages = Math.ceil(this.allScores.length / this.scoresPerPage);
+        const totalPages = Math.ceil(this.totalScores / this.scoresPerPage);
         const start = (this.currentPage - 1) * this.scoresPerPage;
         const end = start + this.scoresPerPage;
-        const pageScores = this.allScores.slice(start, end);
 
-        pageScores.forEach(score => {
+        this.allScores.forEach(score => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${this.getOrdinal(score.rank)}</td>
@@ -115,11 +100,27 @@ export class ScoreboardModal {
         document.getElementById('next-page').disabled = this.currentPage >= totalPages;
     }
 
-    changePage(direction) {
-        const totalPages = Math.ceil(this.allScores.length / this.scoresPerPage);
+    async fetchScores() {
+        try {
+            const response = await fetch(this.apiUrl + `?page=${this.currentPage}`, {
+                method: "GET"
+            })
+            console.log(response.ok);
+            if (!response.ok) throw new Error('Failed to fetch scores')
+            const data = await response.json();
+            this.allScores = data.scores;
+            this.totalScores = data.totalScores;
+        } catch (error) {
+            console.warn(error);
+        }
+    }
+
+    async changePage(direction) {
+        const totalPages = Math.ceil(this.totalScores / this.scoresPerPage);
         this.currentPage += direction;
         if (this.currentPage < 1) this.currentPage = 1;
         if (this.currentPage > totalPages) this.currentPage = totalPages;
+        await this.fetchScores();
         this.displayScores();
     }
 
