@@ -11,30 +11,30 @@
   --overlay-bg: rgba(0, 0, 0, 0.85);
   --shadow-light: rgba(255, 255, 255, 0.1);
   --shadow-dark: rgba(0, 0, 0, 0.5);
-  
+
   /* Game Colors */
   --lives-color: #ff4757;
   --score-color: #ffa502;
   --level-color: #3742fa;
   --timer-color: #2ed573;
-  
+
   /* Power-up Colors */
   --speed-color: #f1c40f;
   --time-color: #00d2d3;
   --heart-color: #e74c3c;
-  
+
   /* Spacing */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
-  
+
   /* Borders */
   --border-radius-sm: 4px;
   --border-radius-md: 8px;
   --border-radius-lg: 12px;
-  
+
   /* Typography */
   --font-pixel: 'Press Start 2P', monospace;
   --font-size-xs: 10px;
@@ -42,7 +42,7 @@
   --font-size-md: 14px;
   --font-size-lg: 18px;
   --font-size-xl: 24px;
-  
+
   /* Game Grid */
   --tile-size: 68px;
   --grid-width: 612px;
@@ -53,7 +53,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -81,7 +82,7 @@ html, body {
   height: var(--grid-height);
   border: 3px solid var(--accent-color);
   border-radius: var(--border-radius-sm);
-  box-shadow: 
+  box-shadow:
     0 0 20px rgba(255, 71, 87, 0.3),
     inset 0 0 10px var(--shadow-dark);
   background: var(--primary-bg);
@@ -107,7 +108,7 @@ html, body {
   transition: all 0.3s ease;
 }
 
- 
+
 #ScoreBoard:hover {
   transform: translateX(-50%) translateY(-2px);
   box-shadow: 0 12px 40px var(--shadow-dark);
@@ -121,10 +122,21 @@ html, body {
   transition: color 0.2s ease;
 }
 
-#ScoreBoard span:nth-child(1) { color: var(--lives-color); }
-#ScoreBoard span:nth-child(2) { color: var(--score-color); }
-#ScoreBoard span:nth-child(3) { color: var(--level-color); }
-#ScoreBoard span:nth-child(4) { color: var(--timer-color); }
+#ScoreBoard span:nth-child(1) {
+  color: var(--lives-color);
+}
+
+#ScoreBoard span:nth-child(2) {
+  color: var(--score-color);
+}
+
+#ScoreBoard span:nth-child(3) {
+  color: var(--level-color);
+}
+
+#ScoreBoard span:nth-child(4) {
+  color: var(--timer-color);
+}
 
 .Controls {
   position: fixed;
@@ -199,7 +211,7 @@ html, body {
   border-radius: var(--border-radius-lg);
   text-align: center;
   max-width: 480px;
-  box-shadow: 
+  box-shadow:
     0 20px 60px var(--shadow-dark),
     0 0 40px rgba(255, 71, 87, 0.2);
   animation: slideUp 0.6s ease;
@@ -258,7 +270,7 @@ html, body {
   font-size: clamp(2rem, 8vw, 4rem);
   font-weight: bold;
   color: var(--text-primary);
-  text-shadow: 
+  text-shadow:
     3px 3px 6px var(--shadow-dark),
     0 0 20px var(--accent-color);
   z-index: 1500;
@@ -328,6 +340,7 @@ div[class*="soft-block"] img {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -338,6 +351,7 @@ div[class*="soft-block"] img {
     opacity: 0;
     transform: translateY(50px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -349,14 +363,17 @@ div[class*="soft-block"] img {
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.5);
   }
+
   25% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1.1);
   }
+
   75% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
+
   100% {
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.8);
@@ -368,10 +385,12 @@ div[class*="soft-block"] img {
     opacity: 1;
     transform: scale(0.5);
   }
+
   50% {
     opacity: 0.8;
     transform: scale(1.2);
   }
+
   100% {
     opacity: 0;
     transform: scale(2);
@@ -379,10 +398,13 @@ div[class*="soft-block"] img {
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
     opacity: 0.7;
   }
+
   50% {
     transform: scale(1.05);
     opacity: 1;
@@ -397,23 +419,23 @@ div[class*="soft-block"] img {
     --font-size-lg: 14px;
     --font-size-xl: 18px;
   }
-  
+
   #ScoreBoard {
     gap: var(--spacing-md);
     padding: var(--spacing-sm) var(--spacing-md);
     font-size: var(--font-size-sm);
   }
-  
+
   .Controls {
     top: var(--spacing-sm);
     right: var(--spacing-sm);
   }
-  
+
   .Controls button {
     width: 36px;
     height: 36px;
   }
-  
+
   .instruction-box {
     margin: var(--spacing-md);
     padding: var(--spacing-lg);
@@ -424,7 +446,7 @@ div[class*="soft-block"] img {
   #ScoreBoard {
     top: var(--spacing-sm);
   }
-  
+
   .Controls {
     top: var(--spacing-sm);
   }
@@ -456,9 +478,20 @@ div[class*="soft-block"] img {
 }
 
 @keyframes enemyFadeOut {
-  0%   { transform: scale(1)   rotate(0deg);   opacity: 1; }
-  50%  { transform: scale(1.3) rotate(180deg); opacity: 0.7; }
-  100% { transform: scale(0)   rotate(360deg); opacity: 0; }
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.3) rotate(180deg);
+    opacity: 0.7;
+  }
+
+  100% {
+    transform: scale(0) rotate(360deg);
+    opacity: 0;
+  }
 }
 
 .scoreboard-modal {
@@ -485,7 +518,7 @@ div[class*="soft-block"] img {
   width: 90%;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 
+  box-shadow:
     0 20px 60px var(--shadow-dark),
     0 0 40px rgba(255, 71, 87, 0.2);
   animation: slideUp 0.4s ease;
@@ -631,7 +664,7 @@ div[class*="soft-block"] img {
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-xl);
   text-align: center;
-  box-shadow: 
+  box-shadow:
     0 20px 60px var(--shadow-dark),
     0 0 40px rgba(255, 71, 87, 0.2);
   animation: slideUp 0.4s ease;
@@ -682,15 +715,22 @@ div[class*="soft-block"] img {
   box-shadow: 0 8px 25px rgba(255, 71, 87, 0.4);
 }
 
+.submit-error {
+  color: var(--accent-color);
+  font-size: var(--font-size-xs);
+  margin: var(--spacing-sm) 0;
+}
+
+
 @media (max-width: 768px) {
   .scoreboard-content {
     padding: var(--spacing-lg);
   }
-  
+
   .scoreboard-table {
     font-size: var(--font-size-xs);
   }
-  
+
   .scoreboard-table th,
   .scoreboard-table td {
     padding: var(--spacing-sm);

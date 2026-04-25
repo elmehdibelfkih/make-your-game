@@ -61,9 +61,10 @@ export class ScoreboardModal {
             this.displayScores();
             this.show();
         } catch (error) {
-            console.error('Error submitting score:', error);
-            alert('Failed to submit score. Please check if the server is running.');
+            const statsDiv = document.getElementById('player-stats');
+            statsDiv.innerHTML = `<p class="submit-error">Failed to submit score. Please check if the server is running.</p>`;
         }
+
     }
 
     displayPlayerStats(name, position, percentile) {
