@@ -88,8 +88,8 @@ func handleScores(w http.ResponseWriter, r *http.Request) {
 
 func validateScore(score Score) error {
 	name := strings.TrimSpace(score.Name)
-	if name == "" || len(name) > 12 {
-		return errors.New("Name must be between 1 and 12 characters")
+	if name == "" || len(name) < 4 || len(name) > 12 {
+		return errors.New("Name must be between 4 and 12 characters")
 	}
 	points := score.Score
 	if points < 0 || points > math.MaxInt32 {

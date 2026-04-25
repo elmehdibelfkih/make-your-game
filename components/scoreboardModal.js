@@ -145,7 +145,8 @@ export class ScoreboardModal {
             nameModal.innerHTML = `
                 <div class="name-modal-content">
                     <h3>Enter Your Name</h3>
-                    <input type="text" id="player-name-input" maxlength="20" placeholder="Your name">
+                    <input type="text" id="player-name-input" placeholder="Your name">
+                    <p id="name-error" style="color: #ff4444; font-size: 14px; margin-top: 8px; min-height: 20px;"></p>
                     <button type="button" id="submit-name">Submit</button>
                 </div>
             `;
@@ -153,11 +154,18 @@ export class ScoreboardModal {
 
             const input = document.getElementById('player-name-input');
             const submitBtn = document.getElementById('submit-name');
+            const errorText = document.getElementById('name-error');
 
             const submit = (e) => {
                 e.preventDefault();
                 const name = input.value.trim();
-                if (name == "") return
+                errorText.textContent = "";
+
+                if (name.length > 12 || name.length < 4) {
+                    errorText.textContent = "Name must be between 4 and 12 characters.";
+                    return;
+                }
+
                 document.body.removeChild(nameModal);
                 resolve(name);
             };
@@ -165,7 +173,7 @@ export class ScoreboardModal {
             submitBtn.addEventListener('click', submit);
             input.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
-                    e.preventDefault()
+                    e.preventDefault();
                     submit(e);
                 }
             });
