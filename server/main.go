@@ -47,6 +47,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/scores", handleScores)
 	mux.HandleFunc("/api/health", handleHealth)
+	mux.Handle("/", http.FileServer(http.Dir("../")))
 
 	log.Printf("Server starting on port %s", ":8080")
 	if err := http.ListenAndServe(":"+"8080", enableCORS(mux)); err != nil {

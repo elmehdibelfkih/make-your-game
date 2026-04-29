@@ -1,5 +1,5 @@
 #!/bin/bash
 
-cd "$(dirname "$0")"
+cd "$(dirname "$(realpath "$0")")/server"
 echo "Starting Scoreboard API Server..."
 go run main.go
