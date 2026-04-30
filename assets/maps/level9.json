@@ -43,5 +43,11 @@
 
   "time_sound": "./assets/audios/timesounde.mp3",
   "speed_sound": "./assets/audios/CoinGet.mp3",
-  "heart_sound": "./assets/audios/heart.mp3"
+  "heart_sound": "./assets/audios/heart.mp3",
+
+  "story": {
+    "introduction": "Floor 9. The penultimate floor. Zara hides in the shadows and counts the enemies. Too many. She plants her bomb and stops counting.",
+    "development": "The generator hum grows louder. Zara traces it to a massive machine powering the Grue King's throne room above. She cannot destroy it yet — but she marks it.",
+    "conclusion": "Floor 9 cleared. One floor remains. Zara can hear the Grue King breathing through the ceiling. She places her last bomb carefully and climbs the final staircase."
+  }
 }

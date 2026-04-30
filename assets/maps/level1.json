@@ -3,7 +3,7 @@
   "initial_grid": [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-    [1,1,1,0,0,0,0,4,0,0,0,0,0,1,1,1],
+    [1,1,1,4,0,0,0,4,0,0,4,0,0,1,1,1],
     [1,1,1,0,0,1,1,1,2,1,1,0,0,1,1,1],
     [1,1,1,0,2,1,0,1,0,0,1,2,0,1,1,1],
     [1,1,1,2,0,1,0,1,0,0,1,0,2,1,1,1],
@@ -41,6 +41,12 @@
 
   "time_sound": "./assets/audios/timesounde.mp3",
   "speed_sound": "./assets/audios/CoinGet.mp3",
-  "heart_sound": "./assets/audios/heart.mp3"
+  "heart_sound": "./assets/audios/heart.mp3",
+
+  "story": {
+    "introduction": "Zara wakes up in a cold, dark dungeon. The last thing she remembers is chasing a strange light into the forest. The walls hum with a cursed energy. A voice echoes: 'Ten floors stand between you and freedom. Survive them all.' She grips her bomb and steps forward.",
+    "development": "Halfway through the first floor, Zara finds a scratched message on the wall: 'The Grue King feeds on fear. Destroy his minions and weaken his power.' She realizes the creatures hunting her are not random — they are his eyes.",
+    "conclusion": "Floor 1 cleared. The exit door creaks open. Zara exhales, but the staircase ahead spirals deeper into darkness. Nine floors remain. The real challenge has not yet begun."
+  }
 
 }

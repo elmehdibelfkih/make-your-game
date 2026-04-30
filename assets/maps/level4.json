@@ -42,5 +42,11 @@
 
   "time_sound": "./assets/audios/timesounde.mp3",
   "speed_sound": "./assets/audios/CoinGet.mp3",
-  "heart_sound": "./assets/audios/heart.mp3"
+  "heart_sound": "./assets/audios/heart.mp3",
+
+  "story": {
+    "introduction": "Floor 4. Double the enemies, double the traps. Zara finds two paths and chooses the harder one — she has learned that the easy road in this dungeon always leads back to the start.",
+    "development": "Zara spots two Grues arguing over a glowing shard. She destroys them both and pockets the shard. It pulses warmly — a fragment of the Grue King's power, now hers.",
+    "conclusion": "Floor 4 cleared. The shard in Zara's pocket grows brighter. She now holds a piece of the enemy's strength. The dungeon feels it too."
+  }
 }

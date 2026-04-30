@@ -43,6 +43,12 @@
 
   "time_sound": "./assets/audios/timesounde.mp3",
   "speed_sound": "./assets/audios/CoinGet.mp3",
-  "heart_sound": "./assets/audios/heart.mp3"
+  "heart_sound": "./assets/audios/heart.mp3",
+
+  "story": {
+    "introduction": "Floor 2. The dungeon grows colder. Zara finds scattered bones and a torn journal: 'Others have tried. None returned.' She tightens her grip. She will not be another entry in that journal.",
+    "development": "A wounded Grue stumbles past without attacking. Zara notices a faint glow pulsing from its chest — the same glow as the cursed walls. The creatures and the dungeon share one heartbeat.",
+    "conclusion": "Floor 2 cleared. The walls crack slightly as the last enemy falls. Zara feels the dungeon shudder. She is weakening it, one floor at a time."
+  }
 
 }

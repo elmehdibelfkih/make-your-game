@@ -10,6 +10,10 @@ while (!game.player || !game.player.playerCoordinate) {
 window.startGame = async function () {
     await game.waitForLevel();
     document.getElementById('instructions').classList.add('hidden');
+
+    // Show introduction of level 1 before the game starts
+    await game.story.showIntroduction();
+
     const levelDisplay = document.getElementById('level-display');
     levelDisplay.textContent = `${game.map.level.name}`
     levelDisplay.classList.add('show')

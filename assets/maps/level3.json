@@ -43,5 +43,11 @@
 
   "time_sound": "./assets/audios/timesounde.mp3",
   "speed_sound": "./assets/audios/CoinGet.mp3",
-  "heart_sound": "./assets/audios/heart.mp3"
+  "heart_sound": "./assets/audios/heart.mp3",
+
+  "story": {
+    "introduction": "Floor 3. Birdsong echoes faintly through the stone — a memory, not a sound. Zara finds a child's drawing pinned to a wall: a stick figure running from shadows. She keeps moving.",
+    "development": "The Grues here move in patterns, almost like they are dancing. Zara realizes they are performing a ritual. She must disrupt it before the floor seals shut forever.",
+    "conclusion": "Floor 3 cleared. The ritual is broken. A distant roar shakes the dungeon — the Grue King knows someone is coming. Good."
+  }
 }

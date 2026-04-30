@@ -43,5 +43,11 @@
 
   "time_sound": "./assets/audios/timesounde.mp3",
   "speed_sound": "./assets/audios/CoinGet.mp3",
-  "heart_sound": "./assets/audios/heart.mp3"
+  "heart_sound": "./assets/audios/heart.mp3",
+
+  "story": {
+    "introduction": "Floor 7. The air smells of wheat and ash. Zara remembers her village, burned the night she was taken. The Grue King ordered it. She will make him remember it too.",
+    "development": "The enemies here are faster, more desperate. Zara understands why — the map showed that the Grue King's chamber is only three floors away. His guards are panicking.",
+    "conclusion": "Floor 7 cleared. The lava music fades. Zara feels the dungeon's curse weakening around her. Three floors left. Three chances to finish this."
+  }
 }

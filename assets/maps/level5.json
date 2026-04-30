@@ -43,5 +43,11 @@
 
   "time_sound": "./assets/audios/timesounde.mp3",
   "speed_sound": "./assets/audios/CoinGet.mp3",
-  "heart_sound": "./assets/audios/heart.mp3"
+  "heart_sound": "./assets/audios/heart.mp3",
+
+  "story": {
+    "introduction": "Floor 5. The halfway point. Zara pauses and counts her scars. Five floors of regret carved into the walls around her. She smiles. Five more to go.",
+    "development": "A vision hits Zara mid-run: the Grue King on his throne, watching her through the eyes of every creature she has fought. He is afraid. She can feel it.",
+    "conclusion": "Floor 5 cleared. Zara stands at the dungeon's midpoint. Behind her: rubble and silence. Ahead: the unknown. She steps forward without hesitation."
+  }
 }

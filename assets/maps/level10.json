@@ -42,5 +42,11 @@
 
   "time_sound": "./assets/audios/timesounde.mp3",
   "speed_sound": "./assets/audios/CoinGet.mp3",
-  "heart_sound": "./assets/audios/heart.mp3"
+  "heart_sound": "./assets/audios/heart.mp3",
+
+  "story": {
+    "introduction": "Floor 10. The Grue King's throne room. The tiles are cold, the walls are watching. Zara steps in and the door seals behind her. There is no going back. There never was.",
+    "development": "The Grue King's voice fills the room: 'You destroyed nine of my floors. Impressive. Pointless.' Zara sets her bomb. 'Watch me do the tenth.'",
+    "conclusion": "The last enemy falls. The dungeon collapses floor by floor, from the bottom up. Zara runs. She bursts through the surface into blinding sunlight. Behind her, the dungeon crumbles into silence. The Grue King is gone. Zara is free."
+  }
 }

@@ -736,3 +736,84 @@ div[class*="soft-block"] img {
     padding: var(--spacing-sm);
   }
 }
+
+/* ── Story Overlay ─────────────────────────────────────────── */
+#story-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(12px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 4000;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+#story-overlay.story-visible {
+  opacity: 1;
+}
+
+.story-box {
+  background: linear-gradient(160deg, var(--secondary-bg) 0%, var(--primary-bg) 100%);
+  border: 3px solid var(--accent-color);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  max-width: 520px;
+  width: 90%;
+  text-align: center;
+  box-shadow:
+    0 0 40px rgba(255, 71, 87, 0.25),
+    0 20px 60px var(--shadow-dark);
+  transform: translateY(30px);
+  transition: transform 0.4s ease;
+}
+
+#story-overlay.story-visible .story-box {
+  transform: translateY(0);
+}
+
+.story-title {
+  font-family: var(--font-pixel);
+  font-size: var(--font-size-lg);
+  color: var(--accent-color);
+  margin-bottom: var(--spacing-lg);
+  text-shadow: 2px 2px 6px var(--shadow-dark);
+  letter-spacing: 2px;
+}
+
+.story-text {
+  font-family: var(--font-pixel);
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  line-height: 2;
+  margin-bottom: var(--spacing-xl);
+  text-align: left;
+  border-left: 3px solid var(--accent-color);
+  padding-left: var(--spacing-md);
+}
+
+.story-btn {
+  background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%);
+  color: var(--text-primary);
+  border: none;
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  font-family: var(--font-pixel);
+  font-size: var(--font-size-sm);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  box-shadow: 0 6px 20px rgba(255, 71, 87, 0.3);
+}
+
+.story-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 71, 87, 0.5);
+}
+
+.story-btn:active {
+  transform: translateY(0);
+}

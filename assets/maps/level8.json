@@ -43,5 +43,11 @@
 
   "time_sound": "./assets/audios/timesounde.mp3",
   "speed_sound": "./assets/audios/CoinGet.mp3",
-  "heart_sound": "./assets/audios/heart.mp3"
+  "heart_sound": "./assets/audios/heart.mp3",
+
+  "story": {
+    "introduction": "Floor 8. The joke is on whoever built this place — Zara is still here. The enemies choke the corridors, but she has learned their rhythm. She moves like a ghost.",
+    "development": "Zara finds a prisoner cell, empty but recently used. Scratched into the floor: 'He is weakest when all floors fall.' She now knows exactly what she must do.",
+    "conclusion": "Floor 8 cleared. Two floors remain. The dungeon groans like a dying beast. Zara is not slowing down."
+  }
 }

@@ -5,6 +5,7 @@ import { State } from './state.js';
 import { Enemy } from '../components/enemy.js';
 import { UI } from '../components/ui.js';
 import { ScoreboardModal } from '../components/scoreboardModal.js'
+import { Story } from '../components/story.js'
 
 export class Game {
 
@@ -21,6 +22,7 @@ export class Game {
         this.player = Player.getInstance(this)
         this.scoreboardModal = new ScoreboardModal(this);
         this.ui = UI.getInstance(this)
+        this.story = new Story(this)
         this.IDRE = null
         this.stateofrest = false
         this.nextLevelTimeoutId = null;
@@ -74,6 +76,10 @@ export class Game {
         }
         this.stateofrest = true
         this.levelComplete = false;
+
+        // Show conclusion of the level (loss)
+        await this.story.showConclusion(false);
+
         // should show the leaderboard first
         const playerName = await this.scoreboardModal.promptPlayerName();
         const data = await this.scoreboardModal.submitScore(playerName, this.state.getScore(), this.formatTime(this.state.getTime()));
@@ -96,6 +102,7 @@ export class Game {
         this.player = Player.getInstance(this)
         await this.map.initMap()
         await this.player.initPlayer()
+        this.story = new Story(this);
         this.stateofrest = false
     }
 
@@ -106,8 +113,9 @@ export class Game {
             this.IDRE = null;
         }
         this.state.SetPause(true);
-        this.ui.nextLevel();
-        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        // Show conclusion of the level just finished
+        await this.story.showConclusion(true);
 
         this.map.enemys = [];
         this.map.Booms = [];
@@ -126,11 +134,18 @@ export class Game {
         await this.player.initPlayer();
 
         await this.waitForLevel();
+
+        // Show introduction of the next level
+        this.story = new Story(this);
+        await this.story.showIntroduction();
+
         this.state.resetTimer();
         this.state.setTime(this.map.level.level_time);
         this.state.startTimer();
+        this.state.SetPause(false);
         this.stateofrest = false;
         this.levelComplete = false;
+        this.run();
     }
 
     async handleWin() {
@@ -140,6 +155,9 @@ export class Game {
             this.IDRE = null;
         }
         this.stateofrest = true
+
+        // Show final conclusion — the end of the full story
+        await this.story.showConclusion(true);
         this.ui.win()
         await new Promise(resolve => setTimeout(resolve, 1500));
         this.state.setScore(0);
@@ -171,6 +189,16 @@ export class Game {
     }
 
     async checkState() {
+        // Show development story beat at roughly half the enemies cleared
+        const totalEnemies = this.map.level?.initial_grid.flat().filter(c => c === 4).length || 0;
+        const remaining = this.map.enemys.length;
+        console.log(`Enemies: ${remaining}/${totalEnemies}`);
+        if (totalEnemies > 0 && remaining <= Math.floor(totalEnemies / 2) && !this.story._developmentShown) {
+            this.state.SetPause(true);
+            await this.story.showDevelopment();
+            this.state.SetPause(false);
+        }
+
         if (this.map.enemys.length === 0 && !this.levelComplete) {
             this.levelComplete = true;
             if (this.state.getcurentlevel() >= this.state.maxlevel()) {

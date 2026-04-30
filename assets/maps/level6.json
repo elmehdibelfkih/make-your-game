@@ -43,5 +43,11 @@
 
   "time_sound": "./assets/audios/timesounde.mp3",
   "speed_sound": "./assets/audios/CoinGet.mp3",
-  "heart_sound": "./assets/audios/heart.mp3"
+  "heart_sound": "./assets/audios/heart.mp3",
+
+  "story": {
+    "introduction": "Floor 6. The dungeon throws a party — blocks everywhere, enemies everywhere. Zara is not invited, but she crashes it anyway.",
+    "development": "Among the chaos, Zara finds a locked chest. She blows it open. Inside: a map of the remaining floors, drawn in Grue blood. Someone wanted her to find this.",
+    "conclusion": "Floor 6 cleared. Map in hand, Zara now knows what lies ahead. The Grue King has been preparing for her. She has been preparing for him longer."
+  }
 }
